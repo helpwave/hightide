@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent, useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { SearchBarContext, type SearchBarContextValue } from './SearchBarContext'
 import { searchBarStateTransition, type SearchBarEvent, type SearchBarState } from './SearchBarState'
 
@@ -12,6 +12,7 @@ export type SearchBarStateManagerProps = DOMInputStateMangerProps<SearchBarState
 
 export function SearchBarStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   onSearch,
@@ -22,20 +23,26 @@ export function SearchBarStateManager({
   id,
   children,
 }: SearchBarStateManagerProps) {
-  const machine = useStateMachine<SearchBarState, SearchBarEvent>({
-    state,
-    transition: searchBarStateTransition,
-    onStateChange,
-  })
-  const onStateEventStable = useStableEvent(onStateEvent)
+  const machine = useStateMachineController<SearchBarState, SearchBarEvent>(state
+    ? {
+      state,
+      transition: searchBarStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: searchBarStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
   const onSearchStable = useStableEvent(onSearch)
   const dispatch = useCallback((event: SearchBarEvent) => {
     machine.dispatch(event)
-    onStateEventStable(event)
     if (event.type === 'commit') {
       onSearchStable(event.value)
     }
-  }, [machine, onSearchStable, onStateEventStable])
+  }, [machine, onSearchStable])
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,

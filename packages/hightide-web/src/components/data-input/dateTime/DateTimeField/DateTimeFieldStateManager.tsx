@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { DateTimeFieldContext, type DateTimeFieldContextValue } from './DateTimeFieldContext'
 import { dateTimeFieldStateTransition, type DateTimeFieldEvent, type DateTimeFieldState } from './DateTimeFieldState'
 
@@ -13,6 +13,7 @@ export type DateTimeFieldStateManagerProps = DOMInputStateMangerProps<DateTimeFi
 
 export function DateTimeFieldStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   locale,
@@ -24,16 +25,19 @@ export function DateTimeFieldStateManager({
   id,
   children,
 }: DateTimeFieldStateManagerProps) {
-  const machine = useStateMachine<DateTimeFieldState, DateTimeFieldEvent>({
-    state,
-    transition: dateTimeFieldStateTransition,
-    onStateChange,
-  })
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: DateTimeFieldEvent) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<DateTimeFieldState, DateTimeFieldEvent>(state
+    ? {
+      state,
+      transition: dateTimeFieldStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: dateTimeFieldStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,
@@ -43,11 +47,11 @@ export function DateTimeFieldStateManager({
   }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<DateTimeFieldContextValue>(() => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     config,
     locale,
     is24HourFormat,
-  }), [config, dispatch, is24HourFormat, locale, machine.state])
+  }), [config, machine.dispatch, is24HourFormat, locale, machine.state])
 
   return (
     <DateTimeFieldContext.Provider value={contextValue}>

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { WheelPickerContext, type WheelPickerContextConfig, type WheelPickerContextValue } from './WheelPickerContext'
 import {
   wheelPickerStateTransition,
@@ -18,6 +18,7 @@ export type WheelPickerStateManagerProps<T> = DOMInputStateMangerProps<WheelPick
 
 export function WheelPickerStateManager<T>({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -29,17 +30,19 @@ export function WheelPickerStateManager<T>({
   visibleRows = 1,
   children,
 }: WheelPickerStateManagerProps<T>) {
-  const machine = useStateMachine<WheelPickerState<T>, WheelPickerEvent<T>>({
-    state,
-    transition: wheelPickerStateTransition,
-    onStateChange,
-  })
-
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: WheelPickerEvent<T>) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<WheelPickerState<T>, WheelPickerEvent<T>>(state
+    ? {
+      state,
+      transition: wheelPickerStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: wheelPickerStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
 
   const config = useMemo<WheelPickerContextConfig>(() => ({
     isInvalid,
@@ -53,9 +56,9 @@ export function WheelPickerStateManager<T>({
 
   const contextValue = useMemo<WheelPickerContextValue<T>>(() => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     config,
-  }), [config, dispatch, machine.state])
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <WheelPickerContext.Provider value={contextValue as WheelPickerContextValue<unknown>}>

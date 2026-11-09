@@ -31,6 +31,6 @@ export interface ControllableDOMInputProps<T, E extends InputStateEvent> extends
   onStateEvent?: (event: E) => void,
 }
 
-export interface DOMInputStateMangerProps<T extends InputState, E extends InputStateEvent> extends
-  Partial<DOMInputConfig>,
-  StateManagerProps<T, E> { }
+export type DOMInputStateMangerProps<T extends InputState, E extends InputStateEvent> =
+  Partial<DOMInputConfig> &
+  StateManagerProps<T, E>

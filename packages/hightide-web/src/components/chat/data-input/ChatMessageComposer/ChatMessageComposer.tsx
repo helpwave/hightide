@@ -1,7 +1,6 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../../data-input/domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import {
   ChatMessageComposerActionLayout,
@@ -59,22 +58,20 @@ const ChatMessageComposerComponent = ({
   sendButtonRef,
   sendButtonProps,
 }: ChatMessageComposerProps) => {
-  const [state, setState] = useControlledState<ChatMessageComposerState>({
-    defaultValue: { value: initialValue ?? '' },
+  const { store, onStateChange } = useControllableStateStore<ChatMessageComposerState>({
+    initialState: { value: initialValue ?? '' },
   })
-  const binding = useStateMachineBinding<ChatMessageComposerState, string>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: string) => ({ value: next }), []),
-    get: useCallback((current: ChatMessageComposerState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <ChatMessageComposerStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       onSend={onSend}
       isInvalid={isInvalid}

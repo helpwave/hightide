@@ -1,10 +1,10 @@
 import type { ComponentRef, Ref, RefObject } from 'react'
-import { useCallback, useId, useMemo, useRef } from 'react'
+import { useId, useMemo, useRef } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { HexColor } from './hexColor'
-import { coerceHex, defaultHex } from './hexColor'
+import { defaultHex } from './hexColor'
 import { ColorInputContext } from './ColorInputContext'
 import { ColorInputControl, type ColorInputControlProps } from './ColorInputControl'
 import { ColorInputDialog } from './ColorInputDialog'
@@ -47,24 +47,21 @@ const ColorInputComponent = ({
   const generatedId = useId()
   const popupId = useMemo(() => `color-input-popup-${generatedId}`, [generatedId])
   const anchorRef = useRef<HTMLDivElement>(null)
-  const [state, setState] = useControlledState<ColorInputState>({
-    defaultValue: colorInputStateFromHex(value ?? initialValue ?? defaultHex(true)),
+  const { store, onStateChange } = useControllableStateStore<ColorInputState>({
+    initialState: colorInputStateFromHex(value ?? initialValue ?? defaultHex(true)),
   })
-  const binding = useStateMachineBinding<ColorInputState, HexColor>({
-    state,
-    onStateChange: setState,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     onValueChange,
-    value: value === undefined ? undefined : coerceHex(value, true),
-    inject: useCallback(() => ({}), []),
-    get: useCallback((current: ColorInputState) => current.value, []),
   })
 
   return (
     <ColorInputStateManager
-      state={binding.state}
+      state={store}
       hasAlpha={hasAlpha}
       isCapitalized={isCapitalized}
-      onStateChange={binding.onStateChange}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

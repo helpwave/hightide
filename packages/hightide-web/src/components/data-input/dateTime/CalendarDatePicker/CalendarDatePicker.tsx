@@ -1,9 +1,8 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useCallback } from 'react'
 import { CalendarDatePickerContext } from './CalendarDatePickerContext'
 import { CalendarDatePickerBody, type CalendarDatePickerBodyProps } from './CalendarDatePickerBody'
 import { CalendarDatePickerHeader, type CalendarDatePickerHeaderProps } from './CalendarDatePickerHeader'
@@ -59,26 +58,24 @@ const CalendarDatePickerComponent = ({
   calendarDayPickerRef,
   calendarDayPickerProps,
 }: CalendarDatePickerProps) => {
-  const [state, setState] = useControlledState<CalendarDatePickerState>({
-    defaultValue: {
+  const { store, onStateChange } = useControllableStateStore<CalendarDatePickerState>({
+    initialState: {
       value: value ?? initialValue,
       displayedMonth: new Date((value ?? initialValue).getFullYear(), (value ?? initialValue).getMonth(), 1),
       displayMode: initialDisplay,
     },
   })
-  const binding = useStateMachineBinding<CalendarDatePickerState, Date>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: Date) => ({ value: next }), []),
-    get: useCallback((current: CalendarDatePickerState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <CalendarDatePickerStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

@@ -1,6 +1,6 @@
 import type { FilterFn } from '@tanstack/react-table'
-import { FilterOperatorUtils } from '../../interaction/data/FilterOperator'
-import { FilterFunctions, type FilterValue } from '../../interaction/data/filter-function'
+import { FilterOperatorUtils } from '../../data-filter/filter-operator'
+import { FilterFunctions, type FilterValue } from '../../data-filter/filter-functions'
 
 
 const textFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {

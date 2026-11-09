@@ -6,9 +6,9 @@ import { flexRender } from '@tanstack/react-table'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Visibility } from '../Visibility'
 import { IconButton } from '../../interaction/IconButton'
-import type { DataType } from '../../interaction/data/data-types'
-import type { FilterValue } from '../../interaction/data/filter-function'
-import { FilterPopUp } from '../../interaction/data/FilterPopUp'
+import type { DataType } from '../../data-filter/data-types'
+import type { FilterValue } from '../../data-filter/filter-functions'
+import { FilterPopUp } from '../../data-filter/interaction/FilterPopUp'
 
 export type TableFilterButtonProps = {
   filterType: DataType,

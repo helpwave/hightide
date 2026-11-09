@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
-import { useCallback } from 'react'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { MenuContent, type MenuContentProps } from './MenuContent'
 import { MenuContext } from './MenuContext'
 import { MenuItem } from './MenuItem'
@@ -32,22 +31,20 @@ const MenuComponent = ({
   triggerProps,
   contentProps,
 }: MenuProps) => {
-  const [state, setState] = useControlledState<MenuState>({
-    defaultValue: { isOpen: initialIsOpen },
-    onValueChange: onStateChange,
+  const { store, onStateChange: commitState } = useControllableStateStore<MenuState>({
+    initialState: { isOpen: initialIsOpen },
+    onStateChange,
   })
-  const binding = useStateMachineBinding<MenuState, boolean>({
-    state,
-    onStateChange: setState,
+  useStateStoreBinding({
+    store,
+    key: 'isOpen',
     value: isOpen,
-    inject: useCallback((next: boolean) => ({ isOpen: next }), []),
-    get: useCallback((current: MenuState) => current.isOpen, []),
   })
 
   return (
     <MenuStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={commitState}
       onStateEvent={onStateEvent}
       disabled={disabled}
     >

@@ -19,6 +19,7 @@ export function DateTimeInputActions({ actions = [], popupId }: DateTimeInputAct
       {actions}
       <Visibility isVisible={hasClear}>
         <IconButton
+          className="date-time-input-clear"
           tooltip={translation('clearValue')}
           variant="foreground"
           color="neutral"

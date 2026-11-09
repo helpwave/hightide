@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import type { ComponentRef, HTMLAttributes, Ref } from 'react'
-import { forwardRef } from 'react'
+import { forwardRef, useMemo } from 'react'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { DateWheelPicker, type DateWheelPickerLayoutProps } from '../DateWheelPicker'
 import { TimeWheelPicker, type TimeWheelPickerLayoutProps } from '../TimeWheelPicker'
@@ -27,6 +28,15 @@ export const DateTimePickerDialogBody = forwardRef<HTMLDivElement, DateTimePicke
   const onStateChange = (next: { value: Date }) => {
     dispatch({ type: 'pick', value: next.value })
   }
+  const pickerState = useMemo(() => ({ value: state.pickerValue }), [state.pickerValue])
+  const datePicker = useControllableStateStore({
+    state: pickerState,
+    onStateChange,
+  })
+  const timePicker = useControllableStateStore({
+    state: pickerState,
+    onStateChange,
+  })
 
   return (
     <div
@@ -36,8 +46,8 @@ export const DateTimePickerDialogBody = forwardRef<HTMLDivElement, DateTimePicke
     >
       {isDateShown && (
         <DateWheelPicker.StateManager
-          state={{ value: state.pickerValue }}
-          onStateChange={onStateChange}
+          state={datePicker.store}
+          onStateChange={datePicker.onStateChange}
           isInvalid={config.isInvalid}
           isDisabled={config.isDisabled}
           isReadOnly={config.isReadOnly}
@@ -59,8 +69,8 @@ export const DateTimePickerDialogBody = forwardRef<HTMLDivElement, DateTimePicke
       )}
       {isTimeShown && (
         <TimeWheelPicker.StateManager
-          state={{ value: state.pickerValue }}
-          onStateChange={onStateChange}
+          state={timePicker.store}
+          onStateChange={timePicker.onStateChange}
           isInvalid={config.isInvalid}
           isDisabled={config.isDisabled}
           isReadOnly={config.isReadOnly}

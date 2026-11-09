@@ -1,11 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Bell, File, Folder, Package, Settings } from 'lucide-react'
-import { AppPage } from '../../../src/components/layout/app/AppPage'
+import { AppPage, type AppPageState } from '../../../src/components/layout/app/AppPage'
 import type { NavigationItemData } from '../../../src/components/interaction/navigation/types'
-import { FullScreenVerticalNavigation } from '../../../src/components/interaction/navigation/FullScreenVerticalNavigation'
+import {
+  FullScreenVerticalNavigation,
+  type FullScreenVerticalNavigationState
+} from '../../../src/components/interaction/navigation/FullScreenVerticalNavigation'
 import { HelpwaveBadge } from '../../../src/components/branding/visualization/HelpwaveBadge'
 import { IconButton } from '../../../src/components/interaction/IconButton'
 import { useEffect, useState } from 'react'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 
 const initialNavigationItems: NavigationItemData[] = [
   {
@@ -174,14 +178,22 @@ export const composed: Story = {
   },
   decorators: pageDecorators,
   render: (args) => {
-    const [state, setState] = useState({ isOpen: args.isOpen ?? false })
+    const [state, setState] = useState<AppPageState>({ isOpen: args.isOpen ?? false })
+    const page = useControllableStateStore<AppPageState>({
+      state,
+      onStateChange: setState,
+    })
+    const navigation = useControllableStateStore<FullScreenVerticalNavigationState>({
+      state,
+      onStateChange: setState,
+    })
     const items = args.sidebarProps.items
     const activeId = args.sidebarProps.activeId ?? null
 
     return (
       <AppPage.StateManager
-        state={state}
-        onStateChange={setState}
+        state={page.store}
+        onStateChange={page.onStateChange}
         items={items}
         LinkComponent={args.sidebarProps.LinkComponent}
         activeId={activeId}
@@ -191,8 +203,8 @@ export const composed: Story = {
       >
         <AppPage.Layout {...args.layoutProps}>
           <FullScreenVerticalNavigation.StateManager
-            state={state}
-            onStateChange={setState}
+            state={navigation.store}
+            onStateChange={navigation.onStateChange}
             items={items ?? []}
             LinkComponent={args.sidebarProps.LinkComponent}
             activeId={activeId}

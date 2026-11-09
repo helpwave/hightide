@@ -1,6 +1,5 @@
 import type { ElementType, ReactNode } from 'react'
-import { useCallback } from 'react'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type { NavigationItemData, NavigationLinkComponentProps } from '../types'
 import { FullScreenVerticalNavigationCloseButton } from './FullScreenVerticalNavigationCloseButton'
 import { FullScreenVerticalNavigationContext } from './FullScreenVerticalNavigationContext'
@@ -37,23 +36,21 @@ function FullScreenVerticalNavigationComponent({
   showTrigger = true,
   children,
 }: FullScreenVerticalNavigationProps) {
-  const [state, setState] = useControlledState<FullScreenVerticalNavigationState>({
-    defaultValue: { isOpen: initialIsOpen },
-    onValueChange: onStateChange,
+  const { store, onStateChange: commitState } = useControllableStateStore<FullScreenVerticalNavigationState>({
+    initialState: { isOpen: initialIsOpen },
+    onStateChange,
   })
-  const binding = useStateMachineBinding<FullScreenVerticalNavigationState, boolean>({
-    state,
-    onStateChange: setState,
-    onValueChange: onIsOpenChange,
+  useStateStoreBinding({
+    store,
+    key: 'isOpen',
     value: isOpen,
-    inject: useCallback((next: boolean) => ({ isOpen: next }), []),
-    get: useCallback((current: FullScreenVerticalNavigationState) => current.isOpen, []),
+    onValueChange: onIsOpenChange,
   })
 
   return (
     <FullScreenVerticalNavigationStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={commitState}
       onStateEvent={onStateEvent}
       items={items}
       LinkComponent={LinkComponent}

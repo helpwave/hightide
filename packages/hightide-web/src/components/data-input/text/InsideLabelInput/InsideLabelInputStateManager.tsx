@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { InsideLabelInputContext, type InsideLabelInputContextValue } from './InsideLabelInputContext'
 import {
   insideLabelInputStateTransition,
@@ -15,6 +15,7 @@ export type InsideLabelInputStateManagerProps = DOMInputStateMangerProps<InsideL
 
 export function InsideLabelInputStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -24,16 +25,19 @@ export function InsideLabelInputStateManager({
   id,
   children,
 }: InsideLabelInputStateManagerProps) {
-  const machine = useStateMachine<InsideLabelInputState, InsideLabelInputEvent>({
-    state,
-    transition: insideLabelInputStateTransition,
-    onStateChange,
-  })
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: InsideLabelInputEvent) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<InsideLabelInputState, InsideLabelInputEvent>(state
+    ? {
+      state,
+      transition: insideLabelInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: insideLabelInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,
@@ -43,9 +47,9 @@ export function InsideLabelInputStateManager({
   }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<InsideLabelInputContextValue>(() => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     config,
-  }), [config, dispatch, machine.state])
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <InsideLabelInputContext.Provider value={contextValue}>

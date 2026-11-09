@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { dateInputConfig } from '../useDateStateMachine'
 import { DateTimeWheelPickerContext, type DateTimeWheelPickerContextConfig } from './DateTimeWheelPickerContext'
 import {
   dateTimeWheelPickerStateTransition,
@@ -18,6 +19,7 @@ export type DateTimeWheelPickerStateManagerProps =
 
 export function DateTimeWheelPickerStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -48,13 +50,24 @@ export function DateTimeWheelPickerStateManager({
     millisecondIncrement,
     precision,
   }), [end, is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, millisecondIncrement, minuteIncrement, precision, secondIncrement, start, id])
-  const contextValue = useDateStateMachine({
-    state,
-    transition: dateTimeWheelPickerStateTransition,
-    onStateChange,
-    onStateEvent,
+  const machine = useStateMachineController(state
+    ? {
+      state,
+      transition: dateTimeWheelPickerStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: dateTimeWheelPickerStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
+  const contextValue = useMemo(() => ({
+    state: machine.state,
+    dispatch: machine.dispatch,
     config,
-  })
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <DateTimeWheelPickerContext.Provider value={contextValue}>

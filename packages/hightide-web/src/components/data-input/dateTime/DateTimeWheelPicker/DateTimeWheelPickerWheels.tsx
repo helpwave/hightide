@@ -1,4 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
+import { useMemo } from 'react'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { DateWheelPicker, type DateWheelPickerLayoutProps } from '../DateWheelPicker'
 import { TimeWheelPicker, type TimeWheelPickerLayoutProps } from '../TimeWheelPicker'
@@ -21,12 +23,21 @@ export function DateTimeWheelPickerWheels({
   const onStateChange = (next: { value: Date }) => {
     dispatch({ type: 'setValue', value: next.value })
   }
+  const pickerState = useMemo(() => ({ value: state.value }), [state.value])
+  const datePicker = useControllableStateStore({
+    state: pickerState,
+    onStateChange,
+  })
+  const timePicker = useControllableStateStore({
+    state: pickerState,
+    onStateChange,
+  })
 
   return (
     <>
       <DateWheelPicker.StateManager
-        state={{ value: state.value }}
-        onStateChange={onStateChange}
+        state={datePicker.store}
+        onStateChange={datePicker.onStateChange}
         isInvalid={config.isInvalid}
         isDisabled={config.isDisabled}
         isReadOnly={config.isReadOnly}
@@ -46,8 +57,8 @@ export function DateTimeWheelPickerWheels({
         </DateWheelPicker.Layout>
       </DateWheelPicker.StateManager>
       <TimeWheelPicker.StateManager
-        state={{ value: state.value }}
-        onStateChange={onStateChange}
+        state={timePicker.store}
+        onStateChange={timePicker.onStateChange}
         isInvalid={config.isInvalid}
         isDisabled={config.isDisabled}
         isReadOnly={config.isReadOnly}

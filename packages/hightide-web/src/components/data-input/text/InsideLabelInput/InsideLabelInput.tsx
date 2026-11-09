@@ -1,7 +1,7 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
-import { useCallback, useId } from 'react'
+import { useId } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { TextInput, TextInputElementProps } from '../TextInput'
 import { InsideLabelInputContext } from './InsideLabelInputContext'
@@ -43,22 +43,20 @@ const InsideLabelInputComponent = ({
   const generatedId = useId()
   const id = customId ?? generatedId
   const labelId = id + '-label'
-  const [state, setState] = useControlledState<InsideLabelInputState>({
-    defaultValue: { value: initialValue ?? '', isFocused: false },
+  const { store, onStateChange } = useControllableStateStore<InsideLabelInputState>({
+    initialState: { value: initialValue ?? '', isFocused: false },
   })
-  const binding = useStateMachineBinding<InsideLabelInputState, string>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: string) => ({ value: next }), []),
-    get: useCallback((current: InsideLabelInputState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <InsideLabelInputStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

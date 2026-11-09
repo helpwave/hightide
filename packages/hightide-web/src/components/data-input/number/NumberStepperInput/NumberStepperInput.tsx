@@ -1,8 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ChangeRateCurveProps, StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberStepperInputContext } from './NumberStepperInputContext'
 import { NumberStepperInputField, type NumberStepperInputFieldProps } from './NumberStepperInputField'
@@ -72,22 +71,20 @@ const NumberStepperInputComponent = ({
   fieldRef,
   fieldProps,
 }: NumberStepperInputProps) => {
-  const [state, setState] = useControlledState<NumberStepperInputState>({
-    defaultValue: { value: initialValue ?? 0 },
+  const { store, onStateChange } = useControllableStateStore<NumberStepperInputState>({
+    initialState: { value: initialValue ?? 0 },
   })
-  const binding = useStateMachineBinding<NumberStepperInputState, number>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: number) => ({ value: next }), []),
-    get: useCallback((current: NumberStepperInputState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <NumberStepperInputStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

@@ -1,5 +1,7 @@
 import clsx from 'clsx'
 import type { ComponentRef, ReactNode, Ref } from 'react'
+import { useMemo } from 'react'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CalendarDayPicker, type CalendarDayPickerLayoutProps } from '../CalendarDayPicker'
 import { YearMonthPicker, type YearMonthPickerLayoutProps } from '../YearMonthPicker'
@@ -21,6 +23,23 @@ export function CalendarDatePickerBody({
   calendarDayPickerProps,
 }: CalendarDatePickerBodyProps) {
   const { state, dispatch, config } = useCalendarDatePickerContext()
+  const yearMonthState = useMemo(() => ({ value: state.value }), [state.value])
+  const dayState = useMemo(() => ({
+    value: state.value,
+    displayedMonth: state.displayedMonth,
+  }), [state.displayedMonth, state.value])
+  const yearMonth = useControllableStateStore({
+    state: yearMonthState,
+    onStateChange: (next) => dispatch({ type: 'pickYearMonth', value: next.value }),
+  })
+  const day = useControllableStateStore({
+    state: dayState,
+    onStateChange: (next) => dispatch({
+      type: 'setDayState',
+      value: next.value,
+      displayedMonth: next.displayedMonth,
+    }),
+  })
   const isYearMonthShown = state.displayMode === 'yearMonth'
   const isDayShown = state.displayMode === 'day'
   const isTimeShown = state.displayMode === 'time'
@@ -28,8 +47,8 @@ export function CalendarDatePickerBody({
   return (
     <>
       <YearMonthPicker.StateManager
-        state={{ value: state.value }}
-        onStateChange={(next) => dispatch({ type: 'pickYearMonth', value: next.value })}
+        state={yearMonth.store}
+        onStateChange={yearMonth.onStateChange}
         isInvalid={config.isInvalid}
         isDisabled={config.isDisabled}
         isReadOnly={config.isReadOnly}
@@ -56,12 +75,8 @@ export function CalendarDatePickerBody({
         {time}
       </div>
       <CalendarDayPicker.StateManager
-        state={{ value: state.value, displayedMonth: state.displayedMonth }}
-        onStateChange={(next) => dispatch({
-          type: 'setDayState',
-          value: next.value,
-          displayedMonth: next.displayedMonth,
-        })}
+        state={day.store}
+        onStateChange={day.onStateChange}
         isInvalid={config.isInvalid}
         isDisabled={config.isDisabled}
         isReadOnly={config.isReadOnly}

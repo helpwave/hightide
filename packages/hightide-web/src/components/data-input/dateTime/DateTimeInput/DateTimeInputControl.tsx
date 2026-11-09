@@ -5,16 +5,17 @@ import { PropsUtil } from '../../../../utils/propsUtil'
 import { useDateTimeInputContext } from './DateTimeInputContext'
 
 export type DateTimeInputControlProps = HTMLAttributes<HTMLDivElement> & {
-  actionCount: number,
+  actions?: ReactNode[],
   children?: ReactNode,
 }
 
 export const DateTimeInputControl = forwardRef<HTMLDivElement, DateTimeInputControlProps>(function DateTimeInputControl({
-  actionCount,
+  actions = [],
   children,
   ...props
 }, forwardedRef) {
-  const { state, dispatch, config } = useDateTimeInputContext()
+  const { state, dispatch, config, hasClear, hasTimePicker } = useDateTimeInputContext()
+  const actionCount = actions.length + (hasClear ? 1 : 0) + (hasTimePicker ? 1 : 0)
 
   useEffect(() => {
     if ((config.isReadOnly || config.isDisabled) && state.isOpen) {

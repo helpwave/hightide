@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { SearchBarContext } from './SearchBarContext'
 import { SearchBarField, type SearchBarFieldProps } from './SearchBarField'
@@ -38,22 +37,20 @@ const SearchBarComponent = ({
   searchButtonRef,
   searchButtonProps,
 }: SearchBarProps) => {
-  const [state, setState] = useControlledState<SearchBarState>({
-    defaultValue: { value: initialValue ?? '' },
+  const { store, onStateChange } = useControllableStateStore<SearchBarState>({
+    initialState: { value: initialValue ?? '' },
   })
-  const binding = useStateMachineBinding<SearchBarState, string>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: string) => ({ value: next }), []),
-    get: useCallback((current: SearchBarState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <SearchBarStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       onSearch={onSearch}
       isInvalid={isInvalid}

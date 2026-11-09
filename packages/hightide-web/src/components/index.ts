@@ -1,6 +1,7 @@
 export * from './branding'
 export * from './chat'
 export * from './data-input'
+export * from './data-filter'
 export * from './interaction'
 export * from './layout'
 export * from './properties'

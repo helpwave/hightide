@@ -1,7 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { WheelPickerBar, type WheelPickerBarProps } from './WheelPickerBar'
 import { WheelPickerContext } from './WheelPickerContext'
@@ -41,16 +41,14 @@ function WheelPickerComponent<T>({
   barRef,
   barProps,
 }: WheelPickerProps<T>) {
-  const [state, setState] = useControlledState<WheelPickerState<T>>({
-    defaultValue: { value: initialValue },
+  const { store, onStateChange } = useControllableStateStore<WheelPickerState<T>>({
+    initialState: { value: initialValue },
   })
-  const valueBinding = useStateMachineBinding<WheelPickerState<T>, T | undefined>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: T | undefined) => ({ value: next }), []),
-    get: useCallback((current: WheelPickerState<T>) => current.value, []),
+    onValueChange,
   })
   const handleStateEvent = useCallback((event: WheelPickerEvent<T>) => {
     onStateEvent?.(event)
@@ -61,8 +59,8 @@ function WheelPickerComponent<T>({
 
   return (
     <WheelPickerStateManager
-      state={valueBinding.state}
-      onStateChange={valueBinding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={handleStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

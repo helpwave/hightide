@@ -1,7 +1,7 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
-import { useCallback, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { DateWheelPickerLayout, DateWheelPickerLayoutProps } from '../DateWheelPicker'
@@ -91,20 +91,18 @@ const DateTimePickerDialogComponent = ({
   timeWheelPickerProps,
 }: DateTimePickerDialogProps) => {
   const resolvedValue = value === undefined ? initialValue : value
-  const [state, setState] = useControlledState<DateTimePickerDialogState>({
-    defaultValue: {
+  const { store, onStateChange } = useControllableStateStore<DateTimePickerDialogState>({
+    initialState: {
       value: resolvedValue,
       pickerValue: resolvedValue ?? new Date(),
       step: 'date',
     },
   })
-  const binding = useStateMachineBinding<DateTimePickerDialogState, Date | null>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: Date | null) => ({ value: next }), []),
-    get: useCallback((current: DateTimePickerDialogState) => current.value, []),
+    onValueChange,
   })
   const valueTime = value === undefined ? undefined : value === null ? null : value.getTime()
   const previousTimeRef = useRef(valueTime)
@@ -114,17 +112,18 @@ const DateTimePickerDialogComponent = ({
       return
     }
     previousTimeRef.current = valueTime
-    setState((current) => ({
+    const current = store.getSnapshot()
+    store.set({
       ...current,
       value,
       pickerValue: value ?? current.pickerValue,
-    }))
-  }, [setState, value, valueTime])
+    })
+  }, [store, value, valueTime])
 
   return (
     <DateTimePickerDialogStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { FlexibleDateTimeInputContext, type FlexibleDateTimeInputContextValue } from './FlexibleDateTimeInputContext'
 import {
   flexibleDateTimeInputStateTransition,
@@ -15,6 +15,7 @@ export type FlexibleDateTimeInputStateManagerProps = DOMInputStateMangerProps<Fl
 
 export function FlexibleDateTimeInputStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -24,20 +25,19 @@ export function FlexibleDateTimeInputStateManager({
   id,
   children,
 }: FlexibleDateTimeInputStateManagerProps) {
-  const onStateChangeStable = useStableEvent(onStateChange)
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const latestStateRef = useRef(state)
-  if (state.mode === latestStateRef.current.mode) {
-    latestStateRef.current = state
-  }
-  const dispatch = useCallback((event: FlexibleDateTimeInputEvent) => {
-    const current = latestStateRef.current
-    const nextState = flexibleDateTimeInputStateTransition(current, event)
-    if (nextState === current) return
-    latestStateRef.current = nextState
-    onStateChangeStable(nextState)
-    onStateEventStable(event)
-  }, [onStateChangeStable, onStateEventStable])
+  const machine = useStateMachineController<FlexibleDateTimeInputState, FlexibleDateTimeInputEvent>(state
+    ? {
+      state,
+      transition: flexibleDateTimeInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: flexibleDateTimeInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,
@@ -46,10 +46,10 @@ export function FlexibleDateTimeInputStateManager({
     id,
   }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<FlexibleDateTimeInputContextValue>(() => ({
-    state,
-    dispatch,
+    state: machine.state,
+    dispatch: machine.dispatch,
     config,
-  }), [config, dispatch, state])
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <FlexibleDateTimeInputContext.Provider value={contextValue}>

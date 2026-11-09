@@ -3,7 +3,8 @@ import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { dateInputConfig } from '../useDateStateMachine'
 import { YearMonthPickerContext, type YearMonthPickerContextConfig } from './YearMonthPickerContext'
 import {
   yearMonthPickerStateTransition,
@@ -22,6 +23,7 @@ export type YearMonthPickerStateManagerProps = DOMInputStateMangerProps<YearMont
 
 export function YearMonthPickerStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -39,27 +41,38 @@ export function YearMonthPickerStateManager({
     return Array.from({ length: 12 }, (_, index) => formatter.format(new Date(2000, index, 1)))
   }, [locale])
   const bounds = useMemo(() => DateUtils.monthBounds(start, end), [end, start])
-  const months = useMemo(
-    () => DateUtils.monthsForYear(state.value.getFullYear(), bounds.minTimestamp, bounds.maxTimestamp),
-    [bounds.maxTimestamp, bounds.minTimestamp, state.value]
-  )
   const years = useMemo(() => DateUtils.yearsBetween(start, end), [end, start])
   const transition = useMemo(() => {
     return (current: YearMonthPickerState, event: YearMonthPickerEvent) => yearMonthPickerStateTransition(current, event, bounds)
   }, [bounds])
+  const machine = useStateMachineController(state
+    ? {
+      state,
+      transition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition,
+      onStateChange,
+      onStateEvent,
+    })
+  const months = useMemo(
+    () => DateUtils.monthsForYear(machine.state.value.getFullYear(), bounds.minTimestamp, bounds.maxTimestamp),
+    [bounds.maxTimestamp, bounds.minTimestamp, machine.state.value]
+  )
   const config = useMemo<YearMonthPickerContextConfig>(() => ({
     ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     monthNames,
     months,
     years,
   }), [isDisabled, isInvalid, isReadOnly, isRequired, monthNames, months, years, id])
-  const contextValue = useDateStateMachine({
-    state,
-    transition,
-    onStateChange,
-    onStateEvent,
+  const contextValue = useMemo(() => ({
+    state: machine.state,
+    dispatch: machine.dispatch,
     config,
-  })
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <YearMonthPickerContext.Provider value={contextValue}>

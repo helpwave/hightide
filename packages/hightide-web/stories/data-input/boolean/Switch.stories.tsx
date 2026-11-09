@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
 import { useState } from 'react'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 import { Switch as SwitchComponent, type SwitchState } from '../../../src/components/data-input/boolean/Switch'
 
 const meta = {
@@ -49,14 +50,18 @@ export const controlledValue: Story = {
 export const controlledState: Story = {
   render: function ControlledState(args) {
     const [state, setState] = useState<SwitchState>({ value: true })
+    const controlled = useControllableStateStore({
+      state,
+      onStateChange: (next) => {
+        action('onStateChange')(next)
+        setState(next)
+      },
+    })
 
     return (
       <SwitchComponent.StateManager
-        state={state}
-        onStateChange={(next) => {
-          action('onStateChange')(next)
-          setState(next)
-        }}
+        state={controlled.store}
+        onStateChange={controlled.onStateChange}
         onStateEvent={args.onStateEvent}
         isInvalid={args.isInvalid}
         isDisabled={args.isDisabled}

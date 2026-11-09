@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import type { NavigationItemData, NavigationLinkComponentProps } from '../types'
 import {
   FullScreenVerticalNavigationContext,
@@ -23,6 +23,7 @@ export type FullScreenVerticalNavigationStateManagerProps =
 
 export function FullScreenVerticalNavigationStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   children,
@@ -30,25 +31,27 @@ export function FullScreenVerticalNavigationStateManager({
   LinkComponent,
   activeId = null,
 }: FullScreenVerticalNavigationStateManagerProps) {
-  const machine = useStateMachine<FullScreenVerticalNavigationState, FullScreenVerticalNavigationEvent>({
-    state,
-    transition: fullScreenVerticalNavigationStateTransition,
-    onStateChange,
-  })
-
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: FullScreenVerticalNavigationEvent) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<FullScreenVerticalNavigationState, FullScreenVerticalNavigationEvent>(state
+    ? {
+      state,
+      transition: fullScreenVerticalNavigationStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: fullScreenVerticalNavigationStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
 
   const contextValue = useMemo((): FullScreenVerticalNavigationContextValue => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     items,
     LinkComponent,
     activeId,
-  }), [activeId, dispatch, items, LinkComponent, machine.state])
+  }), [activeId, machine.dispatch, items, LinkComponent, machine.state])
 
   return (
     <FullScreenVerticalNavigationContext.Provider value={contextValue}>

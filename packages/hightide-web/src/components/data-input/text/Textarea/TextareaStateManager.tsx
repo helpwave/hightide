@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { TextareaContext, type TextareaContextValue } from './TextareaContext'
 import { textareaStateTransition, type TextareaEvent, type TextareaState } from './TextareaState'
 
@@ -12,6 +12,7 @@ export type TextareaStateManagerProps = DOMInputStateMangerProps<TextareaState, 
 
 export function TextareaStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -21,17 +22,19 @@ export function TextareaStateManager({
   id,
   children,
 }: TextareaStateManagerProps) {
-  const machine = useStateMachine<TextareaState, TextareaEvent>({
-    state,
-    transition: textareaStateTransition,
-    onStateChange,
-  })
-
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: TextareaEvent) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<TextareaState, TextareaEvent>(state
+    ? {
+      state,
+      transition: textareaStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: textareaStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
 
   const config = useMemo(() => ({
     isInvalid,
@@ -43,9 +46,9 @@ export function TextareaStateManager({
 
   const contextValue = useMemo<TextareaContextValue>(() => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     config,
-  }), [config, dispatch, machine.state])
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <TextareaContext.Provider value={contextValue}>

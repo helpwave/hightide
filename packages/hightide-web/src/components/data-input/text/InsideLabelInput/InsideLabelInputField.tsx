@@ -1,5 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
+import { useMemo } from 'react'
 import clsx from 'clsx'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 import { TextInput, type TextInputElementProps, type TextInputEvent } from '../TextInput'
 import { useInsideLabelInputContext } from './InsideLabelInputContext'
 
@@ -17,6 +19,11 @@ export function InsideLabelInputField({
   inputProps,
 }: InsideLabelInputFieldProps) {
   const { state, dispatch, config } = useInsideLabelInputContext()
+  const inputState = useMemo(() => ({ value: state.value }), [state.value])
+  const input = useControllableStateStore({
+    state: inputState,
+    onStateChange: (next) => dispatch({ type: 'change', value: next.value }),
+  })
   const forwardEvent = (event: TextInputEvent) => {
     if (event.type === 'focus') {
       dispatch({ type: 'focus' })
@@ -28,8 +35,8 @@ export function InsideLabelInputField({
 
   return (
     <TextInput.StateManager
-      state={{ value: state.value }}
-      onStateChange={(next) => dispatch({ type: 'change', value: next.value })}
+      state={input.store}
+      onStateChange={input.onStateChange}
       onStateEvent={forwardEvent}
       isInvalid={config.isInvalid}
       isDisabled={config.isDisabled}

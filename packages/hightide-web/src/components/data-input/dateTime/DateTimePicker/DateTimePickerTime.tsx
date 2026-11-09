@@ -1,4 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
+import { useMemo } from 'react'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { TimeWheelPicker, type TimeWheelPickerLayoutProps } from '../TimeWheelPicker'
 import { useDateTimePickerContext } from './DateTimePickerContext'
@@ -13,11 +15,16 @@ export function DateTimePickerTime({
   layoutProps,
 }: DateTimePickerTimeProps) {
   const { state, dispatch, config } = useDateTimePickerContext()
+  const timeState = useMemo(() => ({ value: state.value }), [state.value])
+  const time = useControllableStateStore({
+    state: timeState,
+    onStateChange: (next) => dispatch({ type: 'setValue', value: next.value }),
+  })
 
   return (
     <TimeWheelPicker.StateManager
-      state={{ value: state.value }}
-      onStateChange={(next) => dispatch({ type: 'setValue', value: next.value })}
+      state={time.store}
+      onStateChange={time.onStateChange}
       isInvalid={config.isInvalid}
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}

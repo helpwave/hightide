@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
+import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 import { Camera, Paperclip } from 'lucide-react'
 import {
   ChatMessageComposer,
@@ -88,15 +89,19 @@ export const composed: Story = {
     const [state, setState] = useState<ChatMessageComposerState>({
       value: args.initialValue ?? '',
     })
+    const controlled = useControllableStateStore({
+      state,
+      onStateChange: (next) => {
+        action('onStateChange')(next)
+        setState(next)
+      },
+    })
 
     return (
       <div className="w-150 max-w-full">
         <ChatMessageComposer.StateManager
-          state={state}
-          onStateChange={next => {
-            action('onStateChange')(next)
-            setState(next)
-          }}
+          state={controlled.store}
+          onStateChange={controlled.onStateChange}
           onStateEvent={args.onStateEvent}
           onSend={args.onSend}
           isInvalid={args.isInvalid}

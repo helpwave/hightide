@@ -3,7 +3,8 @@ import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { dateInputConfig } from '../useDateStateMachine'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
 import { defaultWheelLoopingBehaviour } from '../TimeWheelPicker/TimeWheelPickerState'
 import { DateWheelPickerContext, type DateWheelPickerContextConfig } from './DateWheelPickerContext'
@@ -27,6 +28,7 @@ export type DateWheelPickerStateManagerProps = DOMInputStateMangerProps<DateWhee
 
 export function DateWheelPickerStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -46,21 +48,34 @@ export function DateWheelPickerStateManager({
     return Array.from({ length: 12 }, (_, index) => formatter.format(new Date(2000, index, 1)))
   }, [locale])
   const bounds = useMemo(() => DateUtils.monthBounds(start, end), [end, start])
-  const months = useMemo(
-    () => DateUtils.monthsForYear(state.value.getFullYear(), bounds.minTimestamp, bounds.maxTimestamp),
-    [bounds.maxTimestamp, bounds.minTimestamp, state.value]
-  )
   const years = useMemo(() => DateUtils.yearsBetween(start, end), [end, start])
-  const days = useMemo(
-    () => daysForMonth(state.value, bounds.minTimestamp, bounds.maxTimestamp),
-    [bounds.maxTimestamp, bounds.minTimestamp, state.value]
-  )
   const transition = useMemo(() => {
     return (current: DateWheelPickerState, event: DateWheelPickerEvent) => dateWheelPickerStateTransition(current, event, {
       ...bounds,
       loopingBehaviour,
     })
   }, [bounds, loopingBehaviour])
+  const machine = useStateMachineController(state
+    ? {
+      state,
+      transition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition,
+      onStateChange,
+      onStateEvent,
+    })
+  const months = useMemo(
+    () => DateUtils.monthsForYear(machine.state.value.getFullYear(), bounds.minTimestamp, bounds.maxTimestamp),
+    [bounds.maxTimestamp, bounds.minTimestamp, machine.state.value]
+  )
+  const days = useMemo(
+    () => daysForMonth(machine.state.value, bounds.minTimestamp, bounds.maxTimestamp),
+    [bounds.maxTimestamp, bounds.minTimestamp, machine.state.value]
+  )
   const config = useMemo<DateWheelPickerContextConfig>(() => ({
     ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     isLooping,
@@ -70,13 +85,11 @@ export function DateWheelPickerStateManager({
     years,
     days,
   }), [days, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, monthNames, months, years, id])
-  const contextValue = useDateStateMachine({
-    state,
-    transition,
-    onStateChange,
-    onStateEvent,
+  const contextValue = useMemo(() => ({
+    state: machine.state,
+    dispatch: machine.dispatch,
     config,
-  })
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <DateWheelPickerContext.Provider value={contextValue}>

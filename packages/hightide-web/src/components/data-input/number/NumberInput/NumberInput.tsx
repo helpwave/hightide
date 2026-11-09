@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberInputContext } from './NumberInputContext'
 import { NumberInputInput, type NumberInputInputProps } from './NumberInputInput'
@@ -36,22 +35,20 @@ const NumberInputComponent = ({
   inputRef,
   inputProps,
 }: NumberInputProps) => {
-  const [state, setState] = useControlledState<NumberInputState>({
-    defaultValue: { value: initialValue ?? 0 },
+  const { store, onStateChange } = useControllableStateStore<NumberInputState>({
+    initialState: { value: initialValue ?? 0 },
   })
-  const binding = useStateMachineBinding<NumberInputState, number>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: number) => ({ value: next }), []),
-    get: useCallback((current: NumberInputState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <NumberInputStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

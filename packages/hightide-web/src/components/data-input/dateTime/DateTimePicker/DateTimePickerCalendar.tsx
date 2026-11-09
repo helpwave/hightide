@@ -1,8 +1,7 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
-import { useCallback } from 'react'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { CalendarDatePicker, type CalendarDatePickerLayoutProps, type CalendarDatePickerState } from '../CalendarDatePicker'
 import { useDateTimePickerContext } from './DateTimePickerContext'
 
@@ -27,26 +26,24 @@ export function DateTimePickerCalendar({
   layoutProps,
 }: DateTimePickerCalendarProps) {
   const { state, dispatch, config } = useDateTimePickerContext()
-  const [calendarState, setCalendarState] = useControlledState<CalendarDatePickerState>({
-    defaultValue: {
+  const { store, onStateChange } = useControllableStateStore<CalendarDatePickerState>({
+    initialState: {
       value: state.value,
       displayedMonth: new Date(state.value.getFullYear(), state.value.getMonth(), 1),
       displayMode: config.initialDisplay ?? 'day',
     },
   })
-  const binding = useStateMachineBinding<CalendarDatePickerState, Date>({
-    state: calendarState,
-    onStateChange: setCalendarState,
-    onValueChange: (next) => dispatch({ type: 'setValue', value: next }),
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value: state.value,
-    inject: useCallback((next: Date) => ({ value: next }), []),
-    get: useCallback((current: CalendarDatePickerState) => current.value, []),
+    onValueChange: (next) => dispatch({ type: 'setValue', value: next }),
   })
 
   return (
     <CalendarDatePicker.StateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       isInvalid={config.isInvalid}
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}

@@ -9,7 +9,7 @@ import { TableColumnSwitcher } from '../../../src/components/layout/Table/TableC
 import { Chip } from '../../../src/components/visualization/Chip'
 import { Table } from '../../../src/components/layout/Table/Table'
 import { Visibility } from '../../../src/components/layout/Visibility'
-import { FilterFunctions, type FilterValue } from '../../../src/components/interaction/data/filter-function'
+import { FilterFunctions, type FilterValue } from '../../../src/components/data-filter/filter-functions'
 import type { ColumnDef } from '@tanstack/react-table'
 
 const relationShipTags = ['Friend', 'Family', 'Work', 'School', 'Other'] as const

@@ -2,7 +2,7 @@ import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useBoundDateState } from '../useDateStateMachine'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type { CalendarDatePickerLayout, CalendarDatePickerLayoutProps, CalendarDisplayMode } from '../CalendarDatePicker'
 import type {
   TimePickerMillisecondIncrement,
@@ -66,14 +66,22 @@ const DateTimePickerComponent = ({
   timeRef,
   timeProps,
 }: DateTimePickerProps) => {
-  const binding = useBoundDateState<DateTimePickerState>({
-    value: value ?? initialValue,
-  }, value, onValueChange)
+  const { store, onStateChange } = useControllableStateStore<DateTimePickerState>({
+    initialState: {
+      value: value ?? initialValue,
+    },
+  })
+  useStateStoreBinding({
+    store,
+    key: 'value',
+    value,
+    onValueChange,
+  })
 
   return (
     <DateTimePickerStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

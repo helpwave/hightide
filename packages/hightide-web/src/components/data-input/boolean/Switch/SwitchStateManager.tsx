@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { SwitchContext, type SwitchContextValue } from './SwitchContext'
 import { switchStateTransition, type SwitchEvent, type SwitchState } from './SwitchState'
 
@@ -12,6 +12,7 @@ export type SwitchStateManagerProps = DOMInputStateMangerProps<SwitchState, Swit
 
 export function SwitchStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -21,17 +22,19 @@ export function SwitchStateManager({
   id,
   children,
 }: SwitchStateManagerProps) {
-  const machine = useStateMachine<SwitchState, SwitchEvent>({
-    state,
-    transition: switchStateTransition,
-    onStateChange,
-  })
-
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: SwitchEvent) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<SwitchState, SwitchEvent>(state
+    ? {
+      state,
+      transition: switchStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: switchStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
 
   const config = useMemo(() => ({
     isInvalid,
@@ -43,9 +46,9 @@ export function SwitchStateManager({
 
   const contextValue = useMemo<SwitchContextValue>(() => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     config,
-  }), [config, dispatch, machine.state])
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <SwitchContext.Provider value={contextValue}>

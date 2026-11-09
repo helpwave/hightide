@@ -3,7 +3,8 @@ import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat, useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { dateInputConfig } from '../useDateStateMachine'
 import type { CalendarDisplayMode } from '../CalendarDatePicker'
 import type {
   TimePickerMillisecondIncrement,
@@ -34,6 +35,7 @@ export type DateTimePickerStateManagerProps = DOMInputStateMangerProps<DateTimeP
 
 export function DateTimePickerStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -72,13 +74,24 @@ export function DateTimePickerStateManager({
     initialDisplay,
     locale,
   }), [end, initialDisplay, is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, millisecondIncrement, minuteIncrement, mode, precision, secondIncrement, start, weekStart, id])
-  const contextValue = useDateStateMachine({
-    state,
-    transition: dateTimePickerStateTransition,
-    onStateChange,
-    onStateEvent,
+  const machine = useStateMachineController(state
+    ? {
+      state,
+      transition: dateTimePickerStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: dateTimePickerStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
+  const contextValue = useMemo(() => ({
+    state: machine.state,
+    dispatch: machine.dispatch,
     config,
-  })
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <DateTimePickerContext.Provider value={contextValue}>

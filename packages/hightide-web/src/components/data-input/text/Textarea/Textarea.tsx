@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { TextareaContext } from './TextareaContext'
 import { TextareaElement, type TextareaElementProps } from './TextareaElement'
@@ -27,22 +26,20 @@ const TextareaComponent = ({
   inputRef,
   inputProps,
 }: TextareaProps) => {
-  const [state, setState] = useControlledState<TextareaState>({
-    defaultValue: { value: initialValue ?? '' },
+  const { store, onStateChange } = useControllableStateStore<TextareaState>({
+    initialState: { value: initialValue ?? '' },
   })
-  const valueBinding = useStateMachineBinding<TextareaState, string>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: string) => ({ value: next }), []),
-    get: useCallback((current: TextareaState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <TextareaStateManager
-      state={valueBinding.state}
-      onStateChange={valueBinding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

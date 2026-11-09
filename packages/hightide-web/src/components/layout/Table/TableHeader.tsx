@@ -6,7 +6,7 @@ import { TableFilterButton } from './TableFilterButton'
 import { useCallback, useEffect, useRef } from 'react'
 import { PropsUtil } from '../../../utils/propsUtil'
 import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
-import { DataTypeUtils, type DataType } from '../../interaction/data/data-types'
+import { DataTypeUtils, type DataType } from '../../data-filter/data-types'
 import { SafeGlobals } from '../../../utils/safeGlobals'
 
 export type TableHeaderProps = {

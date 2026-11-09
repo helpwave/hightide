@@ -23,4 +23,4 @@ export interface ControllableInputProps<T, E extends InputStateEvent> extends Pa
 
 export interface InputStateMangerProps<T extends InputState, E extends InputStateEvent> extends
   Partial<InputConfig>,
-  StateManagerProps<T, E> {}
+  StateManagerProps<T, E> { }

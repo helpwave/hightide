@@ -2,7 +2,7 @@ import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useBoundDateState } from '../useDateStateMachine'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { TimePickerContext } from './TimePickerContext'
 import { TimePickerColumn, type TimePickerColumnProps } from './TimePickerColumn'
 import { TimePickerLayout, type TimePickerLayoutProps } from './TimePickerLayout'
@@ -71,14 +71,22 @@ const TimePickerComponent = ({
   periodRef,
   periodProps,
 }: TimePickerProps) => {
-  const binding = useBoundDateState<TimePickerState>({
-    value: value ?? initialValue,
-  }, value, onValueChange)
+  const { store, onStateChange } = useControllableStateStore<TimePickerState>({
+    initialState: {
+      value: value ?? initialValue,
+    },
+  })
+  useStateStoreBinding({
+    store,
+    key: 'value',
+    value,
+    onValueChange,
+  })
 
   return (
     <TimePickerStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

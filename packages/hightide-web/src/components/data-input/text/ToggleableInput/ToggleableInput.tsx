@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { TextInputElementProps } from '../TextInput'
 import { ToggleableInputContext } from './ToggleableInputContext'
@@ -37,25 +36,23 @@ const ToggleableInputComponent = ({
   inputRef,
   inputProps,
 }: ToggleableInputProps) => {
-  const [state, setState] = useControlledState<ToggleableInputState>({
-    defaultValue: {
+  const { store, onStateChange } = useControllableStateStore<ToggleableInputState>({
+    initialState: {
       value: initialValue ?? '',
       isEditing: initialEditingState !== 'display',
     },
   })
-  const binding = useStateMachineBinding<ToggleableInputState, string>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: string) => ({ value: next }), []),
-    get: useCallback((current: ToggleableInputState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <ToggleableInputStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

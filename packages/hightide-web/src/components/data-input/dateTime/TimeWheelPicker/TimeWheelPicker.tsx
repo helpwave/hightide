@@ -2,7 +2,7 @@ import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useBoundDateState } from '../useDateStateMachine'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type {
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,
@@ -57,14 +57,22 @@ const TimeWheelPickerComponent = ({
   layoutRef,
   layoutProps,
 }: TimeWheelPickerProps) => {
-  const binding = useBoundDateState<TimeWheelPickerState>({
-    value: value ?? initialValue,
-  }, value, onValueChange)
+  const { store, onStateChange } = useControllableStateStore<TimeWheelPickerState>({
+    initialState: {
+      value: value ?? initialValue,
+    },
+  })
+  useStateStoreBinding({
+    store,
+    key: 'value',
+    value,
+    onValueChange,
+  })
 
   return (
     <TimeWheelPickerStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

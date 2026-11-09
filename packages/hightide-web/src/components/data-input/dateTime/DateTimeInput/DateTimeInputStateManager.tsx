@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { DateTimeInputContext, type DateTimeInputContextValue } from './DateTimeInputContext'
 import { dateTimeInputStateTransition, type DateTimeInputEvent, type DateTimeInputState } from './DateTimeInputState'
 
@@ -18,6 +18,7 @@ export type DateTimeInputStateManagerProps = DOMInputStateMangerProps<DateTimeIn
 
 export function DateTimeInputStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   mode,
@@ -33,16 +34,19 @@ export function DateTimeInputStateManager({
   id,
   children,
 }: DateTimeInputStateManagerProps) {
-  const machine = useStateMachine<DateTimeInputState, DateTimeInputEvent>({
-    state,
-    transition: dateTimeInputStateTransition,
-    onStateChange,
-  })
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: DateTimeInputEvent) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<DateTimeInputState, DateTimeInputEvent>(state
+    ? {
+      state,
+      transition: dateTimeInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: dateTimeInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,
@@ -52,7 +56,7 @@ export function DateTimeInputStateManager({
   }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<DateTimeInputContextValue>(() => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     config,
     mode,
     precision,
@@ -60,7 +64,7 @@ export function DateTimeInputStateManager({
     is24HourFormat,
     hasClear,
     hasTimePicker,
-  }), [config, dispatch, hasClear, hasTimePicker, is24HourFormat, machine.state, mode, precision, timeZone])
+  }), [config, hasClear, hasTimePicker, is24HourFormat, machine.dispatch, machine.state, mode, precision, timeZone])
 
   return (
     <DateTimeInputContext.Provider value={contextValue}>

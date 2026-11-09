@@ -1,7 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
@@ -44,8 +44,8 @@ const DateTimeFieldComponent = ({
     () => buildSegmentLayout({ locale, mode, precision, is24HourFormat: is24Hour }),
     [is24Hour, locale, mode, precision]
   )
-  const [state, setState] = useControlledState<DateTimeFieldState>({
-    defaultValue: {
+  const { store, onStateChange } = useControllableStateStore<DateTimeFieldState>({
+    initialState: {
       value: initialValue ?? null,
       edit: {
         values: initialValue ? decomposeDate(initialValue, initialLayout, is24Hour) : {},
@@ -54,19 +54,17 @@ const DateTimeFieldComponent = ({
       focusedType: null,
     },
   })
-  const binding = useStateMachineBinding<DateTimeFieldState, Date | null>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: Date | null) => ({ value: next }), []),
-    get: useCallback((current: DateTimeFieldState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <DateTimeFieldStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       locale={locale}
       is24HourFormat={is24Hour}

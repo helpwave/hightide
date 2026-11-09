@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CalendarDayPickerContext } from './CalendarDayPickerContext'
@@ -44,33 +43,29 @@ const CalendarDayPickerComponent = ({
   layoutRef,
   layoutProps,
 }: CalendarDayPickerProps) => {
-  const [state, setState] = useControlledState<CalendarDayPickerState>({
-    defaultValue: {
+  const { store, onStateChange } = useControllableStateStore<CalendarDayPickerState>({
+    initialState: {
       value: value ?? initialValue,
       displayedMonth: displayedMonth ?? initialDisplayedMonth ?? initialValue,
     },
   })
-  const monthBinding = useStateMachineBinding<CalendarDayPickerState, Date>({
-    state,
-    onStateChange: setState,
-    onValueChange: changeDisplayedMonth,
+  useStateStoreBinding({
+    store,
+    key: 'displayedMonth',
     value: displayedMonth,
-    inject: useCallback((next: Date) => ({ displayedMonth: next }), []),
-    get: useCallback((current: CalendarDayPickerState) => current.displayedMonth, []),
+    onValueChange: changeDisplayedMonth,
   })
-  const binding = useStateMachineBinding<CalendarDayPickerState, Date>({
-    state: monthBinding.state,
-    onStateChange: monthBinding.onStateChange,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: Date) => ({ value: next }), []),
-    get: useCallback((current: CalendarDayPickerState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <CalendarDayPickerStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

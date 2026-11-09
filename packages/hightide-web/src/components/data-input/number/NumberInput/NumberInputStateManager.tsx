@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import { NumberInputContext, type NumberInputContextValue } from './NumberInputContext'
 import { numberInputStateTransition, type NumberInputEvent, type NumberInputState } from './NumberInputState'
 
@@ -11,6 +11,7 @@ export type NumberInputStateManagerProps = DOMInputStateMangerProps<NumberInputS
 
 export function NumberInputStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -20,16 +21,19 @@ export function NumberInputStateManager({
   id,
   children,
 }: NumberInputStateManagerProps) {
-  const machine = useStateMachine<NumberInputState, NumberInputEvent>({
-    state,
-    transition: numberInputStateTransition,
-    onStateChange,
-  })
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: NumberInputEvent) => {
-    machine.dispatch(event)
-    onStateEventStable(event)
-  }, [machine, onStateEventStable])
+  const machine = useStateMachineController<NumberInputState, NumberInputEvent>(state
+    ? {
+      state,
+      transition: numberInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: numberInputStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,
@@ -39,9 +43,9 @@ export function NumberInputStateManager({
   }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<NumberInputContextValue>(() => ({
     state: machine.state,
-    dispatch,
+    dispatch: machine.dispatch,
     config,
-  }), [config, dispatch, machine.state])
+  }), [config, machine.dispatch, machine.state])
 
   return (
     <NumberInputContext.Provider value={contextValue}>

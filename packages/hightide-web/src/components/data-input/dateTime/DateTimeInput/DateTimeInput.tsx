@@ -1,10 +1,10 @@
 import type { ComponentRef, ReactNode, Ref, RefObject } from 'react'
-import { useCallback, useId, useMemo, useRef } from 'react'
+import { useId, useMemo, useRef } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat, useLocalization } from '../../../../global-contexts/localization/forward-exports'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import type {
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,
@@ -39,7 +39,7 @@ export type DateTimeInputProps = ControllableDOMInputProps<Date | null, DateTime
   layoutRef?: Ref<ComponentRef<typeof DateTimeInputLayout>>,
   layoutProps?: DateTimeInputLayoutProps,
   controlRef?: Ref<ComponentRef<typeof DateTimeInputControl>>,
-  controlProps?: Omit<DateTimeInputControlProps, 'actionCount'>,
+  controlProps?: Omit<DateTimeInputControlProps, 'actions'>,
   fieldRef?: DateTimeInputFieldProps['fieldRef'],
   fieldProps?: Omit<DateTimeInputFieldProps, 'fieldRef'>,
 }
@@ -87,29 +87,27 @@ const DateTimeInputComponent = ({
     label: `date-time-input-label-${generatedId}`,
   }), [generatedId])
   const anchorRef = useRef<HTMLDivElement>(null)
-  const [state, setState] = useControlledState<DateTimeInputState>({
-    defaultValue: {
-      value: initialValue ?? null,
-      dialogValue: initialValue ?? null,
+  const initialDate = value !== undefined ? value : (initialValue ?? null)
+  const { store, onStateChange } = useControllableStateStore<DateTimeInputState>({
+    initialState: {
+      value: initialDate,
+      dialogValue: initialDate,
       isOpen: false,
     },
   })
-  const binding = useStateMachineBinding<DateTimeInputState, Date | null>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: Date | null) => ({ value: next }), []),
-    get: useCallback((current: DateTimeInputState) => current.value, []),
+    onValueChange,
   })
-  const hasClear = !isRequired && allowClear && !isReadOnly && !isDisabled && binding.state.value !== null
-  const hasTimePicker = !isReadOnly
-  const actionCount = actions.length + (hasClear ? 1 : 0) + (hasTimePicker ? 1 : 0)
+  const hasClear = !isRequired && allowClear && !isReadOnly && !isDisabled
+  const hasTimePicker = !isReadOnly && !isDisabled
 
   return (
     <DateTimeInputStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}
@@ -130,7 +128,7 @@ const DateTimeInputComponent = ({
         <DateTimeInputControl
           {...controlProps}
           ref={ReactUtils.assingRefsBuilder([anchorRef, controlRef])}
-          actionCount={actionCount}
+          actions={actions}
         >
           <DateTimeInputField {...fieldProps} fieldRef={fieldRef} />
           <DateTimeInputActions actions={actions} popupId={ids.popup} />

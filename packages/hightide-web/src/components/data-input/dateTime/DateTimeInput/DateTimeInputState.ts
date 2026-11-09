@@ -5,14 +5,14 @@ export type DateTimeInputState = {
 }
 
 export type DateTimeInputEvent =
-  | { type: 'setValue', value: Date | null }
+  | { type: 'change', value: Date | null }
   | { type: 'open' }
   | { type: 'close' }
   | { type: 'commit', value: Date | null }
 
 export function dateTimeInputStateTransition(state: DateTimeInputState, event: DateTimeInputEvent): DateTimeInputState {
   switch (event.type) {
-  case 'setValue':
+  case 'change':
     return { ...state, value: event.value }
   case 'open':
     return { ...state, isOpen: true, dialogValue: state.value }

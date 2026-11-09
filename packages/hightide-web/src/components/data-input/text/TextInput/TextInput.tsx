@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { TextInputElement, type TextInputElementProps } from './TextInputElement'
 import { TextInputStateManager } from './TextInputStateManager'
@@ -27,22 +26,20 @@ const TextInputComponent = ({
   inputRef,
   inputProps,
 }: TextInputProps) => {
-  const [state, setState] = useControlledState<TextInputState>({
-    defaultValue: { value: initialValue ?? '' },
+  const { store, onStateChange } = useControllableStateStore<TextInputState>({
+    initialState: { value: initialValue ?? '' },
   })
-  const valueBinding = useStateMachineBinding<TextInputState, string>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: string) => ({ value: next }), []),
-    get: useCallback((current: TextInputState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <TextInputStateManager
-      state={valueBinding.state}
-      onStateChange={valueBinding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

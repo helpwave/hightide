@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { SwitchStateManager } from './SwitchStateManager'
 import { SwitchThumb, type SwitchThumbProps } from './SwitchThumb'
@@ -36,22 +35,20 @@ const SwitchComponent = ({
   thumbRef,
   thumbProps,
 }: SwitchProps) => {
-  const [state, setState] = useControlledState<SwitchState>({
-    defaultValue: { value: initialValue ?? false },
+  const { store, onStateChange } = useControllableStateStore<SwitchState>({
+    initialState: { value: initialValue ?? false },
   })
-  const valueBinding = useStateMachineBinding<SwitchState, boolean>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: boolean) => ({ value: next }), []),
-    get: useCallback((current: SwitchState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <SwitchStateManager
-      state={valueBinding.state}
-      onStateChange={valueBinding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

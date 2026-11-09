@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
 import { TabSwitcherContext, type TabInfo } from './TabSwitcherContext'
 import {
@@ -28,17 +28,26 @@ export type TabSwitcherStateManagerProps = StateManagerProps<TabSwitcherState, T
 
 export function TabSwitcherStateManager({
   state,
+  initialState,
   onStateChange,
   onStateEvent,
   variant = 'underline',
   children,
 }: TabSwitcherStateManagerProps) {
   const [tabInfos, setTabInfos] = useState<TabInfo[]>([])
-  const machine = useStateMachine({
-    state,
-    transition: tabSwitcherStateTransition,
-    onStateChange,
-  })
+  const machine = useStateMachineController<TabSwitcherState, TabSwitcherEvent>(state
+    ? {
+      state,
+      transition: tabSwitcherStateTransition,
+      onStateChange,
+      onStateEvent,
+    }
+    : {
+      initialState,
+      transition: tabSwitcherStateTransition,
+      onStateChange,
+      onStateEvent,
+    })
 
   const unsubscribe = useCallback((id: string) => {
     setTabInfos((previous) => previous.filter((tab) => tab.id !== id))
@@ -56,34 +65,31 @@ export function TabSwitcherStateManager({
     return () => unsubscribe(id)
   }, [unsubscribe])
 
-  const onStateEventStable = useStableEvent(onStateEvent)
-
   const dispatch = useCallback((event: TabSwitcherEvent) => {
     if (event.type === 'select' && event.id !== null && tabInfos.find((tab) => tab.id === event.id)?.disabled) {
       return
     }
     machine.dispatch(event)
-    onStateEventStable?.(event)
-  }, [machine, onStateEventStable, tabInfos])
+  }, [machine, tabInfos])
 
   const activeId = useMemo(() => {
-    const active = tabInfos.find((tab) => tab.id === state.activeId)
-    if (active && !active.disabled) return state.activeId
+    const active = tabInfos.find((tab) => tab.id === machine.state.activeId)
+    if (active && !active.disabled) return machine.state.activeId
     const firstEnabled = tabInfos.find((tab) => !tab.disabled)
     if (firstEnabled) return firstEnabled.id
-    return state.activeId
-  }, [state.activeId, tabInfos])
+    return machine.state.activeId
+  }, [machine.state.activeId, tabInfos])
 
   useEffect(() => {
-    const active = tabInfos.find((tab) => tab.id === state.activeId)
+    const active = tabInfos.find((tab) => tab.id === machine.state.activeId)
     if (!active?.disabled) return
     const firstEnabled = tabInfos.find((tab) => !tab.disabled)
-    if (!firstEnabled || firstEnabled.id === state.activeId) return
+    if (!firstEnabled || firstEnabled.id === machine.state.activeId) return
     onStateChange?.({ activeId: firstEnabled.id })
-  }, [onStateChange, state.activeId, tabInfos])
+  }, [machine.state.activeId, onStateChange, tabInfos])
 
   const contextValue = useMemo(() => ({
-    state,
+    state: machine.state,
     dispatch,
     config: { variant },
     tabs: {
@@ -92,7 +98,7 @@ export function TabSwitcherStateManager({
       subscribe,
       unsubscribe,
     },
-  }), [activeId, dispatch, state, subscribe, tabInfos, unsubscribe, variant])
+  }), [activeId, dispatch, machine.state, subscribe, tabInfos, unsubscribe, variant])
 
   return (
     <TabSwitcherContext.Provider value={contextValue}>

@@ -1,7 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CheckboxIcon, type CheckboxIconProps } from './CheckboxIcon'
 import { CheckboxStateManager } from './CheckboxStateManager'
@@ -39,22 +38,20 @@ const CheckboxComponent = ({
   iconRef,
   iconProps,
 }: CheckboxProps) => {
-  const [state, setState] = useControlledState<CheckboxState>({
-    defaultValue: { value: initialValue ?? false },
+  const { store, onStateChange } = useControllableStateStore<CheckboxState>({
+    initialState: { value: initialValue ?? false },
   })
-  const valueBinding = useStateMachineBinding<CheckboxState, boolean>({
-    state,
-    onStateChange: setState,
-    onValueChange,
+  useStateStoreBinding({
+    store,
+    key: 'value',
     value,
-    inject: useCallback((next: boolean) => ({ value: next }), []),
-    get: useCallback((current: CheckboxState) => current.value, []),
+    onValueChange,
   })
 
   return (
     <CheckboxStateManager
-      state={valueBinding.state}
-      onStateChange={valueBinding.onStateChange}
+      state={store}
+      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

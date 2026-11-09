@@ -15,6 +15,10 @@
     &[data-has-actions] {
       padding-inline-end: calc(var(--spacing) * (3 + var(--action-count, 0) * 9))
     }
+
+    &:not([data-value]) .date-time-input-clear {
+      @apply hidden;
+    }
   }
 
   .date-time-field {

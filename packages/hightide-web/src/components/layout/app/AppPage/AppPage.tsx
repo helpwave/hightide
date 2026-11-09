@@ -1,6 +1,6 @@
 import type { ComponentRef, ElementType, ReactNode, Ref } from 'react'
-import { useCallback, useMemo } from 'react'
-import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
+import { useMemo } from 'react'
+import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { FullScreenVerticalNavigation } from '../../../interaction/navigation/FullScreenVerticalNavigation'
 import { findActiveIdByUrl, type NavigationItemData } from '../../../interaction/navigation/types'
@@ -97,6 +97,11 @@ function AppPageView({
   mainProps,
 }: AppPageViewProps) {
   const { state, dispatch, items, LinkComponent, activeId } = useAppPageContext()
+  const navigationState = useMemo(() => ({ isOpen: state.isOpen }), [state.isOpen])
+  const navigation = useControllableStateStore({
+    state: navigationState,
+    onStateChange: (next) => dispatch({ type: next.isOpen ? 'open' : 'close' }),
+  })
 
   return (
     <AppPageLayout
@@ -104,8 +109,8 @@ function AppPageView({
       ref={ReactUtils.assingRefsBuilder([layoutRef])}
     >
       <FullScreenVerticalNavigation.StateManager
-        state={state}
-        onStateChange={(next) => dispatch({ type: next.isOpen ? 'open' : 'close' })}
+        state={navigation.store}
+        onStateChange={navigation.onStateChange}
         items={items ?? []}
         LinkComponent={LinkComponent}
         activeId={activeId}
@@ -179,17 +184,15 @@ const AppPageComponent = ({
   onStateEvent,
   ...viewProps
 }: AppPageProps) => {
-  const [state, setState] = useControlledState<AppPageState>({
-    defaultValue: { isOpen: initialIsOpen },
-    onValueChange: onStateChange,
+  const { store, onStateChange: commitState } = useControllableStateStore<AppPageState>({
+    initialState: { isOpen: initialIsOpen },
+    onStateChange,
   })
-  const binding = useStateMachineBinding<AppPageState, boolean>({
-    state,
-    onStateChange: setState,
-    onValueChange: onIsOpenChange,
+  useStateStoreBinding({
+    store,
+    key: 'isOpen',
     value: isOpen,
-    inject: useCallback((next: boolean) => ({ isOpen: next }), []),
-    get: useCallback((current: AppPageState) => current.isOpen, []),
+    onValueChange: onIsOpenChange,
   })
 
   const resolvedActiveId = useMemo(() => {
@@ -200,8 +203,8 @@ const AppPageComponent = ({
 
   return (
     <AppPageStateManager
-      state={binding.state}
-      onStateChange={binding.onStateChange}
+      state={store}
+      onStateChange={commitState}
       onStateEvent={onStateEvent}
       items={sidebarProps.items}
       LinkComponent={sidebarProps.LinkComponent}

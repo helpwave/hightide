@@ -354,6 +354,9 @@ describe('DateTimeInput clear button', () => {
 
   test('is hidden when there is no value', () => {
     renderInput({ initialValue: null })
-    expect(clearButton()).toBeNull()
+    const button = clearButton()
+    expect(button).not.toBeNull()
+    expect(button!.classList.contains('date-time-input-clear')).toBe(true)
+    expect(button!.closest('.date-time-input')?.hasAttribute('data-value')).toBe(false)
   })
 })

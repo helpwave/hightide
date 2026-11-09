@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Filter UI lives in `data-filter`. Each type is a `ControllableDOMInputProps` aggregate (`TextFilter`, `NumberFilter`, `DateFilter`, `DateTimeFilter`, `BooleanFilter`, `SingleTagFilter`, `MultiTagsFilter`, `UnknownTypeFilter`) with `StateManager`, `Operator`, and `Parameter` where needed. `FilterList`, `SortingList`, and the type popups live in `data-filter/interaction`
 - Data-input components are grouped by the value they capture: `boolean`, `text`, `number`, `file`, `selection`, and `dateTime`. Stories use the same folders. `InputComponentInterface` is removed. Every data-input aggregate uses `ControllableInputProps`, every data-input state manager uses `InputStateMangerProps`, and other state managers use `StateManagerProps`
 - Each of those inputs is an aggregate with `StateManager`, parts, `Context`, `Provider`, and `Consumer`. Folder indexes export the aggregate and types only
 - `TabSwitcher` `variant` `'underline' | 'segmented-chips'`, default `'underline'`. The list and each item set `data-style-variant` to that value
@@ -110,6 +111,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - updated `Modal` parts stylings
 
 ### Removed
+- `interaction/data`. Filters, sorting, and filter popups live in `data-filter`
 - `useTranslatedValidators`. Form validation returns error codes from `FormValidationUtils` without translating them
 - `ExpandableRoot`'s `allowContainerToggle`
 - Root import `@helpwave/hightide` (`src/index.ts`)
