@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import type { HTMLAttributes } from 'react'
 import { forwardRef } from 'react'
-import { VerticalNavigationMenu } from '../../../interaction/navigation/VerticalNavigationMenu'
+import { VerticalNavigationMenu } from '../../interaction/navigation/VerticalNavigationMenu'
 import { useAppPageContext } from './AppPageContext'
 
 export type AppPageSidebarNavProps = HTMLAttributes<HTMLElement>

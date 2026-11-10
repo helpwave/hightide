@@ -2,8 +2,8 @@ import type { ElementType, ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
 import { useStateMachine } from '@helpwave/hightide-utils/hooks'
-import type { NavigationItemData } from '../../../interaction/navigation/types'
-import type { LinkComponentProps } from '../../../interaction/navigation/VerticalNavigationMenu'
+import type { NavigationItemData } from '../../interaction/navigation/types'
+import type { LinkComponentProps } from '../../interaction/navigation/VerticalNavigationMenu'
 import { AppPageContext, type AppPageContextValue } from './AppPageContext'
 import {
   appPageStateTransition,

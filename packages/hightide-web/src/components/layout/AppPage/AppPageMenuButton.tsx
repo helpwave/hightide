@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 import {
   FullScreenVerticalNavigation,
   type FullScreenVerticalNavigationTriggerProps
-} from '../../../interaction/navigation/FullScreenVerticalNavigation'
+} from '../../interaction/navigation/FullScreenVerticalNavigation'
 
 export type AppPageMenuButtonProps = FullScreenVerticalNavigationTriggerProps
 

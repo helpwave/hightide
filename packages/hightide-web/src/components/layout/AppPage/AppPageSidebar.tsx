@@ -5,10 +5,10 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { X } from 'lucide-react'
-import { FocusTrap } from '../../../interaction/FocusTrap'
-import { IconButton } from '../../../interaction/IconButton'
-import { Icon } from '../../../visualization/Icon'
-import { PropsUtil } from '../../../../utils/propsUtil'
+import { FocusTrap } from '../../interaction/FocusTrap'
+import { IconButton } from '../../interaction/IconButton'
+import { Icon } from '../../visualization/Icon'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type AppSidebarProps = HTMLAttributes<HTMLElement> & {
   isOpen?: boolean,

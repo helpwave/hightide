@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Bell, File, Folder, Package, Settings } from 'lucide-react'
-import { AppPage, type AppPageState } from '../../../src/components/layout/app/AppPage'
-import type { NavigationItemData } from '../../../src/components/interaction/navigation/types'
+import { AppPage, type AppPageState } from '../../src/components/layout/AppPage'
+import type { NavigationItemData } from '../../src/components/interaction/navigation/types'
 import {
   FullScreenVerticalNavigation,
   type FullScreenVerticalNavigationState
-} from '../../../src/components/interaction/navigation/FullScreenVerticalNavigation'
-import { HelpwaveBadge } from '../../../src/components/branding/visualization/HelpwaveBadge'
-import { IconButton } from '../../../src/components/interaction/IconButton'
+} from '../../src/components/interaction/navigation/FullScreenVerticalNavigation'
+import { HelpwaveBadge } from '../../src/components/branding/visualization/HelpwaveBadge'
+import { IconButton } from '../../src/components/interaction/IconButton'
 import { useEffect, useState } from 'react'
 import { useControllableStateStore } from '@helpwave/hightide-utils/hooks'
 

@@ -1,7 +1,7 @@
 import type { Dispatch, ElementType, ReactNode } from 'react'
 import { createContext, useContext } from 'react'
-import type { NavigationItemData } from '../../../interaction/navigation/types'
-import type { LinkComponentProps } from '../../../interaction/navigation/VerticalNavigationMenu'
+import type { NavigationItemData } from '../../interaction/navigation/types'
+import type { LinkComponentProps } from '../../interaction/navigation/VerticalNavigationMenu'
 import type { AppPageEvent, AppPageState } from './AppPageState'
 
 export type AppPageContextValue = {
