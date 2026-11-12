@@ -1,6 +1,6 @@
 import { forwardRef, useCallback } from 'react'
 import { DateFilter } from '../data-input/DateFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorDate } from '../filter-operator'
 import { FilterOperatorUtils, operatorNeedsParameter } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -18,22 +18,18 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
   const operator = FilterOperatorUtils.typeCheck.date(suggestion) ? suggestion : 'between'
   const parameter = value?.parameter ?? {}
   const typedValue: FilterInputValue<FilterOperatorDate> = { operator, parameter }
-  const binding = useFilterState<FilterOperatorDate>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorDate>) => {
-      onValueChange({
-        dataType: 'date',
-        operator: next.operator,
-        parameter: next.parameter,
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorDate>) => {
+    onValueChange({
+      dataType: 'date',
+      operator: next.operator,
+      parameter: next.parameter,
+    })
+  }, [onValueChange])
 
   return (
     <DateFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       operatorOverrides={operatorOverrides}
     >
       <FilterPopUpShell
@@ -41,7 +37,7 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
         {...props}
         name={name}
         onRemove={onRemove}
-        noParameterRequired={!operatorNeedsParameter(binding.state.value.operator)}
+        noParameterRequired={!operatorNeedsParameter(operator)}
         operator={<DateFilter.Operator />}
       >
         <DateFilter.Parameter />

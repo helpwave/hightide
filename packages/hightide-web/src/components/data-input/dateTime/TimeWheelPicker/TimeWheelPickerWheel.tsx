@@ -18,7 +18,7 @@ export function TimeWheelPickerWheel({ unit }: TimeWheelPickerWheelProps) {
   if ((unit === 'second' && !hasSeconds) || (unit === 'millisecond' && !hasMilliseconds)) {
     return null
   }
-  const options = unit === 'hour'
+  const values = unit === 'hour'
     ? config.hours
     : unit === 'minute'
       ? config.minutes
@@ -28,10 +28,10 @@ export function TimeWheelPickerWheel({ unit }: TimeWheelPickerWheelProps) {
   const selected = unit === 'hour'
     ? toTimeWheelHour(state.value, config.is24HourFormat)
     : unit === 'minute'
-      ? closestMatch(options, (left, right) => Math.abs(left - state.value.getMinutes()) < Math.abs(right - state.value.getMinutes()))
+      ? closestMatch(values, (left, right) => Math.abs(left - state.value.getMinutes()) < Math.abs(right - state.value.getMinutes()))
       : unit === 'second'
-        ? closestMatch(options, (left, right) => Math.abs(left - state.value.getSeconds()) < Math.abs(right - state.value.getSeconds()))
-        : closestMatch(options, (left, right) => Math.abs(left - state.value.getMilliseconds()) < Math.abs(right - state.value.getMilliseconds()))
+        ? closestMatch(values, (left, right) => Math.abs(left - state.value.getSeconds()) < Math.abs(right - state.value.getSeconds()))
+        : closestMatch(values, (left, right) => Math.abs(left - state.value.getMilliseconds()) < Math.abs(right - state.value.getMilliseconds()))
   const isLocked = config.isDisabled || config.isReadOnly
 
   return (
@@ -41,7 +41,7 @@ export function TimeWheelPickerWheel({ unit }: TimeWheelPickerWheelProps) {
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       onValueChange={(next) => {
-        if (isLocked || next === undefined) {
+        if (isLocked || next === null) {
           return
         }
         dispatch(unit === 'hour'
@@ -64,12 +64,11 @@ export function TimeWheelPickerWheel({ unit }: TimeWheelPickerWheelProps) {
               ? { type: 'loopSecond', direction }
               : { type: 'loopMillisecond', direction })
       }}
-    >
-      {options.map((option) => (
-        <WheelPicker.Option key={option} value={option} valueId={String(option)}>
-          {padTwoDigits(option)}
-        </WheelPicker.Option>
-      ))}
-    </WheelPicker>
+      options={values.map((option) => ({
+        value: option,
+        id: String(option),
+        label: padTwoDigits(option),
+      }))}
+    />
   )
 }

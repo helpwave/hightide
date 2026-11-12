@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
-import type { PopUpProps } from '../../layout/PopUp/PopUp'
+import type { PopUpPanelProps } from '../../layout/PopUp/PopUp'
 import type { FilterValue } from '../filter-functions'
 import type { FilterOperator } from '../filter-operator'
 
-export interface FilterPopUpProps extends PopUpProps {
+export interface FilterPopUpProps extends PopUpPanelProps {
   name?: ReactNode,
   value?: FilterValue,
   onValueChange: (value: FilterValue) => void,

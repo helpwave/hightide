@@ -1,6 +1,6 @@
 import { forwardRef, useCallback } from 'react'
 import { NumberFilter } from '../data-input/NumberFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorNumber } from '../filter-operator'
 import { FilterOperatorUtils, operatorNeedsParameter } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -18,22 +18,18 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
   const operator = FilterOperatorUtils.typeCheck.number(suggestion) ? suggestion : 'between'
   const parameter = value?.parameter ?? {}
   const typedValue: FilterInputValue<FilterOperatorNumber> = { operator, parameter }
-  const binding = useFilterState<FilterOperatorNumber>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorNumber>) => {
-      onValueChange({
-        dataType: 'number',
-        operator: next.operator,
-        parameter: next.parameter,
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorNumber>) => {
+    onValueChange({
+      dataType: 'number',
+      operator: next.operator,
+      parameter: next.parameter,
+    })
+  }, [onValueChange])
 
   return (
     <NumberFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       operatorOverrides={operatorOverrides}
     >
       <FilterPopUpShell
@@ -41,7 +37,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
         {...props}
         name={name}
         onRemove={onRemove}
-        noParameterRequired={!operatorNeedsParameter(binding.state.value.operator)}
+        noParameterRequired={!operatorNeedsParameter(operator)}
         operator={<NumberFilter.Operator />}
       >
         <NumberFilter.Parameter />

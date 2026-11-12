@@ -1,0 +1,14 @@
+@layer components {
+  .sorting-list-chip {
+    @apply relative;
+  }
+
+  .sorting-list-chip > .sorting-list-chip-remove {
+    @apply absolute top-1/2 z-1 -translate-y-1/2;
+    right: var(--spacing-element-padding-direction-sm);
+  }
+
+  .sorting-list-chip > .list-chip {
+    padding-inline-end: calc(var(--spacing-element-sm) + var(--spacing-element-padding-direction-sm));
+  }
+}

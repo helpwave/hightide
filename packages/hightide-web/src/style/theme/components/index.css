@@ -13,6 +13,7 @@
 @import "./text-input.css";
 @import "./toggleable-intput.css";
 @import "./table.css";
+@import "./sorting-list.css";
 @import "./scrollbar.css";
 @import "./horizontal-navigation.css";
 @import "./vertical-navigation.css";
@@ -36,6 +37,7 @@
 @import "./number-input.css";
 @import "./property.css";
 @import "./pop-up.css";
+@import "./menu.css";
 @import "./select.css";
 @import "./file-input.css";
 @import "./combobox.css";

@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, type ReactNode } from 'react'
+import { useMemo, type ReactNode, type RefObject } from 'react'
 import { usePopUpContext } from './PopUpContext'
 import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
-import type { RefObject } from 'react'
 
 export interface PopUpOpenerBag<T extends HTMLElement> {
   open: () => void,
@@ -14,7 +13,7 @@ export interface PopUpOpenerBag<T extends HTMLElement> {
     'aria-haspopup': 'dialog',
     'aria-controls': string,
     'aria-expanded': boolean,
-    'ref': RefObject<T>,
+    'ref': RefObject<T | null>,
   },
 }
 
@@ -24,28 +23,19 @@ export interface PopUpOpenerProps<T extends HTMLElement> {
 
 export function PopUpOpener<T extends HTMLElement = HTMLButtonElement>({ children }: PopUpOpenerProps<T>) {
   const context = usePopUpContext()
-  const { setTriggerRef } = context
-  const ref = useRef<T>(null)
-
-  useEffect(() => {
-    setTriggerRef(ref)
-    return () => {
-      setTriggerRef(null)
-    }
-  }, [setTriggerRef])
 
   const bag: PopUpOpenerBag<T> = useMemo<PopUpOpenerBag<T>>(() => ({
-    open: () => context.setIsOpen(true),
-    close: () => context.setIsOpen(false),
-    toggleOpen: () => context.setIsOpen(prev => !prev),
-    isOpen: context.isOpen,
+    open: () => context.dispatch({ type: 'open' }),
+    close: () => context.dispatch({ type: 'close' }),
+    toggleOpen: () => context.dispatch({ type: 'toggle' }),
+    isOpen: context.state.isOpen,
     props: {
       'id': context.triggerId,
-      'onClick': () => context.setIsOpen(true),
+      'onClick': () => context.dispatch({ type: 'open' }),
       'aria-haspopup': 'dialog',
       'aria-controls': context.popUpId,
-      'aria-expanded': context.isOpen,
-      'ref': ref,
+      'aria-expanded': context.state.isOpen,
+      'ref': context.triggerRef as RefObject<T | null>,
     },
   }), [context])
 

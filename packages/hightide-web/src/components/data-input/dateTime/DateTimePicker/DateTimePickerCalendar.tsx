@@ -1,8 +1,7 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
-import { CalendarDatePicker, type CalendarDatePickerLayoutProps, type CalendarDatePickerState } from '../CalendarDatePicker'
+import { CalendarDatePicker, type CalendarDatePickerLayoutProps } from '../CalendarDatePicker'
 import { useDateTimePickerContext } from './DateTimePickerContext'
 
 function timeLabelFor(value: Date, locale: string, is24HourFormat: boolean, precision?: DateTimePrecision) {
@@ -26,25 +25,12 @@ export function DateTimePickerCalendar({
   layoutProps,
 }: DateTimePickerCalendarProps) {
   const { state, dispatch, config } = useDateTimePickerContext()
-  const store = useStateStore<CalendarDatePickerState>({
-    value: state.value,
-    displayedMonth: new Date(state.value.getFullYear(), state.value.getMonth(), 1),
-    displayMode: config.initialDisplay ?? 'day',
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: {
-        value: state.value,
-        onValueChange: (next) => dispatch({ type: 'setValue', value: next }),
-      },
-    },
-  })
 
   return (
     <CalendarDatePicker.StateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={state.value}
+      onValueChange={(next) => dispatch({ type: 'setValue', value: next })}
+      initialDisplay={config.initialDisplay}
       isInvalid={config.isInvalid}
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}

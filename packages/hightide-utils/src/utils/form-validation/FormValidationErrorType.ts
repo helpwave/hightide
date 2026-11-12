@@ -38,8 +38,6 @@ export type SelectionFormValidationErrorType = (typeof selectionFormValidationEr
 
 export type FormValidationErrorType = (typeof formValidationErrorTypeValues)[number]
 
-export type FormValidationResult = FormValidationErrorType | undefined
-
 const allowedFormValidationErrorTypeValues: ReadonlySet<string> = new Set(formValidationErrorTypeValues)
 
 function isFormValidationErrorTypeValue(value: unknown): value is FormValidationErrorType {

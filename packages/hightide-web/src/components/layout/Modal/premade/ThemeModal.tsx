@@ -25,9 +25,9 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       {...props}
       value={preferredThemeMode}
       iconAppearance="right"
-      onStateEvent={(event) => {
-        props.onStateEvent?.(event)
-        if (event.type === 'commit') setTheme(event.value)
+      onValueChange={(next) => {
+        props.onValueChange?.(next)
+        if (next != null) setTheme(next)
       }}
       triggerProps={{
         ...props.triggerProps,
@@ -78,7 +78,6 @@ export interface ThemeModalProps extends Omit<ModalProps, 'titleElement' | 'desc
 }
 
 export const ThemeModal = ({
-  onClose,
   titleOverwrite,
   descriptionOverwrite,
   panelProps: contentProps,
@@ -91,7 +90,6 @@ export const ThemeModal = ({
       {...props}
       titleElement={titleOverwrite ?? translation('pThemes', { count: 1 })}
       description={descriptionOverwrite ?? translation('chooseTheme')}
-      onClose={onClose}
       panelProps={{
         ...contentProps,
         className: clsx('w-80', contentProps?.className),
@@ -99,9 +97,15 @@ export const ThemeModal = ({
     >
       <ThemeSelect />
       <div className="flex-row-4 w-full mt-3 justify-end">
-        <Button onClick={onClose}>
-          {translation('done')}
-        </Button>
+        <Modal.Consumer>
+          {(context) => {
+            return (
+              <Button onClick={() => context?.dispatch({ type: 'close' })}>
+                {translation('done')}
+              </Button>
+            )
+          }}
+        </Modal.Consumer>
       </div>
     </Modal>
   )

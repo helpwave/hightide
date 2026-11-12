@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, type ReactNode } from 'react'
 import { MultiTagsFilter } from '../data-input/MultiTagsFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorTags } from '../filter-operator'
 import { FilterOperatorUtils, operatorNeedsParameter } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -23,17 +23,13 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
   const operator = FilterOperatorUtils.typeCheck.tags(suggestion) ? suggestion : 'contains'
   const parameter = value?.parameter ?? {}
   const typedValue: FilterInputValue<FilterOperatorTags> = { operator, parameter }
-  const binding = useFilterState<FilterOperatorTags>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorTags>) => {
-      onValueChange({
-        dataType: 'multiTags',
-        operator: next.operator,
-        parameter: next.parameter,
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorTags>) => {
+    onValueChange({
+      dataType: 'multiTags',
+      operator: next.operator,
+      parameter: next.parameter,
+    })
+  }, [onValueChange])
 
   if (tags.length === 0) {
     return null
@@ -41,8 +37,8 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
 
   return (
     <MultiTagsFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       tags={tags}
       operatorOverrides={operatorOverrides}
     >
@@ -51,7 +47,7 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
         {...props}
         name={name}
         onRemove={onRemove}
-        noParameterRequired={!operatorNeedsParameter(binding.state.value.operator)}
+        noParameterRequired={!operatorNeedsParameter(operator)}
         operator={<MultiTagsFilter.Operator />}
       >
         <MultiTagsFilter.Parameter />

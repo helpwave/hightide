@@ -1,50 +1,14 @@
-import type { ControllableDOMInputProps } from '../../../data-input/domInput'
 import { DateTimeFilterContext } from './DateTimeFilterContext'
-import { DateTimeFilterStateManager } from './DateTimeFilterStateManager'
+import { DateTimeFilterStateManager, type DateTimeFilterStateManagerProps } from './DateTimeFilterStateManager'
 import { DateTimeFilterOperator } from './DateTimeFilterOperator'
 import { DateTimeFilterParameter } from './DateTimeFilterParameter'
 import { DateTimeFilterLayout } from './DateTimeFilterLayout'
-import type { FilterOperatorDatetime } from '../../filter-operator'
-import { useFilterState, type FilterEvent, type FilterInputValue } from '../filter-value'
 
-export type DateTimeFilterProps = ControllableDOMInputProps<FilterInputValue<FilterOperatorDatetime>, FilterEvent<FilterOperatorDatetime>> & {
-  operatorOverrides?: FilterOperatorDatetime[],
-}
+export type DateTimeFilterProps = Omit<DateTimeFilterStateManagerProps, 'children'>
 
-const DateTimeFilterComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
-  operatorOverrides,
-}: DateTimeFilterProps) => {
-  const valueBinding = useFilterState<FilterOperatorDatetime>({
-    value,
-    initialValue,
-    onValueChange,
-    defaultValue: {
-      operator: 'between',
-      parameter: {},
-    },
-  })
-
+const DateTimeFilterComponent = (props: DateTimeFilterProps) => {
   return (
-    <DateTimeFilterStateManager
-      state={valueBinding.store}
-      onStateChange={valueBinding.onStateChange}
-      onStateEvent={onStateEvent}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
-      operatorOverrides={operatorOverrides}
-    >
+    <DateTimeFilterStateManager {...props}>
       <DateTimeFilterLayout>
         <DateTimeFilterOperator />
         <DateTimeFilterParameter />

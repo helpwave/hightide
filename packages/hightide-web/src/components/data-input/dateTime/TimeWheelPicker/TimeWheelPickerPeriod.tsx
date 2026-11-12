@@ -15,13 +15,14 @@ export function TimeWheelPickerPeriod() {
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       onValueChange={(nextPeriod) => {
-        if (!isLocked && nextPeriod !== undefined) {
+        if (!isLocked && nextPeriod !== null) {
           dispatch({ type: 'setPeriod', period: nextPeriod })
         }
       }}
-    >
-      <WheelPicker.Option value="am">AM</WheelPicker.Option>
-      <WheelPicker.Option value="pm">PM</WheelPicker.Option>
-    </WheelPicker>
+      options={[
+        { value: 'am', label: 'AM' },
+        { value: 'pm', label: 'PM' },
+      ]}
+    />
   )
 }

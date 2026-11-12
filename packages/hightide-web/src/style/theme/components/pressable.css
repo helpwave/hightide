@@ -50,6 +50,10 @@
       }
     }
   }
+
+  .pressable.list-chip {
+    padding-inline: var(--element-padding-direction, var(--spacing-element-padding-direction-sm));
+  }
 }
 
 @layer utilities {

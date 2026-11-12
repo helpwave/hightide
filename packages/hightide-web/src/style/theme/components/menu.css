@@ -1,0 +1,7 @@
+@layer components {
+  .menu-item,
+  .menu-navigation-item {
+    height: var(--spacing-element-sm);
+    min-height: var(--spacing-element-sm);
+  }
+}

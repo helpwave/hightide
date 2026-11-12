@@ -1,13 +1,13 @@
-import type { Dispatch, RefObject, SetStateAction } from 'react'
+import type { RefObject } from 'react'
 import { createContext, useContext } from 'react'
+import type { PopUpEvent, PopUpState } from './PopUpState'
 
 export type PopUpContextType = {
-  isOpen: boolean,
-  setIsOpen: Dispatch<SetStateAction<boolean>>,
+  state: PopUpState,
+  dispatch: (event: PopUpEvent) => void,
   popUpId: string,
   triggerId: string,
   triggerRef: RefObject<HTMLElement | null>,
-  setTriggerRef: (ref: RefObject<HTMLElement | null>) => void,
 }
 
 export const PopUpContext = createContext<PopUpContextType | null>(null)
@@ -15,7 +15,7 @@ export const PopUpContext = createContext<PopUpContextType | null>(null)
 export function usePopUpContext() {
   const context = useContext(PopUpContext)
   if (!context) {
-    throw new Error('usePopUpContext must be used within a <PopUpContext.Provider>')
+    throw new Error('usePopUpContext must be used within a PopUp.StateManager')
   }
   return context
 }

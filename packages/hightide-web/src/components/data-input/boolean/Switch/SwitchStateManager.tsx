@@ -1,13 +1,16 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../domInput'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { SwitchContext, type SwitchContextValue } from './SwitchContext'
 import { switchStateTransition, type SwitchEvent, type SwitchState } from './SwitchState'
 
-export type SwitchStateManagerProps = DOMInputStateMangerProps<SwitchState, SwitchEvent>
+export type SwitchStateManagerProps = DOMInputStateManagerProps<SwitchState, SwitchEvent>
 
 export function SwitchStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -17,8 +20,12 @@ export function SwitchStateManager({
   id,
   children,
 }: SwitchStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: { value: false },
     transition: switchStateTransition,
     onStateChange,
     onStateEvent,

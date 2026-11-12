@@ -1,4 +1,5 @@
 import type { Ref } from 'react'
+import clsx from 'clsx'
 import type { ComboboxSearchbarProps } from './ComboboxSearchbar'
 import { ComboboxSearchbar } from './ComboboxSearchbar'
 import type { ComboboxListProps } from './ComboboxList'
@@ -26,21 +27,30 @@ export function ComboboxComponent<T = string>({
   listProps,
   ...props
 }: ComboboxProps<T>) {
+  const list = (
+    <ComboboxList
+      {...listProps}
+      ref={listRef}
+      className={clsx(props.isInline && 'max-h-64', listProps?.className)}
+    />
+  )
+
   return (
     <ComboboxStateManager<T> {...props}>
-      <ComboboxSearchbar
-        {...searchbarProps}
-        ref={searchbarRef}
-      />
-      <ComboboxPopUp
-        {...popupProps}
-        ref={popupRef}
-      >
-        <ComboboxList
-          {...listProps}
-          ref={listRef}
+      <div className={clsx('combobox-root', props.isInline && 'w-full')}>
+        <ComboboxSearchbar
+          {...searchbarProps}
+          ref={searchbarRef}
         />
-      </ComboboxPopUp>
+        {props.isInline ? list : (
+          <ComboboxPopUp
+            {...popupProps}
+            ref={popupRef}
+          >
+            {list}
+          </ComboboxPopUp>
+        )}
+      </div>
     </ComboboxStateManager>
   )
 }

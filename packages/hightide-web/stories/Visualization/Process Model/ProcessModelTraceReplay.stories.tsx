@@ -28,7 +28,10 @@ export const processModelTraceReplay: Story = {
           <span>Example model</span>
           <Select<string>
             value={modelId}
-            onValueChange={setModelId}
+            onValueChange={(value) => {
+              if (value == null) return
+              setModelId(value)
+            }}
             options={processModelLibrary.map((entry) => ({
               value: entry.id,
               label: entry.name,

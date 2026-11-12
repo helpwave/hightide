@@ -1,6 +1,6 @@
 import { forwardRef, useCallback } from 'react'
 import { UnknownTypeFilter } from '../data-input/UnknownTypeFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorUnknownType } from '../filter-operator'
 import { FilterOperatorUtils } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -17,22 +17,18 @@ export const GenericFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(f
   const suggestion = value?.operator ?? 'isNotUndefined'
   const operator = FilterOperatorUtils.typeCheck.unknownType(suggestion) ? suggestion : 'isNotUndefined'
   const typedValue: FilterInputValue<FilterOperatorUnknownType> = { operator, parameter: {} }
-  const binding = useFilterState<FilterOperatorUnknownType>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorUnknownType>) => {
-      onValueChange({
-        dataType: 'unknownType',
-        operator: next.operator,
-        parameter: {},
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorUnknownType>) => {
+    onValueChange({
+      dataType: 'unknownType',
+      operator: next.operator,
+      parameter: {},
+    })
+  }, [onValueChange])
 
   return (
     <UnknownTypeFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       operatorOverrides={operatorOverrides}
     >
       <FilterPopUpShell

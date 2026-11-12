@@ -1,6 +1,6 @@
-import { useSyncExternalStore } from 'react'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
-import type { DOMInputStateMangerProps } from '../../data-input/domInput'
+import { useRef } from 'react'
+import { useInputStateManager, type StateStore } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../data-input/domInput'
 import type { FilterOperator } from '../filter-operator'
 import type { FilterParameter } from '../filter-functions'
 
@@ -19,7 +19,7 @@ export type FilterEvent<O extends FilterOperator = FilterOperator> = {
 }
 
 export interface FilterStateManagerProps<Operator extends FilterOperator>
-  extends DOMInputStateMangerProps<FilterState<Operator>, FilterEvent<Operator>> {
+  extends DOMInputStateManagerProps<FilterState<Operator>, FilterEvent<Operator>> {
   operatorOverrides?: Operator[],
 }
 
@@ -33,31 +33,73 @@ export const filterStateTransition = <O extends FilterOperator>(
   }
 }
 
+function sameDate(left: Date | undefined, right: Date | undefined): boolean {
+  if (left === right) return true
+  if (left === undefined || right === undefined) return false
+  return left.getTime() === right.getTime()
+}
+
+function sameList(left: unknown[] | undefined, right: unknown[] | undefined): boolean {
+  if (left === right) return true
+  if (left === undefined || right === undefined || left.length !== right.length) return false
+  return left.every((item, index) => Object.is(item, right[index]))
+}
+
+function sameParameter(left: FilterParameter, right: FilterParameter): boolean {
+  return left.stringValue === right.stringValue
+    && left.numberValue === right.numberValue
+    && left.numberMin === right.numberMin
+    && left.numberMax === right.numberMax
+    && left.booleanValue === right.booleanValue
+    && sameDate(left.dateValue, right.dateValue)
+    && sameDate(left.dateMin, right.dateMin)
+    && sameDate(left.dateMax, right.dateMax)
+    && Object.is(left.uuidValue, right.uuidValue)
+    && sameList(left.uuidValues, right.uuidValues)
+}
+
+function sameFilterInputValue<O extends FilterOperator>(
+  left: FilterInputValue<O>,
+  right: FilterInputValue<O>
+): boolean {
+  return left.operator === right.operator && sameParameter(left.parameter, right.parameter)
+}
+
+function useStableFilterInputValue<O extends FilterOperator>(value: FilterInputValue<O>): FilterInputValue<O> {
+  const ref = useRef(value)
+  if (!sameFilterInputValue(ref.current, value)) {
+    ref.current = value
+  }
+  return ref.current
+}
+
 export function useFilterState<O extends FilterOperator>({
   value,
   initialValue,
   onValueChange,
   defaultValue,
+  state,
+  onStateChange,
+  onStateEvent,
 }: {
   value?: FilterInputValue<O>,
   initialValue?: FilterInputValue<O>,
-  onValueChange?: (value: FilterInputValue<O>) => void,
+  onValueChange?: DOMInputStateManagerProps<FilterState<O>, FilterEvent<O>>['onValueChange'],
   defaultValue: FilterInputValue<O>,
+  state?: StateStore<FilterState<O>>,
+  onStateChange?: DOMInputStateManagerProps<FilterState<O>, FilterEvent<O>>['onStateChange'],
+  onStateEvent?: (event: FilterEvent<O>) => void,
 }) {
-  const store = useStateStore<FilterState<O>>({
-    value: value ?? initialValue ?? defaultValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-  const state = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot)
-
-  return {
-    store,
+  const resolved = value ?? initialValue ?? defaultValue
+  const stableValue = useStableFilterInputValue(resolved)
+  return useInputStateManager<FilterState<O>, FilterEvent<O>>({
     state,
+    value: value === undefined ? undefined : stableValue,
+    initialValue: stableValue,
+    onValueChange,
     onStateChange,
-  }
+    onStateEvent,
+    transition: filterStateTransition,
+    initialState: { value: stableValue },
+  })
 }

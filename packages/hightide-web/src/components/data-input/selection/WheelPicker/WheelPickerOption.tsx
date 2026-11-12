@@ -1,74 +1,42 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from 'react'
-import { createContext, useContext, useLayoutEffect, useMemo, useRef } from 'react'
+import type { HTMLAttributes, ReactElement, Ref } from 'react'
 import clsx from 'clsx'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
-import { useWheelPickerContext, useWheelPickerListContext } from './WheelPickerContext'
+import type { SelectionOptionData } from '../option'
+import { useWheelPickerContext } from './WheelPickerContext'
 
-const WheelPickerPreviewContext = createContext(false)
-
-export function WheelPickerPreviewScope({ children }: { children: ReactNode }) {
-  return (
-    <WheelPickerPreviewContext.Provider value={true}>
-      {children}
-    </WheelPickerPreviewContext.Provider>
-  )
+export type WheelPickerOptionProps<T = string> = Omit<HTMLAttributes<HTMLDivElement>, 'value'> & {
+  option: SelectionOptionData<T>,
 }
 
-export type WheelPickerOptionProps<T = string> = (
-  T extends string
-    ? {
-        valueId?: undefined,
-        value: T,
-      }
-    : {
-        valueId: string,
-        value: T,
-      }
-) & Omit<HTMLAttributes<HTMLDivElement>, 'value' | 'valueId'> & {
-  children?: ReactNode,
-}
-
-type WheelPickerOptionComponent = <T = string>(props: WheelPickerOptionProps<T>) => ReactElement | null
-
-function toIdentity<T>(value: T, valueId: string | undefined) {
-  if (valueId === undefined) {
-    return { value, id: value as string }
-  }
-  return { value, id: valueId }
-}
+type WheelPickerOptionComponent = <T = string>(
+  props: WheelPickerOptionProps<T> & { ref?: Ref<HTMLDivElement> }
+) => ReactElement | null
 
 function WheelPickerOptionImpl<T>({
-  value,
-  valueId,
+  option,
   className,
-  children,
   onClick,
+  ref,
   ...props
-}: WheelPickerOptionProps<T>) {
-  const isPreview = useContext(WheelPickerPreviewContext)
-  const { state, config } = useWheelPickerContext<T>()
-  const { registerOption, selectValue } = useWheelPickerListContext<T>()
-  const isLocked = config.isDisabled || config.isReadOnly
-  const ref = useRef<HTMLDivElement>(null)
-  const identity = useMemo(() => toIdentity(value, valueId), [value, valueId])
-  const isSelected = !isPreview && Object.is(state.value, value)
-
-  useLayoutEffect(() => {
-    if (isPreview) {
-      return
-    }
-    const element = ref.current
-    if (!element) {
-      return
-    }
-    return registerOption({ id: identity.id, value, element })
-  }, [identity, isPreview, registerOption, value])
+}: WheelPickerOptionProps<T> & { ref?: Ref<HTMLDivElement> }) {
+  const { state, config, isPreview, optionElementsRef, actionsRef } = useWheelPickerContext<T>()
+  const isLocked = config.isDisabled || config.isReadOnly || Boolean(option.disabled)
+  const isSelected = !isPreview && Object.is(state.value, option.value)
 
   return (
     <div
       {...props}
-      ref={ref}
-      id={isPreview ? undefined : identity.id}
+      ref={ReactUtils.assingRefsBuilder([
+        ref,
+        (element) => {
+          if (isPreview) {
+            return
+          }
+          optionElementsRef.current[option.id] = element
+        },
+      ])}
+      id={isPreview ? undefined : option.id}
       role={isPreview ? undefined : 'option'}
       aria-selected={isPreview ? undefined : isSelected}
       data-selected={isSelected ? '' : undefined}
@@ -78,10 +46,10 @@ function WheelPickerOptionImpl<T>({
         if (event.defaultPrevented || isLocked) {
           return
         }
-        selectValue(value)
+        actionsRef.current.selectValue(option.value)
       }}
     >
-      {children ?? (valueId === undefined ? value as string : null)}
+      {option.visual?.content ?? option.label}
     </div>
   )
 }

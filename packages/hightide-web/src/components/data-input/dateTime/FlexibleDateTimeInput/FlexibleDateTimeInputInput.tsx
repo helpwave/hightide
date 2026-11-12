@@ -4,19 +4,15 @@ import { DateTimeInput, type DateTimeInputProps } from '../DateTimeInput'
 import { useFlexibleDateTimeInputContext } from './FlexibleDateTimeInputContext'
 import { FlexibleDateTimeInputModeButton } from './FlexibleDateTimeInputModeButton'
 
-export type FlexibleDateTimeInputInputProps = Omit<DateTimeInputProps, 'mode' | 'value' | 'onValueChange' | 'onStateEvent' | 'actions'> & {
-  timeZone: string,
-  fixedTime: Date,
+export type FlexibleDateTimeInputInputProps = Omit<DateTimeInputProps, 'mode' | 'value' | 'onValueChange' | 'onStateEvent' | 'actions' | 'timeZone'> & {
   actions?: ReactNode[],
 }
 
 export function FlexibleDateTimeInputInput({
-  timeZone,
-  fixedTime,
   actions = [],
   ...props
 }: FlexibleDateTimeInputInputProps) {
-  const { state, dispatch, config } = useFlexibleDateTimeInputContext()
+  const { state, dispatch, config, timeZone, fixedTime } = useFlexibleDateTimeInputContext()
   const zoned = (date: Date) => DateUtils.toZonedDate(date, timeZone)
   const unzoned = (date: Date) => DateUtils.fromZonedDate(date, timeZone)
   const toDate = (date: Date) => unzoned(DateUtils.withTime(zoned(date), fixedTime))
@@ -43,7 +39,7 @@ export function FlexibleDateTimeInputInput({
       }}
       actions={[
         ...actions,
-        <FlexibleDateTimeInputModeButton key="flexible-date-time-mode" timeZone={timeZone} fixedTime={fixedTime} />,
+        <FlexibleDateTimeInputModeButton key="flexible-date-time-mode" />,
       ]}
     />
   )

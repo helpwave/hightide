@@ -1,8 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type {
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,
@@ -13,19 +11,17 @@ import { TimeWheelPickerLayout, type TimeWheelPickerLayoutProps } from './TimeWh
 import { TimeWheelPickerPeriod } from './TimeWheelPickerPeriod'
 import { TimeWheelPickerSeparator } from './TimeWheelPickerSeparator'
 import { TimeWheelPickerWheel } from './TimeWheelPickerWheel'
-import { TimeWheelPickerStateManager } from './TimeWheelPickerStateManager'
+import { TimeWheelPickerStateManager, type TimeWheelPickerStateManagerProps } from './TimeWheelPickerStateManager'
 import {
   defaultTimeWheelMillisecondIncrement,
   defaultTimeWheelMinuteIncrement,
   defaultTimeWheelPrecision,
   defaultTimeWheelSecondIncrement,
   defaultWheelLoopingBehaviour,
-  type TimeWheelPickerEvent,
-  type TimeWheelPickerState,
   type WheelLoopingBehaviour
 } from './TimeWheelPickerState'
 
-export type TimeWheelPickerProps = ControllableDOMInputProps<Date, TimeWheelPickerEvent> & {
+export type TimeWheelPickerProps = Omit<TimeWheelPickerStateManagerProps, 'children'> & {
   is24HourFormat?: boolean,
   isLooping?: boolean,
   loopingBehaviour?: WheelLoopingBehaviour,
@@ -57,20 +53,12 @@ const TimeWheelPickerComponent = ({
   layoutRef,
   layoutProps,
 }: TimeWheelPickerProps) => {
-  const store = useStateStore<TimeWheelPickerState>({
-    value: value ?? initialValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
 
   return (
     <TimeWheelPickerStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

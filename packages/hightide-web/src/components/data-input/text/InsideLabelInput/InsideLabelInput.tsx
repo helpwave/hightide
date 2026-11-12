@@ -1,25 +1,20 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
-import { useId } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { TextInput, TextInputElementProps } from '../TextInput'
 import { InsideLabelInputContext } from './InsideLabelInputContext'
 import { InsideLabelInputField } from './InsideLabelInputField'
 import { InsideLabelInputLabel, type InsideLabelInputLabelProps } from './InsideLabelInputLabel'
 import { InsideLabelInputLayout, type InsideLabelInputLayoutProps } from './InsideLabelInputLayout'
-import { InsideLabelInputStateManager } from './InsideLabelInputStateManager'
-import { type InsideLabelInputEvent, type InsideLabelInputState } from './InsideLabelInputState'
+import { InsideLabelInputStateManager, type InsideLabelInputStateManagerProps } from './InsideLabelInputStateManager'
 
-export type InsideLabelInputProps = ControllableDOMInputProps<string, InsideLabelInputEvent> & {
-  id?: string,
+export type InsideLabelInputProps = Omit<InsideLabelInputStateManagerProps, 'children'> & {
   label: ReactNode,
   layoutRef?: Ref<ComponentRef<typeof InsideLabelInputLayout>>,
   layoutProps?: InsideLabelInputLayoutProps,
   inputRef?: Ref<ComponentRef<typeof TextInput.Input>>,
   inputProps?: TextInputElementProps,
   labelRef?: Ref<ComponentRef<typeof InsideLabelInputLabel>>,
-  labelProps?: Omit<InsideLabelInputLabelProps, 'label'>,
+  labelProps?: Omit<InsideLabelInputLabelProps, 'children'>,
 }
 
 const InsideLabelInputComponent = ({
@@ -31,7 +26,7 @@ const InsideLabelInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
-  id: customId,
+  id,
   label,
   layoutRef,
   layoutProps,
@@ -40,24 +35,11 @@ const InsideLabelInputComponent = ({
   labelRef,
   labelProps,
 }: InsideLabelInputProps) => {
-  const generatedId = useId()
-  const id = customId ?? generatedId
-  const labelId = id + '-label'
-  const store = useStateStore<InsideLabelInputState>({
-    value: value ?? initialValue ?? '',
-    isFocused: false,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-
   return (
     <InsideLabelInputStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}
@@ -70,17 +52,15 @@ const InsideLabelInputComponent = ({
         ref={ReactUtils.assingRefsBuilder([layoutRef])}
       >
         <InsideLabelInputField
-          id={id}
-          labelId={labelId}
           inputRef={inputRef}
           inputProps={inputProps}
         />
         <InsideLabelInputLabel
           {...labelProps}
           ref={ReactUtils.assingRefsBuilder([labelRef])}
-          id={labelId}
-          label={label}
-        />
+        >
+          {label}
+        </InsideLabelInputLabel>
       </InsideLabelInputLayout>
     </InsideLabelInputStateManager>
   )

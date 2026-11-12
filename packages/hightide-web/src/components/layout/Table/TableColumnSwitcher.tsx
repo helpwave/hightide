@@ -1,16 +1,15 @@
 import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, Columns3Cog } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import type { PopUpProps } from '../PopUp/PopUp'
-import { PopUp } from '../PopUp/PopUp'
-import { PopUpRoot } from '../PopUp/PopUpRoot'
-import { PopUpOpener } from '../PopUp/PopUpOpener'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
+import { PopUp, type PopUpPanelProps } from '../PopUp/PopUp'
+import type { PopUpState } from '../PopUp/PopUpState'
 import { useTableStateWithoutSizingContext } from './TableContext'
 import type { IconButtonProps } from '../../interaction/IconButton'
 import { IconButton } from '../../interaction/IconButton'
 import { Visibility } from '../Visibility'
 
-export type TableColumnSwitcherPopUpProps = PopUpProps
+export type TableColumnSwitcherPopUpProps = PopUpPanelProps
 
 export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpProps) => {
   const { table } = useTableStateWithoutSizingContext()
@@ -178,9 +177,9 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
   }
 
   return (
-    <PopUp
+    <PopUp.Panel
       {...props}
-      ref={containerRef}
+      panelRef={containerRef}
       id={ids.popup}
       options={{
         verticalAlignment: 'afterEnd',
@@ -315,7 +314,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
           )
         })}
       </div>
-    </PopUp>
+    </PopUp.Panel>
   )
 }
 
@@ -325,21 +324,28 @@ export interface TableColumnSwitcherProps extends TableColumnSwitcherPopUpProps 
 
 export const TableColumnSwitcher = ({ buttonProps, ...props }: TableColumnSwitcherProps) => {
   const translation = useHightideTranslation()
+  const store = useStateStore<PopUpState>({ isOpen: false })
+  const onStateChange = useStateStoreBindings({
+    store,
+    bindings: {
+      isOpen: {},
+    },
+  })
 
   return (
-    <PopUpRoot>
-      <PopUpOpener>
-        {({ props }) => (
+    <PopUp.StateManager state={store} onStateChange={onStateChange}>
+      <PopUp.Opener>
+        {({ props: openerProps }) => (
           <IconButton
-            {...props}
+            {...openerProps}
             color="neutral"
             tooltip={translation('changeColumnDisplay')}
             icon={Columns3Cog}
             {...buttonProps}
           />
         )}
-      </PopUpOpener>
+      </PopUp.Opener>
       <TableColumnSwitcherPopUp {...props} />
-    </PopUpRoot>
+    </PopUp.StateManager>
   )
 }

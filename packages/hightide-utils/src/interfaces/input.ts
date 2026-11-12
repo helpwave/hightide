@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+import type { BindingTransitionInformation, StateStoreBindings, StateStoreChange } from '../hooks/state-machine/useStateStoreBindings'
 import type { StateManagerProps } from './state-manager'
 
 export interface InputState { value: unknown }
@@ -14,13 +16,20 @@ export interface InputContextValue<T extends InputState, E extends InputStateEve
   config: C,
 }
 
-export interface ControllableInputProps<T, E extends InputStateEvent> extends Partial<InputConfig> {
-  value?: T,
-  initialValue?: T,
-  onValueChange?: (value: T) => void,
-  onStateEvent?: (event: E) => void,
-}
+export type InputStateManagerProps<TState extends InputState, E extends InputStateEvent> =
+  Omit<StateManagerProps<TState, E>, 'children' | 'initialState'> & {
+    value?: TState['value'],
+    initialValue?: TState['value'],
+    onValueChange?: (
+      value: TState['value'],
+      transition?: BindingTransitionInformation<TState, 'value', E>,
+    ) => StateStoreChange<TState['value']> | void,
+    children?: ReactNode,
+  }
 
-export interface InputStateMangerProps<T extends InputState, E extends InputStateEvent> extends
-  Partial<InputConfig>,
-  StateManagerProps<T, E> { }
+export type InputStateManagerHookProps<TState extends InputState, E extends InputStateEvent> =
+  Omit<InputStateManagerProps<TState, E>, 'children'> & {
+    transition: (state: TState, event: E) => TState,
+    initialState: TState | ((value: TState['value'] | undefined) => TState),
+    bindings?: StateStoreBindings<TState, E>,
+  }

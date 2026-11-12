@@ -47,6 +47,7 @@ export const SingleSelectProperty = ({
             value={value}
             initialValue={initialValue}
             onValueChange={(next) => {
+              if (next == null) return
               onValueChange?.(next)
               onEditComplete?.(next)
             }}

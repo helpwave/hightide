@@ -35,6 +35,19 @@ export const card: Story = {
   },
 }
 
+export const cardInCard: Story = {
+  render: () => (
+    <Card className="max-w-md">
+      <span className="typography-title-md">Outer card</span>
+      <Card>
+        <ListItem title="Anna Müller" subtitle="Name" />
+        <Divider />
+        <ListItem title="anna@example.com" subtitle="Email" />
+      </Card>
+    </Card>
+  ),
+}
+
 export const profileStyle: Story = {
   render: () => (
     <div className="flex-col-5 w-full max-w-md">

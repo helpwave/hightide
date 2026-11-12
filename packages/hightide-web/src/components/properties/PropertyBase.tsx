@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { AlertTriangle, Trash, X } from 'lucide-react'
-import type { ControllableDOMInputProps } from '../data-input/domInput'
+import type { DOMInputValueProps } from '../data-input/domInput'
 import type { InputStateEvent } from '@helpwave/hightide-utils/interfaces'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Icon } from '../visualization/Icon'
@@ -16,7 +16,7 @@ export type PropertyField<T, E extends InputStateEvent> = {
   onRemove?: () => void,
   onValueClear?: () => void,
   onEditComplete?: (value: T) => void,
-} & ControllableDOMInputProps<T, E>
+} & DOMInputValueProps<T, E>
 
 export type PropertyBaseProps = {
   children: (props: { isRequired: boolean, hasValue: boolean, invalid: boolean }) => ReactNode,

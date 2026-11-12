@@ -5,6 +5,12 @@ import { range } from '@helpwave/hightide-utils/utils'
 
 import { WheelPicker } from '../../../../src/components/data-input/selection/WheelPicker'
 
+const options = range(60).map((item) => ({
+  value: item,
+  id: String(item),
+  label: String(item),
+}))
+
 const meta = {
   component: WheelPicker<number>,
 } satisfies Meta<typeof WheelPicker<number>>
@@ -23,6 +29,7 @@ export const wheelPicker: Story = {
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
     onLoop: action('onLoop'),
+    options,
   },
   render: function WheelPickerStory({
     isDisabled,
@@ -34,6 +41,7 @@ export const wheelPicker: Story = {
     onValueChange,
     onStateEvent,
     onLoop,
+    options: storyOptions,
   }) {
     const [value, setValue] = useState(55)
     return (
@@ -51,13 +59,8 @@ export const wheelPicker: Story = {
         isRequired={isRequired}
         isLooping={isLooping}
         visibleRows={visibleRows}
-      >
-        {range(60).map((item) => (
-          <WheelPicker.Option key={item} value={item} valueId={String(item)}>
-            {item}
-          </WheelPicker.Option>
-        ))}
-      </WheelPicker>
+        options={storyOptions}
+      />
     )
   },
 }

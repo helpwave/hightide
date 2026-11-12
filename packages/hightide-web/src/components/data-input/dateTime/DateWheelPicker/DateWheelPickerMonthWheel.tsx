@@ -12,7 +12,7 @@ export function DateWheelPickerMonthWheel() {
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       onValueChange={(month) => {
-        if (!isLocked && month !== undefined) {
+        if (!isLocked && month !== null) {
           dispatch({ type: 'setMonth', month })
         }
       }}
@@ -21,12 +21,11 @@ export function DateWheelPickerMonthWheel() {
           dispatch({ type: 'loopMonth', direction })
         }
       }}
-    >
-      {config.months.map((month) => (
-        <WheelPicker.Option key={month} value={month} valueId={String(month)}>
-          {config.monthNames[month]}
-        </WheelPicker.Option>
-      ))}
-    </WheelPicker>
+      options={config.months.map((month) => ({
+        value: month,
+        id: String(month),
+        label: config.monthNames[month] ?? String(month),
+      }))}
+    />
   )
 }

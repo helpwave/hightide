@@ -1,14 +1,10 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { SwitchStateManager } from './SwitchStateManager'
+import { SwitchStateManager, type SwitchStateManagerProps } from './SwitchStateManager'
 import { SwitchThumb, type SwitchThumbProps } from './SwitchThumb'
 import { SwitchTrack, type SwitchTrackProps } from './SwitchTrack'
 import { SwitchTrigger, type SwitchTriggerProps } from './SwitchTrigger'
-import { type SwitchEvent, type SwitchState } from './SwitchState'
-
-export type SwitchProps = ControllableDOMInputProps<boolean, SwitchEvent>
+export type SwitchProps = Omit<SwitchStateManagerProps, 'children'>
   & {
     triggerRef?: Ref<ComponentRef<typeof SwitchTrigger>>,
     triggerProps?: SwitchTriggerProps,
@@ -19,43 +15,16 @@ export type SwitchProps = ControllableDOMInputProps<boolean, SwitchEvent>
   }
 
 const SwitchComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
   triggerRef,
   triggerProps,
   trackRef,
   trackProps,
   thumbRef,
   thumbProps,
+  ...props
 }: SwitchProps) => {
-  const store = useStateStore<SwitchState>({
-    value: value ?? initialValue ?? false,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-
   return (
-    <SwitchStateManager
-      state={store}
-      onStateChange={onStateChange}
-      onStateEvent={onStateEvent}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
-    >
+    <SwitchStateManager {...props}>
       <SwitchTrigger
         ref={ReactUtils.assingRefsBuilder([triggerRef])}
         {...triggerProps}

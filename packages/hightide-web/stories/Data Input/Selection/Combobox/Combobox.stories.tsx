@@ -32,6 +32,7 @@ export const combobox: Story = {
     onItemClick: action('onItemClick'),
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
+    hasClearIcon: true,
   },
   render: (args) => (
     <div className="w-80 flex flex-col gap-2">

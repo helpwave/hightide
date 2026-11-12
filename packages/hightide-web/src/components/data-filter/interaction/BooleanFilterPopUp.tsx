@@ -1,6 +1,6 @@
 import { forwardRef, useCallback } from 'react'
 import { BooleanFilter } from '../data-input/BooleanFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorBoolean } from '../filter-operator'
 import { FilterOperatorUtils } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -18,22 +18,18 @@ export const BooleanFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(f
   const operator = FilterOperatorUtils.typeCheck.boolean(suggestion) ? suggestion : 'isTrue'
   const parameter = value?.parameter ?? {}
   const typedValue: FilterInputValue<FilterOperatorBoolean> = { operator, parameter }
-  const binding = useFilterState<FilterOperatorBoolean>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorBoolean>) => {
-      onValueChange({
-        dataType: 'boolean',
-        operator: next.operator,
-        parameter: next.parameter,
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorBoolean>) => {
+    onValueChange({
+      dataType: 'boolean',
+      operator: next.operator,
+      parameter: next.parameter,
+    })
+  }, [onValueChange])
 
   return (
     <BooleanFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       operatorOverrides={operatorOverrides}
     >
       <FilterPopUpShell

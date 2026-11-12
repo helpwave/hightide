@@ -17,10 +17,10 @@ export type SelectionOptionData<T> = {
 
 type SelectionOptionIdentity<T> =
   [T] extends [string]
-    ? { id?: string, label?: string }
-    : [string] extends [T]
-      ? { id?: string, label?: string }
-      : { id: string, label: string }
+  ? { id?: string, label?: string }
+  : [string] extends [T]
+  ? { id?: string, label?: string }
+  : { id: string, label: string }
 
 export type SelectionOptionInput<T> = {
   value: T,
@@ -72,21 +72,10 @@ export function useOptionRefs(ids: readonly string[]): Record<string, RefObject<
 
 export function scrollHighlightedOption(
   highlightedId: string | null,
-  optionRefs: Record<string, RefObject<HTMLLIElement | null>>,
-  listboxId: string,
-  searchInputId?: string
+  optionRefs: Record<string, RefObject<HTMLLIElement | null>>
 ) {
   if (!highlightedId) return
   const node = optionRefs[highlightedId]?.current
   if (!node) return
   node.scrollIntoView({ block: 'nearest' })
-  const active = document.activeElement
-  if (searchInputId) {
-    const search = document.getElementById(searchInputId)
-    if (search && (active === search || search.contains(active))) return
-  }
-  const listbox = document.getElementById(listboxId)
-  if (listbox && (active === listbox || listbox.contains(active))) {
-    node.focus()
-  }
 }

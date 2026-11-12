@@ -6,19 +6,15 @@ import { TextInput, type TextInputElementProps, type TextInputEvent } from '../T
 import { useInsideLabelInputContext } from './InsideLabelInputContext'
 
 export type InsideLabelInputFieldProps = {
-  id: string,
-  labelId: string,
   inputRef?: Ref<ComponentRef<typeof TextInput.Input>>,
   inputProps?: TextInputElementProps,
 }
 
 export function InsideLabelInputField({
-  id,
-  labelId,
   inputRef,
   inputProps,
 }: InsideLabelInputFieldProps) {
-  const { state, dispatch, config } = useInsideLabelInputContext()
+  const { state, dispatch, config, labelId } = useInsideLabelInputContext()
   const inputState = useMemo(() => ({ value: state.value }), [state.value])
   const input = useControllableStateStore({
     state: inputState,
@@ -47,7 +43,7 @@ export function InsideLabelInputField({
       <TextInput.Input
         {...inputProps}
         ref={inputRef}
-        id={id}
+        id={config.id}
         aria-labelledby={labelId}
         className={clsx('h-14 px-4 pb-2 py-6.5', inputProps?.className)}
       />

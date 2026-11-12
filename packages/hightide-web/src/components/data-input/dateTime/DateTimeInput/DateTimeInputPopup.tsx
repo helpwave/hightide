@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import type { RefObject } from 'react'
 import { DateUtils, type Weekday } from '@helpwave/hightide-utils/utils'
 import type {
   TimePickerMillisecondIncrement,
@@ -11,9 +10,6 @@ import { PopUp } from '../../../layout/PopUp/PopUp'
 import { useDateTimeInputContext } from './DateTimeInputContext'
 
 export type DateTimeInputPopupProps = {
-  popupId: string,
-  labelId: string,
-  anchor: RefObject<HTMLDivElement | null>,
   outsideClickCloses?: boolean,
   allowRemove?: boolean,
   start?: Date,
@@ -27,9 +23,6 @@ export type DateTimeInputPopupProps = {
 }
 
 export function DateTimeInputPopup({
-  popupId,
-  labelId,
-  anchor,
   outsideClickCloses = true,
   allowRemove = false,
   start,
@@ -41,24 +34,24 @@ export function DateTimeInputPopup({
   millisecondIncrement,
   pickerProps,
 }: DateTimeInputPopupProps) {
-  const { state, dispatch, mode, precision, timeZone, is24HourFormat } = useDateTimeInputContext()
+  const { state, dispatch, mode, precision, timeZone, is24HourFormat, ids, anchorRef } = useDateTimeInputContext()
   const toZoned = (date: Date | null) => DateUtils.toZonedDate(date, timeZone)
   const fromZoned = (date: Date | null) => DateUtils.fromZonedDate(date, timeZone)
 
   return (
-    <PopUp
-      id={popupId}
+    <PopUp.Panel
+      id={ids.popup}
       isOpen={state.isOpen}
-      anchor={anchor}
+      anchor={anchorRef}
       options={{
         verticalAlignment: 'afterEnd',
         horizontalAlignment: 'center',
         gap: 4,
       }}
-      outsideClickOptions={{ refs: [anchor], active: outsideClickCloses }}
+      outsideClickOptions={{ refs: [anchorRef], active: outsideClickCloses }}
       onClose={() => dispatch({ type: 'commit', value: state.value })}
       role="dialog"
-      aria-labelledby={labelId}
+      aria-labelledby={ids.label}
       data-mode={mode}
       data-time-format={is24HourFormat ? '24h' : '12h'}
       className="date-time-input-dialog-popup"
@@ -90,6 +83,6 @@ export function DateTimeInputPopup({
         millisecondIncrement={millisecondIncrement}
         precision={precision}
       />
-    </PopUp>
+    </PopUp.Panel>
   )
 }

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../domInput'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { ToggleableInputContext, type ToggleableInputContextValue } from './ToggleableInputContext'
 import {
   toggleableInputStateTransition,
@@ -8,10 +8,15 @@ import {
   type ToggleableInputState
 } from './ToggleableInputState'
 
-export type ToggleableInputStateManagerProps = DOMInputStateMangerProps<ToggleableInputState, ToggleableInputEvent>
+export type ToggleableInputStateManagerProps = DOMInputStateManagerProps<ToggleableInputState, ToggleableInputEvent> & {
+  initialEditingState?: 'editing' | 'display',
+}
 
 export function ToggleableInputStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -19,10 +24,15 @@ export function ToggleableInputStateManager({
   isReadOnly = false,
   isRequired = false,
   id,
+  initialEditingState = 'display',
   children,
 }: ToggleableInputStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: { value: '', isEditing: initialEditingState !== 'display' },
     transition: toggleableInputStateTransition,
     onStateChange,
     onStateEvent,

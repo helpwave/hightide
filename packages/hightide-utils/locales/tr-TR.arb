@@ -337,6 +337,22 @@
       }
     }
   },
+  "validationErrorNumberTooSmall": "Değer en az {min} olmalıdır.",
+  "@validationErrorNumberTooSmall": {
+    "placeholders": {
+      "min": {
+        "type": "float"
+      }
+    }
+  },
+  "validationErrorNumberTooLarge": "Değer en fazla {max} olmalıdır.",
+  "@validationErrorNumberTooLarge": {
+    "placeholders": {
+      "max": {
+        "type": "float"
+      }
+    }
+  },
   "validationErrorOutOfRangeSelectionItems": "{min} ile {max} arasında öğe seçilmelidir.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {

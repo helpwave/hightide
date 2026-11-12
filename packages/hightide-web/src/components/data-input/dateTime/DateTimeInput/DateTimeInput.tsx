@@ -1,10 +1,6 @@
-import type { ComponentRef, ReactNode, Ref, RefObject } from 'react'
-import { useId, useMemo, useRef } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
+import type { ComponentRef, ReactNode, Ref } from 'react'
+import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useDateTimeFormat, useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type {
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,
@@ -16,16 +12,10 @@ import { DateTimeInputControl, type DateTimeInputControlProps } from './DateTime
 import { DateTimeInputField, type DateTimeInputFieldProps } from './DateTimeInputField'
 import { DateTimeInputLayout, type DateTimeInputLayoutProps } from './DateTimeInputLayout'
 import { DateTimeInputPopup, type DateTimeInputPopupProps } from './DateTimeInputPopup'
-import { DateTimeInputStateManager } from './DateTimeInputStateManager'
-import { type DateTimeInputEvent, type DateTimeInputState } from './DateTimeInputState'
+import { DateTimeInputStateManager, type DateTimeInputStateManagerProps } from './DateTimeInputStateManager'
 
-export type DateTimeInputProps = ControllableDOMInputProps<Date | null, DateTimeInputEvent> & {
+export type DateTimeInputProps = Omit<DateTimeInputStateManagerProps, 'children'> & {
   allowRemove?: boolean,
-  allowClear?: boolean,
-  mode?: DateTimeFormat,
-  precision?: DateTimePrecision,
-  timeZone?: string,
-  is24HourFormat?: boolean,
   start?: Date,
   end?: Date,
   weekStart?: Weekday,
@@ -55,10 +45,10 @@ const DateTimeInputComponent = ({
   isRequired,
   id,
   allowRemove = false,
-  allowClear = true,
-  mode = 'date',
-  precision = 'minute',
-  timeZone: timeZoneOverride,
+  allowClear,
+  mode,
+  precision,
+  timeZone,
   is24HourFormat,
   start,
   end,
@@ -77,47 +67,22 @@ const DateTimeInputComponent = ({
   fieldRef,
   fieldProps,
 }: DateTimeInputProps) => {
-  const { timeZone: contextTimeZone } = useLocalization()
-  const { is24HourFormat: contextIs24HourFormat } = useDateTimeFormat()
-  const timeZone = timeZoneOverride ?? contextTimeZone
-  const resolvedIs24HourFormat = is24HourFormat ?? contextIs24HourFormat
-  const generatedId = useId()
-  const ids = useMemo(() => ({
-    popup: `date-time-input-popup-${generatedId}`,
-    label: `date-time-input-label-${generatedId}`,
-  }), [generatedId])
-  const anchorRef = useRef<HTMLDivElement>(null)
-  const initialDate = value !== undefined ? value : (initialValue ?? null)
-  const store = useStateStore<DateTimeInputState>({
-    value: initialDate,
-    dialogValue: initialDate,
-    isOpen: false,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-  const hasClear = !isRequired && allowClear && !isReadOnly && !isDisabled
-  const hasTimePicker = !isReadOnly && !isDisabled
-
   return (
     <DateTimeInputStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
       id={id}
+      allowClear={allowClear}
       mode={mode}
       precision={precision}
       timeZone={timeZone}
-      is24HourFormat={resolvedIs24HourFormat}
-      hasClear={hasClear}
-      hasTimePicker={hasTimePicker}
+      is24HourFormat={is24HourFormat}
     >
       <DateTimeInputLayout
         {...layoutProps}
@@ -125,16 +90,13 @@ const DateTimeInputComponent = ({
       >
         <DateTimeInputControl
           {...controlProps}
-          ref={ReactUtils.assingRefsBuilder([anchorRef, controlRef])}
+          ref={ReactUtils.assingRefsBuilder([controlRef])}
           actions={actions}
         >
           <DateTimeInputField {...fieldProps} fieldRef={fieldRef} />
-          <DateTimeInputActions actions={actions} popupId={ids.popup} />
+          <DateTimeInputActions actions={actions} />
         </DateTimeInputControl>
         <DateTimeInputPopup
-          popupId={ids.popup}
-          labelId={ids.label}
-          anchor={anchorRef as RefObject<HTMLDivElement | null>}
           outsideClickCloses={outsideClickCloses}
           allowRemove={allowRemove}
           start={start}

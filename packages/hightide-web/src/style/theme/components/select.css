@@ -1,11 +1,36 @@
 @layer components {
-  .select-button,
+  .select-control,
+  .multi-select-control {
+    @apply relative;
+  }
+
+  .select-control:has(> .select-button.w-fit),
+  .multi-select-control:has(> .multi-select-button.w-fit) {
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .select-button:not([data-appearance="text"]),
   .multi-select-button {
-    @apply flex-row-2 items-center justify-between py-2;
+    @apply flex-row-2 items-center justify-between py-2 w-full text-start;
 
     &:not([data-disabled]):not([data-readonly]) {
       @apply hover:cursor-pointer;
     }
+  }
+
+  .select-button:not([data-appearance="text"]) {
+    font: inherit;
+  }
+
+  .select-clear,
+  .multi-select-clear {
+    @apply absolute right-1.5 top-1/2 z-1 -translate-y-1/2;
+  }
+
+  .select-control:has(> .select-clear) > .select-button,
+  .multi-select-control:has(> .multi-select-clear) > .multi-select-button {
+    padding-inline-end: calc(var(--spacing) * 10);
   }
 
   .multi-select-chip-display-button {
@@ -34,17 +59,18 @@
 
   .select-list,
   .multi-select-list {
-    @apply flex-col-1 overflow-y-auto h-full;
+    @apply flex flex-col gap-0.5 overflow-y-auto h-full;
   }
 
   .multi-select-content,
   .select-content {
-    @apply flex-col-1;
+    @apply flex-col-0;
   }
 
   .select-list-option,
   .multi-select-list-option {
-    @apply flex-row-1 items-center px-2 py-1 rounded-md;
+    @apply flex-row-1 items-center px-2 py-1 rounded-md shrink-0;
+    height: var(--spacing-element-sm);
 
     &[data-disabled] {
       @apply cursor-not-allowed text-disabled;

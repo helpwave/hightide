@@ -20,7 +20,6 @@ export function ComboboxListItemElement<T>({
     <li
       ref={optionRef}
       id={domId}
-      tabIndex={-1}
       hidden={!isVisible}
       role="option"
       aria-selected={isHighlighted}

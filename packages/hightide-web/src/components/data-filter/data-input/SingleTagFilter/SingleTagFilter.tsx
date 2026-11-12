@@ -1,54 +1,15 @@
-import type { ControllableDOMInputProps } from '../../../data-input/domInput'
 import { SingleTagFilterContext } from './SingleTagFilterContext'
-import type { FilterTagOption } from './SingleTagFilterContext'
-import type { FilterOperatorTagsSingle } from '../../filter-operator'
-import { SingleTagFilterStateManager } from './SingleTagFilterStateManager'
+
+import { SingleTagFilterStateManager, type SingleTagFilterStateManagerProps } from './SingleTagFilterStateManager'
 import { SingleTagFilterOperator } from './SingleTagFilterOperator'
 import { SingleTagFilterParameter } from './SingleTagFilterParameter'
 import { SingleTagFilterLayout } from './SingleTagFilterLayout'
-import { useFilterState, type FilterEvent, type FilterInputValue } from '../filter-value'
 
-export type SingleTagFilterProps = ControllableDOMInputProps<FilterInputValue<FilterOperatorTagsSingle>, FilterEvent<FilterOperatorTagsSingle>> & {
-  tags?: ReadonlyArray<FilterTagOption>,
-  operatorOverrides?: FilterOperatorTagsSingle[],
-}
+export type SingleTagFilterProps = Omit<SingleTagFilterStateManagerProps, 'children'>
 
-const SingleTagFilterComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
-  tags,
-  operatorOverrides,
-}: SingleTagFilterProps) => {
-  const valueBinding = useFilterState<FilterOperatorTagsSingle>({
-    value,
-    initialValue,
-    onValueChange,
-    defaultValue: {
-      operator: 'contains',
-      parameter: {},
-    },
-  })
-
+const SingleTagFilterComponent = (props: SingleTagFilterProps) => {
   return (
-    <SingleTagFilterStateManager
-      state={valueBinding.store}
-      onStateChange={valueBinding.onStateChange}
-      onStateEvent={onStateEvent}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
-      tags={tags}
-      operatorOverrides={operatorOverrides}
-    >
+    <SingleTagFilterStateManager {...props}>
       <SingleTagFilterLayout>
         <SingleTagFilterOperator />
         <SingleTagFilterParameter />

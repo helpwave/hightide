@@ -1,6 +1,6 @@
 import { forwardRef, useCallback } from 'react'
 import { TextFilter } from '../data-input/TextFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorText } from '../filter-operator'
 import { FilterOperatorUtils, operatorNeedsParameter } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -18,22 +18,18 @@ export const TextFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
   const operator = FilterOperatorUtils.typeCheck.text(suggestion) ? suggestion : 'contains'
   const parameter = value?.parameter ?? {}
   const typedValue: FilterInputValue<FilterOperatorText> = { operator, parameter }
-  const binding = useFilterState<FilterOperatorText>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorText>) => {
-      onValueChange({
-        dataType: 'text',
-        operator: next.operator,
-        parameter: next.parameter,
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorText>) => {
+    onValueChange({
+      dataType: 'text',
+      operator: next.operator,
+      parameter: next.parameter,
+    })
+  }, [onValueChange])
 
   return (
     <TextFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       operatorOverrides={operatorOverrides}
     >
       <FilterPopUpShell
@@ -41,7 +37,7 @@ export const TextFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
         {...props}
         name={name}
         onRemove={onRemove}
-        noParameterRequired={!operatorNeedsParameter(binding.state.value.operator)}
+        noParameterRequired={!operatorNeedsParameter(operator)}
         operator={<TextFilter.Operator />}
       >
         <TextFilter.Parameter />

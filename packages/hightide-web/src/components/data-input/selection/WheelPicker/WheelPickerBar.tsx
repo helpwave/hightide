@@ -2,6 +2,8 @@ import type { HTMLAttributes } from 'react'
 import { forwardRef } from 'react'
 import clsx from 'clsx'
 
+import { WheelPickerBarLine } from './WheelPickerBarLine'
+
 export type WheelPickerBarProps = HTMLAttributes<HTMLDivElement>
 
 export const WheelPickerBar = forwardRef<HTMLDivElement, WheelPickerBarProps>(function WheelPickerBar({
@@ -15,8 +17,8 @@ export const WheelPickerBar = forwardRef<HTMLDivElement, WheelPickerBarProps>(fu
       aria-hidden
       className={clsx('wheel-picker-bar', className)}
     >
-      <div className="wheel-picker-bar-line" />
-      <div className="wheel-picker-bar-line" />
+      <WheelPickerBarLine />
+      <WheelPickerBarLine />
     </div>
   )
 })

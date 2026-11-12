@@ -337,6 +337,22 @@
       }
     }
   },
+  "validationErrorNumberTooSmall": "Valoarea trebuie să fie cel puțin {min}.",
+  "@validationErrorNumberTooSmall": {
+    "placeholders": {
+      "min": {
+        "type": "float"
+      }
+    }
+  },
+  "validationErrorNumberTooLarge": "Valoarea trebuie să fie cel mult {max}.",
+  "@validationErrorNumberTooLarge": {
+    "placeholders": {
+      "max": {
+        "type": "float"
+      }
+    }
+  },
   "validationErrorOutOfRangeSelectionItems": "Trebuie selectate între {min} și {max} elemente.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {

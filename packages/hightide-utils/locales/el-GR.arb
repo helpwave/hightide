@@ -337,6 +337,22 @@
       }
     }
   },
+  "validationErrorNumberTooSmall": "Η τιμή πρέπει να είναι τουλάχιστον {min}.",
+  "@validationErrorNumberTooSmall": {
+    "placeholders": {
+      "min": {
+        "type": "float"
+      }
+    }
+  },
+  "validationErrorNumberTooLarge": "Η τιμή πρέπει να είναι το πολύ {max}.",
+  "@validationErrorNumberTooLarge": {
+    "placeholders": {
+      "max": {
+        "type": "float"
+      }
+    }
+  },
   "validationErrorOutOfRangeSelectionItems": "Πρέπει να επιλεγούν από {min} έως {max} στοιχεία.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {

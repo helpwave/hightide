@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import type { FocusEvent, HTMLAttributes, KeyboardEvent } from 'react'
 import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
-import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { PropsUtil } from '../../../../utils/propsUtil'
 import { SafeGlobals } from '../../../../utils/safeGlobals'
@@ -37,18 +36,14 @@ function sameSegmentValues(left: SegmentValues, right: SegmentValues) {
   return true
 }
 
-export type DateTimeFieldLayoutProps = HTMLAttributes<HTMLDivElement> & {
-  mode?: DateTimeFormat,
-  precision?: DateTimePrecision,
-}
+export type DateTimeFieldLayoutProps = HTMLAttributes<HTMLDivElement>
 
-export const DateTimeFieldLayout = forwardRef<HTMLDivElement, DateTimeFieldLayoutProps>(function DateTimeFieldLayout({
-  mode = 'date',
-  precision = 'minute',
-  ...props
-}, forwardedRef) {
+export const DateTimeFieldLayout = forwardRef<HTMLDivElement, DateTimeFieldLayoutProps>(function DateTimeFieldLayout(
+  props,
+  forwardedRef
+) {
   const translation = useHightideTranslation()
-  const { state, dispatch, config, locale, is24HourFormat } = useDateTimeFieldContext()
+  const { state, dispatch, config, locale, is24HourFormat, mode, precision } = useDateTimeFieldContext()
   const layout = useMemo(
     () => buildSegmentLayout({ locale, mode, precision, is24HourFormat }),
     [is24HourFormat, locale, mode, precision]

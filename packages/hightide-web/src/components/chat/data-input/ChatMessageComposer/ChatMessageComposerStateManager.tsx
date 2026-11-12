@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../../data-input/domInput'
+import { useInputStateManager, useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { ChatMessageComposerContext, type ChatMessageComposerContextValue } from './ChatMessageComposerContext'
 import {
   chatMessageComposerStateTransition,
@@ -8,7 +8,7 @@ import {
   type ChatMessageComposerState
 } from './ChatMessageComposerState'
 
-export type ChatMessageComposerStateManagerProps = DOMInputStateMangerProps<
+export type ChatMessageComposerStateManagerProps = DOMInputStateManagerProps<
   ChatMessageComposerState,
   ChatMessageComposerEvent
 > & {
@@ -17,6 +17,9 @@ export type ChatMessageComposerStateManagerProps = DOMInputStateMangerProps<
 
 export function ChatMessageComposerStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   onSend,
@@ -27,8 +30,12 @@ export function ChatMessageComposerStateManager({
   id,
   children,
 }: ChatMessageComposerStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: { value: '' },
     transition: chatMessageComposerStateTransition,
     onStateChange,
     onStateEvent,

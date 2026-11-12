@@ -1,16 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useRef } from 'react'
 import type { UseAnchoredPositionOptions } from '../../../src/hooks/useAnchoredPosition'
-import type { PopUpProps } from '../../../src/components/layout/PopUp/PopUp'
-import { PopUp } from '../../../src/components/layout/PopUp/PopUp'
+import { PopUp, type PopUpPanelProps } from '../../../src/components/layout/PopUp/PopUp'
 import { action } from 'storybook/actions'
 
-type StoryArgs = Omit<PopUpProps, 'options'> & UseAnchoredPositionOptions & {
+type StoryArgs = Omit<PopUpPanelProps, 'options'> & UseAnchoredPositionOptions & {
   isAnchored?: boolean,
 }
 
 const meta: Meta<StoryArgs> = {
-  component: PopUp,
+  component: PopUp.Panel,
 }
 
 export default meta
@@ -68,7 +67,7 @@ export const popUp: Story = {
           </div>
           <div className="min-h-9/10"></div>
         </div>
-        <PopUp
+        <PopUp.Panel
           {...props}
           anchor={isAnchored ? anchorRef : undefined}
           className="w-128 h-64"

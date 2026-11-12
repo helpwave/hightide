@@ -1,15 +1,18 @@
 import { useCallback, useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../domInput'
+import { useInputStateManager, useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { SearchBarContext, type SearchBarContextValue } from './SearchBarContext'
 import { searchBarStateTransition, type SearchBarEvent, type SearchBarState } from './SearchBarState'
 
-export type SearchBarStateManagerProps = DOMInputStateMangerProps<SearchBarState, SearchBarEvent> & {
+export type SearchBarStateManagerProps = DOMInputStateManagerProps<SearchBarState, SearchBarEvent> & {
   onSearch: (value: string) => void,
 }
 
 export function SearchBarStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   onSearch,
@@ -20,8 +23,12 @@ export function SearchBarStateManager({
   id,
   children,
 }: SearchBarStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: { value: '' },
     transition: searchBarStateTransition,
     onStateChange,
     onStateEvent,

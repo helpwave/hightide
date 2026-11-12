@@ -5,7 +5,6 @@ import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { IconButton } from '../../../interaction/IconButton'
 import { useNumberStepperInputContext } from './NumberStepperInputContext'
-import { useNumberStepperHold } from './NumberStepperInputHold'
 import type { NumberStepperInputLayoutMode } from './NumberStepperInputLayout'
 
 export type NumberStepperInputStepButtonProps = Omit<ComponentProps<typeof IconButton>, 'icon' | 'onClick'> & {
@@ -19,8 +18,7 @@ export const NumberStepperInputStepButton = forwardRef<HTMLButtonElement, Number
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { config } = useNumberStepperInputContext()
-  const { start, stop } = useNumberStepperHold()
+  const { config, startScroll, stopScroll } = useNumberStepperInputContext()
   const isIncrement = direction === 1
 
   return (
@@ -39,10 +37,10 @@ export const NumberStepperInputStepButton = forwardRef<HTMLButtonElement, Number
       }}
       data-layout={layout === 'col' ? 'col' : 'row'}
       icon={isIncrement ? Plus : Minus}
-      onPointerDown={() => start('button', direction)}
-      onPointerUp={() => stop('button', direction)}
-      onPointerLeave={() => stop('button', direction)}
-      onPointerCancel={() => stop('button', direction)}
+      onPointerDown={() => startScroll('button', direction)}
+      onPointerUp={() => stopScroll('button', direction)}
+      onPointerLeave={() => stopScroll('button', direction)}
+      onPointerCancel={() => stopScroll('button', direction)}
       className={clsx('number-stepper-input-button', props.className)}
     />
   )

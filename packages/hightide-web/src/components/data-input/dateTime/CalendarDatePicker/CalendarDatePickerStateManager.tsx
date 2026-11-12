@@ -1,17 +1,19 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
+import type { DOMInputStateManagerProps } from '../../domInput'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { CalendarDatePickerContext, type CalendarDatePickerContextConfig } from './CalendarDatePickerContext'
 import {
   calendarDatePickerStateTransition,
   type CalendarDatePickerEvent,
-  type CalendarDatePickerState
+  type CalendarDatePickerState,
+  type CalendarDisplayMode
 } from './CalendarDatePickerState'
 
-export type CalendarDatePickerStateManagerProps = DOMInputStateMangerProps<CalendarDatePickerState, CalendarDatePickerEvent> & {
+export type CalendarDatePickerStateManagerProps = DOMInputStateManagerProps<CalendarDatePickerState, CalendarDatePickerEvent> & {
+  initialDisplay?: CalendarDisplayMode,
   start?: Date,
   end?: Date,
   weekStart?: Weekday,
@@ -20,6 +22,9 @@ export type CalendarDatePickerStateManagerProps = DOMInputStateMangerProps<Calen
 
 export function CalendarDatePickerStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -27,6 +32,7 @@ export function CalendarDatePickerStateManager({
   isReadOnly,
   isRequired,
   id,
+  initialDisplay = 'day',
   start,
   end,
   weekStart,
@@ -42,8 +48,19 @@ export function CalendarDatePickerStateManager({
     markToday,
     locale,
   }), [end, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, start, weekStart, id])
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => {
+      const resolved = seeded ?? new Date()
+      return {
+        value: resolved,
+        displayedMonth: new Date(resolved.getFullYear(), resolved.getMonth(), 1),
+        displayMode: initialDisplay,
+      }
+    },
     transition: calendarDatePickerStateTransition,
     onStateChange,
     onStateEvent,

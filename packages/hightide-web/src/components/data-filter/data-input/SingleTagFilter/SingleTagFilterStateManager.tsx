@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { SingleTagFilterContext, type SingleTagFilterContextValue, type FilterTagOption } from './SingleTagFilterContext'
 import type { FilterOperatorTagsSingle } from '../../filter-operator'
-import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
+import { useFilterState, type FilterStateManagerProps } from '../filter-value'
 
 export type SingleTagFilterStateManagerProps = FilterStateManagerProps<FilterOperatorTagsSingle> & {
   tags?: ReadonlyArray<FilterTagOption>,
@@ -10,6 +9,9 @@ export type SingleTagFilterStateManagerProps = FilterStateManagerProps<FilterOpe
 
 export function SingleTagFilterStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -21,11 +23,17 @@ export function SingleTagFilterStateManager({
   operatorOverrides,
   children,
 }: SingleTagFilterStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useFilterState({
     state,
-    transition: filterStateTransition,
+    value,
+    initialValue,
+    onValueChange,
     onStateChange,
     onStateEvent,
+    defaultValue: {
+      operator: 'contains',
+      parameter: {},
+    },
   })
 
   const config = useMemo(() => ({

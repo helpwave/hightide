@@ -41,8 +41,12 @@ export const TablePageSizeSelect = ({
   return (
     <Select
       {...props}
+      searchableThreshold={props.searchableThreshold ?? 7}
       value={currentPageSize.toString()}
-      onValueChange={(value) => table.setPageSize(Number(value))}
+      onValueChange={(value) => {
+        if (value == null) return
+        table.setPageSize(Number(value))
+      }}
       options={pageSizeOptions.map(size => ({
         value: size.toString(),
         label: size.toString(),

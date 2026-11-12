@@ -1,7 +1,4 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
-import { useEffect, useRef } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { DateWheelPickerLayout, DateWheelPickerLayoutProps } from '../DateWheelPicker'
@@ -16,10 +13,9 @@ import { DateTimePickerDialogActions, type DateTimePickerDialogActionsProps } fr
 import { DateTimePickerDialogBody, type DateTimePickerDialogBodyProps } from './DateTimePickerDialogBody'
 import { DateTimePickerDialogHeader, type DateTimePickerDialogHeaderProps } from './DateTimePickerDialogHeader'
 import { DateTimePickerDialogLayout, type DateTimePickerDialogLayoutProps } from './DateTimePickerDialogLayout'
-import { DateTimePickerDialogStateManager } from './DateTimePickerDialogStateManager'
-import { type DateTimePickerDialogEvent, type DateTimePickerDialogState } from './DateTimePickerDialogState'
+import { DateTimePickerDialogStateManager, type DateTimePickerDialogStateManagerProps } from './DateTimePickerDialogStateManager'
 
-export type DateTimePickerDialogProps = ControllableDOMInputProps<Date | null, DateTimePickerDialogEvent> & {
+export type DateTimePickerDialogProps = Omit<DateTimePickerDialogStateManagerProps, 'children'> & {
   allowRemove?: boolean,
   mode?: DateTimeFormat,
   start?: Date,
@@ -87,38 +83,11 @@ const DateTimePickerDialogComponent = ({
   timeWheelPickerRef,
   timeWheelPickerProps,
 }: DateTimePickerDialogProps) => {
-  const resolvedValue = value === undefined ? initialValue : value
-  const store = useStateStore<DateTimePickerDialogState>({
-    value: resolvedValue,
-    pickerValue: resolvedValue ?? new Date(),
-    step: 'date',
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-  const valueTime = value === undefined ? undefined : value === null ? null : value.getTime()
-  const previousTimeRef = useRef(valueTime)
-
-  useEffect(() => {
-    if (value === undefined || Object.is(previousTimeRef.current, valueTime)) {
-      return
-    }
-    previousTimeRef.current = valueTime
-    const current = store.getSnapshot()
-    store.set({
-      ...current,
-      value,
-      pickerValue: value ?? current.pickerValue,
-    })
-  }, [store, value, valueTime])
-
   return (
     <DateTimePickerDialogStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

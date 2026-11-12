@@ -3,16 +3,37 @@
     @apply flex-col-2;
   }
 
+  .combobox-control {
+    @apply relative w-full;
+  }
+
+  .combobox-input {
+    @apply w-full;
+  }
+
+  .combobox-clear {
+    @apply absolute right-1.5 top-1/2 z-1 -translate-y-1/2;
+  }
+
+  .combobox-control:has(> .combobox-clear) .combobox-input {
+    @apply pr-10;
+  }
+
   .combobox-list {
-    @apply flex-col-1 overflow-y-auto;
+    @apply flex flex-col gap-0.5 overflow-y-auto;
   }
 
   .combobox-popup {
     @apply flex-col-1;
   }
 
+  .combobox-popup .combobox-list {
+    @apply p-1.5;
+  }
+
   .combobox-option {
-    @apply flex-row-1 items-center px-2 py-1 rounded-md cursor-pointer;
+    @apply flex-row-1 items-center px-2 py-1 rounded-md cursor-pointer shrink-0;
+    height: var(--spacing-element-sm);
 
     &[data-highlighted] {
       background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);

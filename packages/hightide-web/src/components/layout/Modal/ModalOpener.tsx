@@ -22,19 +22,18 @@ export function ModalOpener({ children }: ModalOpenerProps) {
   const context = useModalContext()
 
   const bag: ModalOpenerBag = useMemo<ModalOpenerBag>(() => ({
-    open: () => context.setIsOpen(true),
-    close: () => context.setIsOpen(false),
-    toggleOpen: () => context.setIsOpen(prev => !prev),
-    isOpen: context.isOpen,
+    open: () => context.dispatch({ type: 'open' }),
+    close: () => context.close(),
+    toggleOpen: () => context.dispatch({ type: 'toggle' }),
+    isOpen: context.state.isOpen,
     props: {
-      'onClick': () => context.setIsOpen(true),
+      'onClick': () => context.dispatch({ type: 'open' }),
       'aria-haspopup': 'dialog',
     },
   }), [context])
 
   return BagFunctionUtil.resolve(children, bag)
 }
-
 
 export interface ModalOpenerPassingProps {
   'children'?: React.ReactNode,

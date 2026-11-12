@@ -28,13 +28,16 @@ export function FilterOperatorSelect<O extends FilterOperator>({
   return (
     <Select<string>
       value={value}
-      onValueChange={(newOperator) => onValueChange(newOperator as O)}
+      onValueChange={(newOperator) => {
+        if (newOperator == null) return
+        onValueChange(newOperator as O)
+      }}
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isInvalid={isInvalid}
       isRequired={isRequired}
       triggerProps={{
-        className: 'filter-operator-select w-fit flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
+        appearance: 'text',
         selectedDisplay: (option) => option ? translation(FilterOperatorUtils.getInfo(option.value as FilterOperator).translationKey as Parameters<typeof translation>[0]) : '',
       }}
       iconAppearance="right"

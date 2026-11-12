@@ -1,8 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
 import type {
   TimePickerMillisecondIncrement,
@@ -14,10 +12,9 @@ import type { TimeWheelPickerLayout, TimeWheelPickerLayoutProps } from '../TimeW
 import { DateTimeWheelPickerContext } from './DateTimeWheelPickerContext'
 import { DateTimeWheelPickerLayout, type DateTimeWheelPickerLayoutProps } from './DateTimeWheelPickerLayout'
 import { DateTimeWheelPickerWheels } from './DateTimeWheelPickerWheels'
-import { DateTimeWheelPickerStateManager } from './DateTimeWheelPickerStateManager'
-import { type DateTimeWheelPickerEvent, type DateTimeWheelPickerState } from './DateTimeWheelPickerState'
+import { DateTimeWheelPickerStateManager, type DateTimeWheelPickerStateManagerProps } from './DateTimeWheelPickerStateManager'
 
-export type DateTimeWheelPickerProps = ControllableDOMInputProps<Date, DateTimeWheelPickerEvent> & {
+export type DateTimeWheelPickerProps = Omit<DateTimeWheelPickerStateManagerProps, 'children'> & {
   start?: Date,
   end?: Date,
   isLooping?: boolean,
@@ -61,20 +58,12 @@ const DateTimeWheelPickerComponent = ({
   timeWheelPickerRef,
   timeWheelPickerProps,
 }: DateTimeWheelPickerProps) => {
-  const store = useStateStore<DateTimeWheelPickerState>({
-    value: value ?? initialValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
 
   return (
     <DateTimeWheelPickerStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

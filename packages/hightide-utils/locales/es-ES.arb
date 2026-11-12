@@ -337,6 +337,22 @@
       }
     }
   },
+  "validationErrorNumberTooSmall": "El valor debe ser al menos {min}.",
+  "@validationErrorNumberTooSmall": {
+    "placeholders": {
+      "min": {
+        "type": "float"
+      }
+    }
+  },
+  "validationErrorNumberTooLarge": "El valor debe ser como máximo {max}.",
+  "@validationErrorNumberTooLarge": {
+    "placeholders": {
+      "max": {
+        "type": "float"
+      }
+    }
+  },
   "validationErrorOutOfRangeSelectionItems": "Debes seleccionar entre {min} y {max} elementos.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {

@@ -299,7 +299,10 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
           <span className="process-model-trace-replay-speed-label">{translation('speed')}</span>
           <Select<number>
             value={speedMult}
-            onValueChange={setSpeedMult}
+            onValueChange={(value) => {
+              if (value == null) return
+              setSpeedMult(value)
+            }}
             options={SPEED_OPTIONS.map((option) => ({
               id: String(option.value),
               value: option.value,

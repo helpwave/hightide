@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
-import type { ControllableDOMInputProps } from '../../domInput'
+import type { DOMInputValueProps } from '../../domInput'
 import { ComboboxContext } from './ComboboxContext'
 import type { ComboboxContextConfig, ComboboxContextIds, ComboboxContextLayout, ComboboxContextType, ComboboxOptionData } from './ComboboxContext'
 import type { UseComboboxOptions } from './useCombobox'
@@ -11,14 +11,18 @@ import { PopUpContext } from '../../../layout/PopUp/PopUpContext'
 import type { SelectionOptionInput } from '../option'
 import { normalizeSelectionOptions, scrollHighlightedOption, useOptionRefs } from '../option'
 
-export type ComboboxEvent<T> = { type: 'commit', value: T }
+export type ComboboxEvent<T> =
+  | { type: 'commit', value: T }
+  | { type: 'clear' }
 
-export interface ComboboxStateManagerProps<T = string> extends ControllableDOMInputProps<T, ComboboxEvent<T>>, Omit<UseComboboxOptions, 'options' | 'allowNewValue' | 'newValueOptionId'> {
+export interface ComboboxStateManagerProps<T = string> extends DOMInputValueProps<T | null, ComboboxEvent<T>>, Omit<UseComboboxOptions, 'options' | 'allowNewValue' | 'newValueOptionId'> {
   options: ReadonlyArray<SelectionOptionInput<T>>,
   children: ReactNode,
   onItemClick?: (value: T) => void,
+  isInline?: boolean,
   isAllowingNewValue?: boolean,
   onNewValueAdded?: (value: string) => void,
+  hasClearIcon?: boolean,
 }
 
 export function ComboboxStateManager<T = string>({
@@ -34,8 +38,10 @@ export function ComboboxStateManager<T = string>({
   isRequired = false,
   id,
   onItemClick,
+  isInline = false,
   isAllowingNewValue = false,
   onNewValueAdded,
+  hasClearIcon = false,
   ...hookProps
 }: ComboboxStateManagerProps<T>) {
   const normalizedOptions = useMemo(() => normalizeSelectionOptions(options), [options])
@@ -66,14 +72,12 @@ export function ComboboxStateManager<T = string>({
   const onStateEventStable = useStableEvent(onStateEvent)
   const onItemClickStable = useStableEvent(onItemClick)
   const onNewValueAddedStable = useStableEvent(onNewValueAdded)
-  const [selectedValue, setSelectedValue] = useControlledState<T | undefined>({
+  const [selectedValue, setSelectedValue] = useControlledState<T | null>({
     value,
     onValueChange: (next) => {
-      if (next !== undefined) {
-        onValueChangeStable(next)
-      }
+      onValueChangeStable(next)
     },
-    defaultValue: initialValue,
+    defaultValue: initialValue ?? null,
   })
 
   const setIsOpen = useCallback((open: boolean) => {
@@ -90,7 +94,7 @@ export function ComboboxStateManager<T = string>({
     [normalizedOptions]
   )
 
-  const state = useCombobox({
+  const combobox = useCombobox({
     ...hookProps,
     options: hookOptions,
     allowNewValue: isAllowingNewValue && !isDisabled && !isReadOnly,
@@ -106,19 +110,17 @@ export function ComboboxStateManager<T = string>({
 
   useEffect(() => {
     scrollHighlightedOption(
-      state.highlightedId,
-      optionRefsRef.current,
-      ids.listbox,
-      ids.trigger
+      combobox.highlightedId,
+      optionRefsRef.current
     )
-  }, [ids.listbox, ids.trigger, isOpen, state.highlightedId])
+  }, [isOpen, combobox.highlightedId])
 
   const addNewValue = useCallback(() => {
     if (!isAllowingNewValue || isDisabled || isReadOnly) return
-    const next = state.searchQuery.trim()
+    const next = combobox.searchQuery.trim()
     if (!next) return
     onNewValueAddedStable(next)
-  }, [isAllowingNewValue, isDisabled, isReadOnly, onNewValueAddedStable, state.searchQuery])
+  }, [isAllowingNewValue, isDisabled, isReadOnly, onNewValueAddedStable, combobox.searchQuery])
 
   const selectOption = useCallback(
     (id: string) => {
@@ -136,20 +138,50 @@ export function ComboboxStateManager<T = string>({
       setSelectedValue(option.value)
       onStateEventStable?.({ type: 'commit', value: option.value })
       onItemClickStable(option.value)
-      state.setSearchQuery(option.label)
+      combobox.setSearchQuery(option.label)
       setIsOpenState(false)
     },
-    [isDisabled, isReadOnly, newValueId, addNewValue, idToOptionMap, setSelectedValue, onStateEventStable, onItemClickStable, state]
+    [isDisabled, isReadOnly, newValueId, addNewValue, idToOptionMap, setSelectedValue, onStateEventStable, onItemClickStable, combobox]
   )
+
+  const updateSearchQuery = useCallback((query: string) => {
+    combobox.setSearchQuery(query)
+    if (isDisabled || isReadOnly) {
+      return
+    }
+    setIsOpenState(true)
+    const match = normalizedOptions.find((option) => !option.disabled && option.label === query)
+    if (match) {
+      if (!Object.is(selectedValue, match.value)) {
+        setSelectedValue(match.value)
+      }
+      return
+    }
+    if (selectedValue !== null) {
+      setSelectedValue(null)
+    }
+  }, [combobox, isDisabled, isReadOnly, normalizedOptions, selectedValue, setSelectedValue])
+
+  const clear = useCallback(() => {
+    if (isDisabled || isReadOnly) {
+      return
+    }
+    combobox.setSearchQuery('')
+    setSelectedValue(null)
+    onStateEventStable?.({ type: 'clear' })
+    setIsOpenState(false)
+  }, [combobox, isDisabled, isReadOnly, onStateEventStable, setSelectedValue])
 
   const config: ComboboxContextConfig = useMemo(
     () => ({
       ids,
       setIds,
       newValueId,
+      isInline,
       isAllowingNewValue,
+      hasClearIcon,
     }),
-    [ids, setIds, newValueId, isAllowingNewValue]
+    [ids, setIds, newValueId, isInline, isAllowingNewValue, hasClearIcon]
   )
 
   const layout: ComboboxContextLayout = useMemo(
@@ -162,10 +194,10 @@ export function ComboboxStateManager<T = string>({
 
   const search = useMemo(
     () => ({
-      searchQuery: state.searchQuery,
-      setSearchQuery: state.setSearchQuery,
+      searchQuery: combobox.searchQuery,
+      setSearchQuery: updateSearchQuery,
     }),
-    [state.searchQuery, state.setSearchQuery]
+    [combobox.searchQuery, updateSearchQuery]
   )
 
   const contextValue = useMemo(
@@ -176,18 +208,19 @@ export function ComboboxStateManager<T = string>({
       isReadOnly,
       isRequired,
       isOpen,
-      highlightedId: state.highlightedId,
+      highlightedId: combobox.highlightedId,
       options: normalizedOptions,
       optionRefs,
-      visibleOptionIds: state.visibleOptionIds,
+      visibleOptionIds: combobox.visibleOptionIds,
       idToOptionMap,
       selectOption,
       addNewValue,
-      highlightFirst: state.highlightFirst,
-      highlightLast: state.highlightLast,
-      highlightNext: state.highlightNext,
-      highlightPrevious: state.highlightPrevious,
-      highlightItem: state.highlightItem,
+      clear,
+      highlightFirst: combobox.highlightFirst,
+      highlightLast: combobox.highlightLast,
+      highlightNext: combobox.highlightNext,
+      highlightPrevious: combobox.highlightPrevious,
+      highlightItem: combobox.highlightItem,
       setIsOpen,
       config,
       layout,
@@ -200,18 +233,19 @@ export function ComboboxStateManager<T = string>({
       isReadOnly,
       isRequired,
       isOpen,
-      state.highlightedId,
-      state.visibleOptionIds,
-      state.highlightFirst,
-      state.highlightLast,
-      state.highlightNext,
-      state.highlightPrevious,
-      state.highlightItem,
+      combobox.highlightedId,
+      combobox.visibleOptionIds,
+      combobox.highlightFirst,
+      combobox.highlightLast,
+      combobox.highlightNext,
+      combobox.highlightPrevious,
+      combobox.highlightItem,
       normalizedOptions,
       optionRefs,
       idToOptionMap,
       selectOption,
       addNewValue,
+      clear,
       setIsOpen,
       config,
       layout,
@@ -223,14 +257,24 @@ export function ComboboxStateManager<T = string>({
     <ComboboxContext.Provider value={contextValue as ComboboxContextType<unknown>}>
       <PopUpContext.Provider
         value={{
-          isOpen,
-          setIsOpen: (updater) => {
-            setIsOpenState((current) => typeof updater === 'function' ? updater(current) : updater)
+          state: { isOpen },
+          dispatch: (event) => {
+            if (event.type === 'open') {
+              setIsOpen(true)
+              return
+            }
+            if (event.type === 'close') {
+              setIsOpen(false)
+              return
+            }
+            if (event.type === 'toggle') {
+              setIsOpen(!isOpen)
+              return
+            }
           },
           popUpId: ids.popup,
           triggerId: ids.trigger,
           triggerRef: searchbarRef,
-          setTriggerRef: () => {},
         }}
       >
         {children}

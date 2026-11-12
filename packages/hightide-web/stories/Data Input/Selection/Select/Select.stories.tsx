@@ -37,6 +37,7 @@ export const select: Story = {
     isRequired: false,
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
+    hasClearIcon: true,
     options: fruitOptions,
   },
 }
@@ -52,14 +53,14 @@ export const controlledValue: Story = {
     onStateEvent: action('onStateEvent'),
   },
   render: function ControlledValue(args) {
-    const [value, setValue] = useState('none')
+    const [value, setValue] = useState<string | null>(null)
 
     return (
       <Select
         {...args}
         value={value}
+        hasClearIcon
         onValueChange={(next) => {
-          if(next === 'none') return
           args.onValueChange?.(next)
           setValue(next)
         }}
@@ -124,22 +125,20 @@ export const selectWithUser: StoryObj<typeof Select<User>> = {
     })),
   },
   render: (args: SelectProps<User>) => {
-    const [value, setValue] = useState<User | undefined>(args.value)
+    const [value, setValue] = useState<User | null>(args.value ?? null)
     useEffect(() => {
-      setValue(args.value)
+      setValue(args.value ?? null)
     }, [args.value])
     return (
       <Select<User>
         {...args}
         value={value}
-        onValueChange={(v) => {
-          args.onValueChange?.(v)
-          setValue(v)
+        hasClearIcon
+        onValueChange={(next) => {
+          args.onValueChange?.(next)
+          setValue(next)
         }}
-        onStateEvent={(event) => {
-          args.onStateEvent?.(event)
-          if (event.type === 'commit') setValue(event.value)
-        }}
+        onStateEvent={args.onStateEvent}
       />
     )
   },

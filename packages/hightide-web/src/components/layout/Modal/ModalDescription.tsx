@@ -1,31 +1,27 @@
 'use client'
 
 import type { HTMLAttributes } from 'react'
+import { forwardRef } from 'react'
 import clsx from 'clsx'
-
-import { Visibility } from '../Visibility'
 import { useModalContext } from './ModalContext'
 
 export type ModalDescriptionProps = HTMLAttributes<HTMLDivElement>
 
-export function ModalDescription({
+export const ModalDescription = forwardRef<HTMLDivElement, ModalDescriptionProps>(function ModalDescription({
   children,
   ...props
-}: ModalDescriptionProps) {
+}, ref) {
   const context = useModalContext()
-  if (!context.ids) {
-    throw new Error('Modal.Description must be used within a Modal.Container')
-  }
+  if (!children) return null
 
   return (
-    <Visibility isVisible={!!children}>
-      <div
-        {...props}
-        id={context.ids.description}
-        className={clsx('text-description', props.className)}
-      >
-        {children}
-      </div>
-    </Visibility>
+    <div
+      {...props}
+      ref={ref}
+      id={context.ids.description}
+      className={clsx('text-description', props.className)}
+    >
+      {children}
+    </div>
   )
-}
+})

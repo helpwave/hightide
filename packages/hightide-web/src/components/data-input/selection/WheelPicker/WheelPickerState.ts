@@ -1,5 +1,5 @@
 export type WheelPickerState<T> = {
-  value: T | undefined,
+  value: T | null,
 }
 
 export type WheelPickerLoopEvent<T> = {

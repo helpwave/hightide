@@ -4,14 +4,9 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 import { IconButton } from '../../../interaction/IconButton'
 import { useFlexibleDateTimeInputContext } from './FlexibleDateTimeInputContext'
 
-export type FlexibleDateTimeInputModeButtonProps = {
-  timeZone: string,
-  fixedTime: Date,
-}
-
-export function FlexibleDateTimeInputModeButton({ timeZone, fixedTime }: FlexibleDateTimeInputModeButtonProps) {
+export function FlexibleDateTimeInputModeButton() {
   const translation = useHightideTranslation()
-  const { state, dispatch } = useFlexibleDateTimeInputContext()
+  const { state, dispatch, timeZone, fixedTime } = useFlexibleDateTimeInputContext()
   const zoned = (date: Date) => DateUtils.toZonedDate(date, timeZone)
   const unzoned = (date: Date) => DateUtils.fromZonedDate(date, timeZone)
   const hasFixedTime = (date: Date) => DateUtils.sameTime(zoned(date), fixedTime, true, true)

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
+import type { DOMInputStateManagerProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { range } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { TimePickerContext, type TimePickerContextConfig } from './TimePickerContext'
 import type {
@@ -50,7 +50,7 @@ const millisecondStep: Record<TimePickerMillisecondIncrement, number> = {
   '500ms': 500,
 }
 
-export type TimePickerStateManagerProps = DOMInputStateMangerProps<TimePickerState, TimePickerEvent> & {
+export type TimePickerStateManagerProps = DOMInputStateManagerProps<TimePickerState, TimePickerEvent> & {
   is24HourFormat?: boolean,
   precision?: DateTimePrecision,
   minuteIncrement?: TimePickerMinuteIncrement,
@@ -60,6 +60,9 @@ export type TimePickerStateManagerProps = DOMInputStateMangerProps<TimePickerSta
 
 export function TimePickerStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -88,8 +91,12 @@ export function TimePickerStateManager({
     seconds: stepped(60, secondStep[secondIncrement]),
     milliseconds: stepped(1000, millisecondStep[millisecondIncrement]),
   }), [is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, millisecondIncrement, minuteIncrement, precision, secondIncrement, id])
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => ({ value: seeded ?? new Date() }),
     transition,
     onStateChange,
     onStateEvent,

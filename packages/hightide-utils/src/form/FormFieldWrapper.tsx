@@ -1,81 +1,51 @@
-import type { InputStateEvent } from '../interfaces/input'
-import type { FormValues, ValidationRunnerState } from './FormStore'
+import type { ReactNode } from 'react'
+import { useStateStoreSelector } from '../hooks/state-machine/useStateStore'
+import type { FormError, FormValue, ValidationRunner } from './FormStore'
 import { useFormStore } from './FormStoreContext'
-import { useFieldTouchedTrigger, type TouchedTrigger } from './useFieldTouchedTrigger'
 
-const emptyFieldErrors: string[] = []
+const emptyFieldErrors: FormError[] = []
 
-export type FormFieldWrapperConfig<
-  T extends FormValues,
-  E extends InputStateEvent = InputStateEvent
-> = {
-  isRequired?: boolean | ((values: T) => boolean),
-  isDisabled?: boolean | ((values: T) => boolean),
-  touchedTrigger?: TouchedTrigger<E>,
+const defaultFlags = {
+  isRequired: false,
+  isDisabled: false,
+  isReadOnly: false,
 }
 
-export type FormFieldWrapperBag<T extends FormValues, K extends keyof T, E extends InputStateEvent = InputStateEvent> = {
+export type FormFieldWrapperBag<T extends FormValue, K extends keyof T> = {
   name: K,
-
   value: T[K],
-  errors: string[],
-  validationRunnerError: ValidationRunnerState | undefined,
-
-  isTouched: boolean,
+  errors: FormError[],
+  validationRunnerError: ValidationRunner | undefined,
+  hasInteracted: boolean,
   isRequired: boolean,
   isDisabled: boolean,
+  isReadOnly: boolean,
+}
 
-  setValue: (value: T[K]) => void,
-  setTouched: (touched?: boolean) => void,
-  onStateEvent: (event: E) => void,
-};
-
-type FormFieldWrapperProps<T extends FormValues, K extends keyof T, E extends InputStateEvent = InputStateEvent> = {
+type FormFieldWrapperProps<T extends FormValue, K extends keyof T> = {
   name: K,
-  config?: FormFieldWrapperConfig<T, E>,
-  children: (field: FormFieldWrapperBag<T, K, E>) => React.ReactNode,
-};
+  children: (field: FormFieldWrapperBag<T, K>) => ReactNode,
+}
 
-export function FormFieldWrapper<
-  T extends FormValues,
-  K extends keyof T,
-  E extends InputStateEvent = InputStateEvent
->({
+export function FormFieldWrapper<T extends FormValue, K extends keyof T>({
   name,
-  config,
   children,
-}: FormFieldWrapperProps<T, K, E>) {
-  const value = useFormStore<T>()(state => state.values[name])
-  const errors = useFormStore<T>()(state => state.errors[name]) ?? emptyFieldErrors
-  const validationRunnerError = useFormStore<T>()(state => state.validationRunnerError[name])
-  const isTouched = useFormStore<T>()(state => state.touchedValues[name] ?? false)
-
-  const setValue = useFormStore<T>()(state => state.setValue)
-  const setTouchedValue = useFormStore<T>()(state => state.setTouchedValue)
-  const onStateEvent = useFieldTouchedTrigger<E>(config?.touchedTrigger, value, () => {
-    setTouchedValue(name, true)
-  })
-
-  const isRequired = useFormStore<T>()(state =>
-    typeof config?.isRequired === 'function'
-      ? config.isRequired(state.values)
-      : config?.isRequired ?? false)
-
-  const isDisabled = useFormStore<T>()(state =>
-    typeof config?.isDisabled === 'function'
-      ? config.isDisabled(state.values)
-      : config?.isDisabled ?? false)
+}: FormFieldWrapperProps<T, K>) {
+  const store = useFormStore<T>()
+  const value = useStateStoreSelector(store, state => state.values[name])
+  const errors = useStateStoreSelector(store, state => state.errors[name] ?? emptyFieldErrors)
+  const validationRunnerError = useStateStoreSelector(store, state => state.validationRunnerError[name])
+  const hasInteracted = useStateStoreSelector(store, state => state.hasInteracted[name] ?? false)
+  const flags = useStateStoreSelector(store, state => state.fieldFlags[name] ?? defaultFlags)
 
   return children({
     name,
     value,
     errors,
     validationRunnerError,
-    isTouched,
-    isRequired,
-    isDisabled,
-    setValue: value => setValue(name, value),
-    setTouched: touched => setTouchedValue(name, touched ?? true),
-    onStateEvent,
+    hasInteracted,
+    isRequired: flags.isRequired,
+    isDisabled: flags.isDisabled,
+    isReadOnly: flags.isReadOnly,
   })
 }

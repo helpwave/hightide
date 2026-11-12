@@ -1,13 +1,11 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+import { CheckboxContext } from './CheckboxContext'
 import { CheckboxIcon, type CheckboxIconProps } from './CheckboxIcon'
-import { CheckboxStateManager } from './CheckboxStateManager'
+import { CheckboxStateManager, type CheckboxStateManagerProps } from './CheckboxStateManager'
 import { CheckboxTrigger, type CheckboxSize, type CheckboxTriggerProps } from './CheckboxTrigger'
-import { type CheckboxEvent, type CheckboxState } from './CheckboxState'
 
-export type CheckboxProps = ControllableDOMInputProps<boolean, CheckboxEvent>
+export type CheckboxProps = Omit<CheckboxStateManagerProps, 'children'>
   & {
     indeterminate?: boolean,
     size?: CheckboxSize,
@@ -20,15 +18,6 @@ export type CheckboxProps = ControllableDOMInputProps<boolean, CheckboxEvent>
   }
 
 const CheckboxComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
   indeterminate = false,
   size = 'md',
   alwaysShowCheckIcon = false,
@@ -37,28 +26,10 @@ const CheckboxComponent = ({
   triggerProps,
   iconRef,
   iconProps,
+  ...props
 }: CheckboxProps) => {
-  const store = useStateStore<CheckboxState>({
-    value: value ?? initialValue ?? false,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-
   return (
-    <CheckboxStateManager
-      state={store}
-      onStateChange={onStateChange}
-      onStateEvent={onStateEvent}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
-    >
+    <CheckboxStateManager {...props}>
       <CheckboxTrigger
         ref={ReactUtils.assingRefsBuilder([triggerRef])}
         indeterminate={indeterminate}
@@ -82,4 +53,7 @@ export const Checkbox = Object.assign(CheckboxComponent, {
   StateManager: CheckboxStateManager,
   Trigger: CheckboxTrigger,
   Icon: CheckboxIcon,
+  Context: CheckboxContext,
+  Provider: CheckboxContext.Provider,
+  Consumer: CheckboxContext.Consumer,
 })

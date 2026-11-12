@@ -28,7 +28,7 @@ export const focusTrap: Story = {
           isOpen={showDialog}
           titleElement="Dialog 1"
           description="This is the second dialog trap"
-          onClose={() => setShowDialog(false)}
+          onIsOpenChange={setShowDialog}
         >
           <Button onClick={() => setShowDialog2(true)}>
           Open next
@@ -41,7 +41,7 @@ export const focusTrap: Story = {
           isOpen={showDialog2}
           titleElement="Dialog 2"
           description="This is the second dialog trap"
-          onClose={() => setShowDialog2(false)}
+          onIsOpenChange={setShowDialog2}
         />
         <div className="flex-col-4">
           <FocusTrapWrapper

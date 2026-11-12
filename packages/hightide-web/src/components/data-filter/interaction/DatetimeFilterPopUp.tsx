@@ -1,6 +1,6 @@
 import { forwardRef, useCallback } from 'react'
 import { DateTimeFilter } from '../data-input/DateTimeFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorDatetime } from '../filter-operator'
 import { FilterOperatorUtils, operatorNeedsParameter } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -18,22 +18,18 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
   const operator = FilterOperatorUtils.typeCheck.datetime(suggestion) ? suggestion : 'between'
   const parameter = value?.parameter ?? {}
   const typedValue: FilterInputValue<FilterOperatorDatetime> = { operator, parameter }
-  const binding = useFilterState<FilterOperatorDatetime>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorDatetime>) => {
-      onValueChange({
-        dataType: 'dateTime',
-        operator: next.operator,
-        parameter: next.parameter,
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorDatetime>) => {
+    onValueChange({
+      dataType: 'dateTime',
+      operator: next.operator,
+      parameter: next.parameter,
+    })
+  }, [onValueChange])
 
   return (
     <DateTimeFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       operatorOverrides={operatorOverrides}
     >
       <FilterPopUpShell
@@ -41,7 +37,7 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
         {...props}
         name={name}
         onRemove={onRemove}
-        noParameterRequired={!operatorNeedsParameter(binding.state.value.operator)}
+        noParameterRequired={!operatorNeedsParameter(operator)}
         operator={<DateTimeFilter.Operator />}
       >
         <DateTimeFilter.Parameter />

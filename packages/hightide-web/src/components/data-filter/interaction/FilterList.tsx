@@ -1,18 +1,18 @@
 import type { PropsWithChildren } from 'react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useId, useMemo, useState, type ReactNode } from 'react'
+import { useStateStore, useStateStoreBindings, type StateStoreBindingChange } from '@helpwave/hightide-utils/hooks'
 import type { FilterValue } from '../filter-functions'
 import { FilterValueUtils, useFilterValueTranslation } from '../filter-functions'
 import { DataTypeUtils, type DataType } from '../data-types'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { PlusIcon } from 'lucide-react'
-import { PopUpRoot } from '../../layout/PopUp/PopUpRoot'
 import { PopUp } from '../../layout/PopUp/PopUp'
-import { PopUpOpener } from '../../layout/PopUp/PopUpOpener'
+import type { PopUpOpenerProps } from '../../layout/PopUp/PopUpOpener'
+import type { PopUpState } from '../../layout/PopUp/PopUpState'
 import { Button } from '../../interaction/Button'
 import { Pressable } from '../../interaction/Pressable'
 import { FilterPopUp } from './FilterPopUp'
 import { Combobox } from '../../data-input/selection/Combobox/Combobox'
-import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 import type { FilterOperator } from '../filter-operator'
 import { FilterOperatorUtils } from '../filter-operator'
 import type { ColumnFilter } from '@tanstack/react-table'
@@ -49,6 +49,38 @@ export interface FilterListProps extends PropsWithChildren {
   availableItems: FilterListItem[],
 }
 
+function FilterValuePopUp({
+  isOpen,
+  onIsOpenChange,
+  trigger,
+  children,
+}: {
+  isOpen?: boolean,
+  onIsOpenChange?: (isOpen: boolean) => void | StateStoreBindingChange<boolean>,
+  trigger: PopUpOpenerProps<HTMLButtonElement>['children'],
+  children: ReactNode,
+}) {
+  const store = useStateStore<PopUpState>({ isOpen: isOpen ?? false })
+  const onStateChange = useStateStoreBindings({
+    store,
+    bindings: {
+      isOpen: {
+        value: isOpen,
+        onValueChange: (next) => onIsOpenChange?.(next),
+      },
+    },
+  })
+
+  return (
+    <PopUp.StateManager state={store} onStateChange={onStateChange}>
+      <PopUp.Opener<HTMLButtonElement>>
+        {trigger}
+      </PopUp.Opener>
+      {children}
+    </PopUp.StateManager>
+  )
+}
+
 export const FilterList = ({ value, onValueChange, availableItems }: FilterListProps) => {
   const translation = useHightideTranslation()
   const filterValueToLabel = useFilterValueTranslation()
@@ -59,6 +91,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
     return acc
   }, {} as Record<string, FilterListItem>), [availableItems])
   const [editState, setEditState] = useState<IdentifierFilterValue | undefined>(undefined)
+  const addFilterTitleId = useId()
 
   const valueWithEditState = useMemo(() => {
     let foundEditValue = false
@@ -76,28 +109,35 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
 
   return (
     <div className="flex-row-2 flex-wrap gap-y-2">
-      <PopUpRoot>
-        <PopUpOpener>
-          {({ toggleOpen, props }) => (
-            <Button
-              {...props}
-              onClick={toggleOpen}
-              color="neutral"
-              size="sm"
-              className="min-w-36"
-              trailing={PlusIcon}
-            >
-              {translation('addFilter')}
-            </Button>
-          )}
-        </PopUpOpener>
-        <PopUp className="flex-col-2 p-2">
-          <PopUpContext.Consumer>
-            {(context) => {
-              if(!context) return
-              const { setIsOpen } = context
-              return (
+      <PopUp
+        trigger={({ toggleOpen, props }) => (
+          <Button
+            {...props}
+            onClick={toggleOpen}
+            color="neutral"
+            size="sm"
+            className="min-w-36"
+            trailing={PlusIcon}
+          >
+            {translation('addFilter')}
+          </Button>
+        )}
+        panelProps={{
+          'className': 'flex-col-0 min-w-72',
+          'aria-labelledby': addFilterTitleId,
+        }}
+      >
+        <span id={addFilterTitleId} className="typography-title-md font-semibold px-3 pt-3 pb-2">
+          {translation('addFilter')}
+        </span>
+        <PopUp.Consumer>
+          {(context) => {
+            if(!context) return
+            const { dispatch } = context
+            return (
+              <div className="w-full px-3 pb-3">
                 <Combobox
+                  isInline
                   onItemClick={(id) => {
                     const item = itemRecord[id]
                     if (!item) return
@@ -110,7 +150,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                       },
                     }
                     setEditState(newValue)
-                    setIsOpen(false)
+                    dispatch({ type: 'close' })
                   }}
                   options={inactiveItems.map(item => ({
                     value: item.id,
@@ -125,15 +165,15 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                     },
                   }))}
                 />
-              )}}
-          </PopUpContext.Consumer>
-        </PopUp>
-      </PopUpRoot>
+              </div>
+            )}}
+        </PopUp.Consumer>
+      </PopUp>
       {valueWithEditState.map(columnFilter => {
         const item = itemRecord[columnFilter.id]
         if (!item) return null
         return (
-          <PopUpRoot
+          <FilterValuePopUp
             key={columnFilter.id}
             isOpen={editState?.id === columnFilter.id}
             onIsOpenChange={isOpen => {
@@ -149,25 +189,25 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                 setEditState({ ...valueItem })
               }
             }}
+            trigger={({ toggleOpen, props }) => (
+              <Pressable {...props} onClick={toggleOpen} color="primary" coloringStyle="filled" colorVariant="tonal" size="sm" className="list-chip">
+                {item.activeLabelBuilder ?
+                  item.activeLabelBuilder(columnFilter.value) : (
+                    <>
+                      <span className="font-bold">{item.label}</span>
+                      {filterValueToLabel(columnFilter.value, { tags: item.tags })}
+                    </>
+                  )
+                }
+              </Pressable>
+            )}
           >
-            <PopUpOpener>
-              {({ toggleOpen, props }) => (
-                <Pressable {...props} onClick={toggleOpen} color="primary" coloringStyle="filled" colorVariant="tonal" bordered size="sm">
-                  {item.activeLabelBuilder ?
-                    item.activeLabelBuilder(columnFilter.value) : (
-                      <>
-                        <span className="font-bold">{item.label}</span>
-                        {filterValueToLabel(columnFilter.value, { tags: item.tags })}
-                      </>
-                    )
-                  }
-                </Pressable>
-              )}
-            </PopUpOpener>
-            <PopUpContext.Consumer>
+            <PopUp.Consumer>
               {(context) => {
                 if(!context) return
-                const { isOpen, setIsOpen } = context
+                const { state, dispatch } = context
+                const isOpen = state.isOpen
+                const close = () => dispatch({ type: 'close' })
                 return item.popUpBuilder ? (
                   item.popUpBuilder({
                     value: editState?.id === columnFilter.id ? editState.value : columnFilter.value,
@@ -181,7 +221,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                     tags: item.tags,
                     name: item.label,
                     isOpen,
-                    onClose: () => setIsOpen(false),
+                    onClose: close,
                   })
                 ) : (
                   <FilterPopUp
@@ -197,11 +237,11 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                       onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
                       setEditState(undefined)
                     }}
-                    onClose={() => setIsOpen(false)}
+                    onClose={close}
                   />
                 )}}
-            </PopUpContext.Consumer>
-          </PopUpRoot>
+            </PopUp.Consumer>
+          </FilterValuePopUp>
         )
       })}
     </div>

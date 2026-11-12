@@ -1,28 +1,27 @@
 'use client'
 
 import type { HTMLAttributes } from 'react'
+import { forwardRef } from 'react'
 import clsx from 'clsx'
-
 import { useModalContext } from './ModalContext'
 
 export type ModalBackgroundProps = HTMLAttributes<HTMLDivElement>
 
-export function ModalBackground({
-  ...props
-}: ModalBackgroundProps) {
+export const ModalBackground = forwardRef<HTMLDivElement, ModalBackgroundProps>(function ModalBackground(
+  props,
+  ref
+) {
   const context = useModalContext()
-  if (!context.ids || !context.onClose || context.transitionState === undefined) {
-    throw new Error('Modal.Background must be used within a Modal.Container')
-  }
 
   return (
     <div
       {...props}
+      ref={ref}
       id={context.ids.background}
-      onClick={context.onClose}
+      onClick={context.close}
       data-state={context.transitionState}
       aria-hidden={true}
       className={clsx('modal-background', props.className)}
     />
   )
-}
+})

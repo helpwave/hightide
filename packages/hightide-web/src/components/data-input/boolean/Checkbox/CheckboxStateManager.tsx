@@ -1,13 +1,16 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../domInput'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { CheckboxContext, type CheckboxContextValue } from './CheckboxContext'
 import { checkboxStateTransition, type CheckboxEvent, type CheckboxState } from './CheckboxState'
 
-export type CheckboxStateManagerProps = DOMInputStateMangerProps<CheckboxState, CheckboxEvent>
+export type CheckboxStateManagerProps = DOMInputStateManagerProps<CheckboxState, CheckboxEvent>
 
 export function CheckboxStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -17,8 +20,12 @@ export function CheckboxStateManager({
   id,
   children,
 }: CheckboxStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: { value: false },
     transition: checkboxStateTransition,
     onStateChange,
     onStateEvent,

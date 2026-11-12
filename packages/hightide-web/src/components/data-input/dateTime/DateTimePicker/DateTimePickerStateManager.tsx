@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
+import type { DOMInputStateManagerProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat, useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import type { CalendarDisplayMode } from '../CalendarDatePicker'
 import type {
@@ -17,7 +17,7 @@ import {
   type DateTimePickerState
 } from './DateTimePickerState'
 
-export type DateTimePickerStateManagerProps = DOMInputStateMangerProps<DateTimePickerState, DateTimePickerEvent> & {
+export type DateTimePickerStateManagerProps = DOMInputStateManagerProps<DateTimePickerState, DateTimePickerEvent> & {
   mode?: DateTimeFormat,
   start?: Date,
   end?: Date,
@@ -33,6 +33,9 @@ export type DateTimePickerStateManagerProps = DOMInputStateMangerProps<DateTimeP
 
 export function DateTimePickerStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -71,8 +74,12 @@ export function DateTimePickerStateManager({
     initialDisplay,
     locale,
   }), [end, initialDisplay, is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, millisecondIncrement, minuteIncrement, mode, precision, secondIncrement, start, weekStart, id])
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => ({ value: seeded ?? new Date() }),
     transition: dateTimePickerStateTransition,
     onStateChange,
     onStateEvent,

@@ -1,26 +1,21 @@
 import type { ForwardedRef } from 'react'
-import { forwardRef, useEffect } from 'react'
+import { forwardRef } from 'react'
 import clsx from 'clsx'
-import { PopUp, type PopUpProps } from '../../../layout/PopUp/PopUp'
+import { PopUp, type PopUpPanelProps } from '../../../layout/PopUp/PopUp'
 import { useSelectContext } from './SelectContext'
 
-export type SelectPopUpProps = PopUpProps
+export type SelectPopUpProps = PopUpPanelProps
 
-export const SelectPopUp = forwardRef<HTMLDivElement, SelectPopUpProps>(function SelectPopUp({
-  id,
-  ...props
-}, ref: ForwardedRef<HTMLDivElement>) {
+export const SelectPopUp = forwardRef<HTMLDivElement, SelectPopUpProps>(function SelectPopUp(
+  props,
+  ref: ForwardedRef<HTMLDivElement>
+) {
   const context = useSelectContext()
-  const { setIds } = context.config
-
-  useEffect(() => {
-    if (id) setIds((prev) => ({ ...prev, content: id }))
-  }, [id, setIds])
 
   return (
-    <PopUp
+    <PopUp.Panel
       {...props}
-      ref={ref}
+      panelRef={ref}
       id={context.config.ids.content}
       isOpen={context.isOpen}
       anchor={context.layout.triggerRef}
@@ -33,6 +28,6 @@ export const SelectPopUp = forwardRef<HTMLDivElement, SelectPopUpProps>(function
       className={clsx('select-content', props.className)}
     >
       {props.children}
-    </PopUp>
+    </PopUp.Panel>
   )
 })

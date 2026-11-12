@@ -10,7 +10,7 @@
   }
 
   .tab-list[data-style-variant="segmented-chips"] {
-    @apply flex-row-0.5 items-center;
+    @apply flex-row-0.5 items-center gap-x-1;
   }
 
   .tab-list-item {
@@ -54,6 +54,6 @@
   }
 
   .tab-panel {
-    @apply flex-col-0 overflow-y-auto;
+    @apply flex-col-0 overflow-y-auto p-2;
   }
 }

@@ -12,16 +12,15 @@ export function DateWheelPickerYearWheel() {
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       onValueChange={(year) => {
-        if (!isLocked && year !== undefined) {
+        if (!isLocked && year !== null) {
           dispatch({ type: 'setYear', year })
         }
       }}
-    >
-      {config.years.map((year) => (
-        <WheelPicker.Option key={year} value={year} valueId={String(year)}>
-          {String(year)}
-        </WheelPicker.Option>
-      ))}
-    </WheelPicker>
+      options={config.years.map((year) => ({
+        value: year,
+        id: String(year),
+        label: String(year),
+      }))}
+    />
   )
 }

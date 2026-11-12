@@ -4,7 +4,7 @@ import {
   useControlledState,
   useStableEvent
 } from '@helpwave/hightide-utils/hooks'
-import type { ControllableDOMInputProps } from '../../domInput'
+import type { DOMInputValueProps } from '../../domInput'
 import { SafeGlobals } from '../../../../utils/safeGlobals'
 import { FileInputContext, type FileInputContextType, type FileInputPickFiles } from './FileInputContext'
 import {
@@ -16,7 +16,7 @@ import {
 
 export type FileInputEvent = { type: 'commit', value: readonly FileInputItem[] }
 
-export interface FileInputStateManagerProps extends Omit<ControllableDOMInputProps<readonly FileInputItem[], FileInputEvent>, 'value'> {
+export interface FileInputStateManagerProps extends Omit<DOMInputValueProps<readonly FileInputItem[], FileInputEvent>, 'value'> {
   value?: readonly FileInputItem[],
   initialIsOpen?: boolean,
   onClose?: () => void,

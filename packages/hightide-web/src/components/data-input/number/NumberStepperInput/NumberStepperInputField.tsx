@@ -2,7 +2,6 @@ import type { ComponentRef, Ref } from 'react'
 import clsx from 'clsx'
 import { NumberInput, type NumberInputInputProps, type NumberInputProps } from '../NumberInput'
 import { useNumberStepperInputContext } from './NumberStepperInputContext'
-import { useNumberStepperHold } from './NumberStepperInputHold'
 
 export type NumberStepperInputFieldProps = Omit<NumberInputProps, 'value' | 'onValueChange' | 'onStateEvent' | 'inputRef' | 'inputProps'> & {
   inputRef?: Ref<ComponentRef<typeof NumberInput.Input>>,
@@ -14,8 +13,7 @@ export function NumberStepperInputField({
   inputProps,
   ...props
 }: NumberStepperInputFieldProps) {
-  const { state, dispatch, config } = useNumberStepperInputContext()
-  const { start, stop } = useNumberStepperHold()
+  const { state, dispatch, config, startScroll, stopScroll } = useNumberStepperInputContext()
 
   return (
     <NumberInput
@@ -39,22 +37,22 @@ export function NumberStepperInputField({
           inputProps?.onKeyDown?.(event)
           if (event.key === 'ArrowUp') {
             event.preventDefault()
-            start('keyboard', 1)
+            startScroll('keyboard', 1)
           }
           if (event.key === 'ArrowDown') {
             event.preventDefault()
-            start('keyboard', -1)
+            startScroll('keyboard', -1)
           }
         },
         onKeyUp: (event) => {
           inputProps?.onKeyUp?.(event)
           if (event.key === 'ArrowUp') {
             event.preventDefault()
-            stop('keyboard', 1)
+            stopScroll('keyboard', 1)
           }
           if (event.key === 'ArrowDown') {
             event.preventDefault()
-            stop('keyboard', -1)
+            stopScroll('keyboard', -1)
           }
         },
         className: clsx('number-stepper-input-field', inputProps?.className),

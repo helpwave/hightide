@@ -19,6 +19,7 @@ export interface ComboboxContextComputedState<T> {
 export interface ComboboxContextActions {
   selectOption(id: string): void,
   addNewValue(): void,
+  clear(): void,
   highlightFirst(): void,
   highlightLast(): void,
   highlightNext(): void,
@@ -40,8 +41,10 @@ export interface ComboboxContextSearch {
 export interface ComboboxContextConfig {
   ids: ComboboxContextIds,
   setIds: Dispatch<SetStateAction<ComboboxContextIds>>,
+  isInline: boolean,
   newValueId: string,
   isAllowingNewValue: boolean,
+  hasClearIcon: boolean,
 }
 
 export interface ComboboxContextType<T> extends ComboboxContextComputedState<T>, ComboboxContextActions {
@@ -50,7 +53,7 @@ export interface ComboboxContextType<T> extends ComboboxContextComputedState<T>,
   isReadOnly: boolean,
   isRequired: boolean,
   isOpen: boolean,
-  value?: T,
+  value: T | null,
   highlightedId: string | null,
   optionRefs: Record<string, RefObject<HTMLLIElement | null>>,
   config: ComboboxContextConfig,

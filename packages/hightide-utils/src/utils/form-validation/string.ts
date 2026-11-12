@@ -1,26 +1,31 @@
 import { boundsValidation, type FormValidationBounds } from './bounds'
-import type { FormValidationResult } from './FormValidationErrorType'
+import type { FormValidationResult } from './formError'
 
 const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 
 export const notEmpty = (value: string | undefined): FormValidationResult => {
   if (!value) {
-    return 'notEmpty'
+    return { code: 'validationErrorNotEmpty' }
   }
 }
 
 export const email = (value: string | undefined): FormValidationResult => {
   if (!value || !emailPattern.test(value)) {
-    return 'invalidEmail'
+    return { code: 'validationErrorInvalidEmail' }
   }
 }
 
 export const length = (value: string | undefined, bounds: FormValidationBounds): FormValidationResult => {
-  const mapping: Record<ReturnType<typeof boundsValidation>, FormValidationResult> = {
-    range: 'outOfRangeString',
-    lower: 'tooShort',
-    upper: 'tooLong',
-    none: undefined,
+  const [min, max] = bounds
+  const result = boundsValidation(value?.length, bounds)
+
+  if (result === 'lower') {
+    return { code: 'validationErrorTooShort', information: { min: min ?? 0 } }
   }
-  return mapping[boundsValidation(value?.length, bounds)]
+  if (result === 'upper') {
+    return { code: 'validationErrorTooLong', information: { max: max ?? 0 } }
+  }
+  if (result === 'range') {
+    return { code: 'validationErrorOutOfRangeString', information: { min: min ?? 0, max: max ?? 0 } }
+  }
 }

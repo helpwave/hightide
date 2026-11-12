@@ -35,6 +35,7 @@ export const multiSelect: Story = {
     isRequired: false,
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
+    hasClearIcon: true,
     options: fruitOptions,
   },
 }
@@ -69,6 +70,7 @@ export const multiSelectWithUser: StoryObj<typeof MultiSelect<User>> = {
     compareFunction: compareUser,
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
+    hasClearIcon: true,
     placeholder: 'Select users',
     selectedDisplay: (values: User[]) => (
       <div className="flex flex-col gap-1">
@@ -85,6 +87,7 @@ export const multiSelectWithUser: StoryObj<typeof MultiSelect<User>> = {
       value: user,
       label: user.name,
       visual: {
+        className: 'h-auto',
         content: (
           <div className="flex flex-col">
             <span>{user.name}</span>
@@ -114,7 +117,6 @@ export const multiSelectWithUser: StoryObj<typeof MultiSelect<User>> = {
         }}
         onStateEvent={(event) => {
           args.onStateEvent?.(event)
-          if (event.type === 'commit') setValue(event.value)
         }}
       />
     )

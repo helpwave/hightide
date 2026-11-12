@@ -1,8 +1,8 @@
 'use client'
 
-import type { ForwardedRef, ReactNode } from 'react'
-import { forwardRef } from 'react'
+import type { ReactNode, Ref } from 'react'
 import clsx from 'clsx'
+import { useStateStore, useStateStoreBindings, type StateStoreBindingChange } from '@helpwave/hightide-utils/hooks'
 
 import { ModalBackground } from './ModalBackground'
 import type { ModalBackgroundProps } from './ModalBackground'
@@ -11,42 +11,60 @@ import type { ModalCloseButtonProps } from './ModalCloseButton'
 import { ModalContainer } from './ModalContainer'
 import type { ModalContainerProps } from './ModalContainer'
 import { ModalPanel, type ModalPanelProps, type ModalPosition } from './ModalPanel'
-import { ModalContext } from './ModalContext'
+import { ModalContext, type ModalIds } from './ModalContext'
 import { ModalDescription } from './ModalDescription'
 import type { ModalDescriptionProps } from './ModalDescription'
-import { ModalOpener } from './ModalOpener'
-import { ModalRoot } from './ModalRoot'
+import { ModalOpener, type ModalOpenerProps } from './ModalOpener'
 import { ModalTitle } from './ModalTitle'
 import type { ModalTitleProps } from './ModalTitle'
 import { ModalContent, type ModalContentProps } from './ModalContent'
+import { ModalStateManager } from './ModalStateManager'
+import { type ModalEvent, type ModalState } from './ModalState'
 
 export type { ModalPosition }
 
 export type ModalProps = {
   isOpen?: boolean,
+  onIsOpenChange?: (isOpen: boolean) => void | StateStoreBindingChange<boolean>,
+  onStateEvent?: (event: ModalEvent) => void,
   titleElement: ReactNode,
   description: ReactNode,
-  onClose?: () => void,
   position?: ModalPosition,
-  isClosable?: boolean,
+  trigger?: ModalOpenerProps['children'],
   children?: ReactNode,
-  containerProps?: Omit<ModalContainerProps, 'children' | 'isOpen' | 'onClose' | 'isClosable' | 'hasDescription' | 'contentId'>,
+  containerRef?: Ref<HTMLDivElement>,
+  backgroundRef?: Ref<HTMLDivElement>,
+  panelRef?: Ref<HTMLDivElement>,
+  contentRef?: Ref<HTMLDivElement>,
+  titleRef?: Ref<HTMLDivElement>,
+  descriptionRef?: Ref<HTMLDivElement>,
+  closeButtonRef?: Ref<HTMLButtonElement>,
+  containerProps?: ModalContainerProps,
   backgroundProps?: ModalBackgroundProps,
-  panelProps?: Omit<ModalPanelProps, 'children'>,
-  contentProps?: Omit<ModalContentProps, 'children'>,
-  titleProps?: Omit<ModalTitleProps, 'children'>,
-  descriptionProps?: Omit<ModalDescriptionProps, 'children'>,
+  panelProps?: ModalPanelProps,
+  contentProps?: ModalContentProps,
+  titleProps?: ModalTitleProps,
+  descriptionProps?: ModalDescriptionProps,
   closeButtonProps?: ModalCloseButtonProps,
+  ids?: Partial<ModalIds>,
 }
 
-const ModalComponent = forwardRef<HTMLDivElement, ModalProps>(function Modal({
+function ModalComponent({
   children,
   isOpen,
+  onIsOpenChange,
+  onStateEvent,
   titleElement,
   description,
-  onClose,
   position = 'center',
-  isClosable = true,
+  trigger,
+  containerRef,
+  backgroundRef,
+  panelRef,
+  contentRef,
+  titleRef,
+  descriptionRef,
+  closeButtonRef,
   containerProps,
   backgroundProps,
   panelProps,
@@ -54,41 +72,83 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalProps>(function Modal({
   titleProps,
   descriptionProps,
   closeButtonProps,
-}, forwardedRef: ForwardedRef<HTMLDivElement>) {
+  ids,
+}: ModalProps) {
+  const store = useStateStore<ModalState>({
+    isOpen: isOpen ?? false,
+  })
+  const onStateChange = useStateStoreBindings({
+    store,
+    bindings: {
+      isOpen: {
+        value: isOpen,
+        onValueChange: onIsOpenChange,
+      },
+    },
+  })
+
   return (
-    <ModalContainer
-      {...containerProps}
-      isOpen={isOpen}
-      onClose={onClose}
-      isClosable={isClosable}
+    <ModalStateManager
+      state={store}
+      onStateChange={onStateChange}
+      onStateEvent={onStateEvent}
       hasDescription={!!description}
-      contentId={panelProps?.id}
-      className={clsx(containerProps?.className)}
+      ids={ids}
     >
-      <ModalBackground {...backgroundProps} />
-      <ModalPanel
-        {...panelProps}
-        ref={forwardedRef}
-        position={position}
-        className={clsx(panelProps?.className)}
+      {trigger && (
+        <ModalOpener>
+          {trigger}
+        </ModalOpener>
+      )}
+      <ModalContainer
+        {...containerProps}
+        ref={containerRef}
+        className={clsx(containerProps?.className)}
       >
-        <ModalTitle {...titleProps}>
-          {titleElement}
-        </ModalTitle>
-        <ModalContent {...contentProps}>
-          <ModalDescription {...descriptionProps}>
-            {description}
-          </ModalDescription>
-          <ModalCloseButton {...closeButtonProps} />
-          {children}
-        </ModalContent>
-      </ModalPanel>
-    </ModalContainer>
+        {containerProps?.children ?? (
+          <>
+            <ModalBackground
+              {...backgroundProps}
+              ref={backgroundRef}
+            />
+            <ModalPanel
+              {...panelProps}
+              ref={panelRef}
+              position={panelProps?.position ?? position}
+              className={clsx(panelProps?.className)}
+            >
+              <ModalTitle
+                {...titleProps}
+                ref={titleRef}
+              >
+                {titleElement}
+              </ModalTitle>
+              <ModalContent
+                {...contentProps}
+                ref={contentRef}
+              >
+                <ModalDescription
+                  {...descriptionProps}
+                  ref={descriptionRef}
+                >
+                  {description}
+                </ModalDescription>
+                <ModalCloseButton
+                  {...closeButtonProps}
+                  ref={closeButtonRef}
+                />
+                {children}
+              </ModalContent>
+            </ModalPanel>
+          </>
+        )}
+      </ModalContainer>
+    </ModalStateManager>
   )
-})
+}
 
 const Modal = Object.assign(ModalComponent, {
-  Root: ModalRoot,
+  StateManager: ModalStateManager,
   Container: ModalContainer,
   Background: ModalBackground,
   Content: ModalPanel,
@@ -97,6 +157,7 @@ const Modal = Object.assign(ModalComponent, {
   CloseButton: ModalCloseButton,
   Opener: ModalOpener,
   Context: ModalContext,
+  Provider: ModalContext.Provider,
   Consumer: ModalContext.Consumer,
 })
 

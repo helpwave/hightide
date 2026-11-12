@@ -2,7 +2,7 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 import { Visibility } from '../../layout/Visibility'
 import { IconButton } from '../../interaction/IconButton'
 import { Check, TrashIcon } from 'lucide-react'
-import { PopUp, type PopUpProps } from '../../layout/PopUp/PopUp'
+import { PopUp, type PopUpPanelProps } from '../../layout/PopUp/PopUp'
 import type { FilterOperator } from '../filter-operator'
 import { FilterOperatorUtils } from '../filter-operator'
 import type { ReactNode } from 'react'
@@ -11,7 +11,7 @@ import { Select } from '../../data-input/selection/Select/Select'
 import clsx from 'clsx'
 import { FilterOperatorLabel } from './FilterOperatorLabel'
 
-export interface FilterPopUpBaseProps extends PopUpProps {
+export interface FilterPopUpBaseProps extends PopUpPanelProps {
   name?: ReactNode,
   operator: FilterOperator,
   onOperatorChange: (operator: FilterOperator) => void,
@@ -45,9 +45,9 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
   }, [operators, onRemove])
 
   return (
-    <PopUp
-      ref={ref}
+    <PopUp.Panel
       {...props}
+      panelRef={ref}
       className={clsx('flex-col-3 p-3 relative min-w-64', props.className)}
     >
       <div className="flex-row-4 justify-between w-full">
@@ -55,9 +55,12 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
           <span className="typography-label-sm text-description">{name ?? translation('filter')}</span>
           <Select
             value={operator}
-            onValueChange={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
+            onValueChange={(newOperator) => {
+              if (newOperator == null) return
+              onOperatorChange(newOperator as FilterOperator)
+            }}
             triggerProps={{
-              className: 'filter-operator-select w-fit flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
+              appearance: 'text',
               selectedDisplay: (option) => option ? translation(FilterOperatorUtils.getInfo(option.value).translationKey as Parameters<typeof translation>[0]) : '',
             }}
             iconAppearance="right"
@@ -95,11 +98,11 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
           {translation('noParameterRequired')}
         </div>
       </Visibility>
-    </PopUp>
+    </PopUp.Panel>
   )
 })
 
-export interface FilterPopUpShellProps extends PopUpProps {
+export interface FilterPopUpShellProps extends PopUpPanelProps {
   name?: ReactNode,
   onRemove: () => void,
   noParameterRequired?: boolean,
@@ -117,9 +120,9 @@ export const FilterPopUpShell = forwardRef<HTMLDivElement, FilterPopUpShellProps
   const translation = useHightideTranslation()
 
   return (
-    <PopUp
-      ref={ref}
+    <PopUp.Panel
       {...props}
+      panelRef={ref}
       className={clsx('flex-col-3 p-3 relative min-w-64', props.className)}
     >
       <div className="flex-row-4 justify-between w-full">
@@ -152,6 +155,6 @@ export const FilterPopUpShell = forwardRef<HTMLDivElement, FilterPopUpShellProps
           {translation('noParameterRequired')}
         </div>
       </Visibility>
-    </PopUp>
+    </PopUp.Panel>
   )
 })

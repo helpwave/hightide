@@ -1,11 +1,12 @@
-import type { ReactNode, RefObject, SetStateAction } from 'react'
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+import { useEffect, useId, useMemo, useRef } from 'react'
 import { MultiSelectContext } from './MultiSelectContext'
-import type { MultiSelectContextType, MultiSelectIconAppearance, MultiSelectOptionData } from './MultiSelectContext'
-import { useMultiSelect } from './useMultiSelect'
-import type { ControllableDOMInputProps } from '../../domInput'
+import type { MultiSelectContextConfig, MultiSelectContextLayout, MultiSelectIconAppearance } from './MultiSelectContext'
+import { createMultiSelectState, multiSelectStateTransition, type MultiSelectEvent } from './MultiSelectState'
+import type { DOMInputValueProps } from '../../domInput'
+import { useStateManager, useTypeAheadSearch } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from '../../../layout/PopUp/PopUpContext'
-import type { SelectionOptionInput } from '../option'
+import type { SelectionOptionData, SelectionOptionInput } from '../option'
 import { normalizeSelectionOptions, scrollHighlightedOption, useOptionRefs } from '../option'
 
 export interface MultiSelectIds {
@@ -15,16 +16,22 @@ export interface MultiSelectIds {
   searchInput: string,
 }
 
-export type MultiSelectEvent<T> = { type: 'commit', value: T[] }
+export type { MultiSelectEvent } from './MultiSelectState'
 
-export interface MultiSelectStateManagerProps<T> extends ControllableDOMInputProps<T[], MultiSelectEvent<T>> {
+export interface MultiSelectStateManagerProps<T> extends DOMInputValueProps<T[], MultiSelectEvent<T>> {
   options: ReadonlyArray<SelectionOptionInput<T>>,
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
   searchableThreshold?: number,
   iconAppearance?: MultiSelectIconAppearance,
+  hasClearIcon?: boolean,
+  ids?: Partial<MultiSelectIds>,
   children: ReactNode,
+}
+
+function sameIds(left: readonly string[], right: readonly string[]) {
+  return left.length === right.length && left.every((id, index) => id === right[index])
 }
 
 export function MultiSelectStateManager<T>({
@@ -37,189 +44,199 @@ export function MultiSelectStateManager<T>({
   compareFunction,
   initialIsOpen = false,
   onClose,
-  searchableThreshold = 6,
+  searchableThreshold = 7,
   iconAppearance = 'right',
+  hasClearIcon = false,
+  ids: idsOverride,
   isInvalid = false,
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
   id,
 }: MultiSelectStateManagerProps<T>) {
-  const nullTrigger = useRef<HTMLElement | null>(null)
-  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null>>(nullTrigger)
+  const triggerRef = useRef<HTMLElement | null>(null)
   const normalizedOptions = useMemo(() => normalizeSelectionOptions(options), [options])
   const optionIds = useMemo(() => normalizedOptions.map((option) => option.id), [normalizedOptions])
   const optionRefs = useOptionRefs(optionIds)
   const optionRefsRef = useRef(optionRefs)
   optionRefsRef.current = optionRefs
   const generatedId = useId()
-  const [ids, setIds] = useState<MultiSelectIds>({
-    trigger: id ?? 'multi-select-' + generatedId,
-    content: 'multi-select-content-' + generatedId,
-    listbox: 'multi-select-listbox-' + generatedId,
-    searchInput: 'multi-select-search-' + generatedId,
-  })
-
-  useEffect(() => {
-    if (!id) return
-    setIds((prev) => (prev.trigger === id ? prev : { ...prev, trigger: id }))
-  }, [id])
-
-  const registerTrigger = useCallback((ref: RefObject<HTMLElement | null>) => {
-    setTriggerRef(ref)
-    return () => setTriggerRef(nullTrigger)
-  }, [])
-
-  const compare = useMemo(() => compareFunction ?? Object.is, [compareFunction])
-
-  const idToOptionMap = useMemo(
-    () =>
-      normalizedOptions.reduce(
-        (acc, option) => {
-          acc[option.id] = option
-          return acc
-        },
-        {} as Record<string, MultiSelectOptionData<T>>
-      ),
-    [normalizedOptions]
-  )
-
-  const mappedValueIds = useMemo(() => {
-    if (value === undefined) return undefined
-    return value
-      .map((item) => normalizedOptions.find((option) => compare(option.value, item))?.id)
-      .filter((id) => id !== undefined)
-  }, [normalizedOptions, value, compare])
-
-  const mappedInitialValueIds = useMemo(() => {
-    if (initialValue === undefined) return []
-    return initialValue
-      .map((item) => normalizedOptions.find((option) => compare(option.value, item))?.id)
-      .filter((id) => id !== undefined)
-  }, [normalizedOptions, initialValue, compare])
-
-  const onValueChangeStable = useCallback(
-    (ids: string[]) => {
-      const values = ids
-        .map((id) => idToOptionMap[id]?.value)
-        .filter((item): item is T => item !== undefined)
-      onValueChange?.(values)
-    },
-    [idToOptionMap, onValueChange]
-  )
-
-  const onEditCompleteStable = useCallback(
-    (ids: string[]) => {
-      const values = ids
-        .map((id) => idToOptionMap[id]?.value)
-        .filter((item): item is T => item !== undefined)
-      onStateEvent?.({ type: 'commit', value: values })
-    },
-    [idToOptionMap, onStateEvent]
-  )
-
-  const state = useMultiSelect({
-    options: normalizedOptions.map((option) => ({ id: option.id, label: option.label, disabled: option.disabled })),
-    value: mappedValueIds,
-    onValueChange: onValueChangeStable,
-    onEditComplete: onEditCompleteStable,
-    initialValue: mappedInitialValueIds,
-    initialIsOpen,
-    onClose,
-  })
-  const { setSearchQuery } = state
-  const hasSearch = normalizedOptions.length >= searchableThreshold
-
-  useEffect(() => {
-    if (!hasSearch) {
-      setSearchQuery('')
-    }
-  }, [hasSearch, setSearchQuery])
-
-  useEffect(() => {
-    scrollHighlightedOption(
-      state.highlightedId,
-      optionRefsRef.current,
-      ids.listbox,
-      hasSearch ? ids.searchInput : undefined
-    )
-  }, [hasSearch, ids.listbox, ids.searchInput, state.highlightedId, state.isOpen])
-
-  const contextValue = useMemo((): MultiSelectContextType<T> => {
-    const valueT = state.value
-      .map((id) => idToOptionMap[id]?.value)
-      .filter((item): item is T => item !== undefined)
-    return {
-      isInvalid,
-      isDisabled,
-      isReadOnly,
-      isRequired,
-      selectedIds: state.value,
-      highlightedId: state.highlightedId,
-      isOpen: state.isOpen,
-      options: normalizedOptions,
-      optionRefs,
-      visibleOptionIds: state.visibleOptionIds,
-      idToOptionMap,
-      value: valueT,
-      toggleSelection: state.toggleSelection,
-      highlightFirst: state.highlightFirst,
-      highlightLast: state.highlightLast,
-      highlightNext: state.highlightNext,
-      highlightPrevious: state.highlightPrevious,
-      highlightItem: state.highlightItem,
-      handleTypeaheadKey: state.handleTypeaheadKey,
-      setIsOpen: state.setIsOpen,
-      toggleIsOpen: state.toggleOpen,
-      config: {
-        iconAppearance,
-        ids,
-        setIds,
-      },
-      layout: {
-        triggerRef,
-        registerTrigger,
-      },
-      search: {
-        hasSearch,
-        searchQuery: state.searchQuery,
-        setSearchQuery: state.setSearchQuery,
-      },
-    }
-  }, [
-    isInvalid,
-    isDisabled,
-    isReadOnly,
-    isRequired,
-    state,
-    normalizedOptions,
-    optionRefs,
-    idToOptionMap,
-    iconAppearance,
-    ids,
-    triggerRef,
-    registerTrigger,
-    hasSearch,
+  const ids = useMemo<MultiSelectIds>(() => ({
+    trigger: idsOverride?.trigger ?? id ?? 'multi-select-' + generatedId,
+    content: idsOverride?.content ?? 'multi-select-content-' + generatedId,
+    listbox: idsOverride?.listbox ?? 'multi-select-listbox-' + generatedId,
+    searchInput: idsOverride?.searchInput ?? 'multi-select-search-' + generatedId,
+  }), [
+    generatedId,
+    id,
+    idsOverride?.content,
+    idsOverride?.listbox,
+    idsOverride?.searchInput,
+    idsOverride?.trigger,
   ])
 
-  const setIsOpen = useCallback((updater: SetStateAction<boolean>) => {
-    if (typeof updater === 'function') {
-      state.setIsOpen(updater(state.isOpen))
-    } else {
-      state.setIsOpen(updater)
+  const compare = useMemo(() => compareFunction ?? Object.is, [compareFunction])
+  const seededValue = value !== undefined ? value : initialValue
+  const seededIds = useMemo(() => {
+    const idsForValue: string[] = []
+    for (const item of seededValue ?? []) {
+      const match = normalizedOptions.find((option) => compare(option.value, item))
+      if (match && !idsForValue.includes(match.id)) idsForValue.push(match.id)
     }
-  }, [state])
+    return idsForValue
+  }, [compare, normalizedOptions, seededValue])
+
+  const machine = useStateManager({
+    initialState: () => createMultiSelectState({
+      options: normalizedOptions,
+      selectedIds: seededIds,
+      isOpen: initialIsOpen,
+    }),
+    transition: multiSelectStateTransition<T>,
+    onStateChange: (next, transition) => {
+      if (!transition) return
+      const previous = transition.previousState
+      const event = transition.event
+      const selectionChanged = !sameIds(next.selectedIds, previous.selectedIds)
+      if ((event.type === 'toggle' || event.type === 'clear') && selectionChanged) {
+        onValueChange?.([...next.value])
+      }
+      onStateEvent?.(event)
+      if (event.type === 'clear') {
+        onClose?.()
+        onStateEvent?.({ type: 'commit', value: [...next.value] })
+        return
+      }
+      if ((event.type === 'setOpen' || event.type === 'toggleOpen') && !next.isOpen && previous.isOpen) {
+        onClose?.()
+        onStateEvent?.({ type: 'commit', value: [...next.value] })
+      }
+    },
+  })
+  const { dispatch, state } = machine
+  const visibleOptionIds = useMemo(
+    () => state.visibleOptions.map((option) => option.id),
+    [state.visibleOptions]
+  )
+  const enabledVisibleOptions = useMemo(
+    () => state.visibleOptions.filter((option) => !option.disabled),
+    [state.visibleOptions]
+  )
+  const hasSearch = state.options.length >= searchableThreshold
+
+  const { addToTypeAhead, reset: resetTypeAhead } = useTypeAheadSearch({
+    options: enabledVisibleOptions,
+    resetTimer: 500,
+    toString: (option) => option.label,
+    onResultChange: (option) => {
+      if (!option) return
+      dispatch({ type: 'highlight', id: option.id })
+    },
+  })
+
+  useEffect(() => {
+    if (!state.isOpen) resetTypeAhead()
+  }, [resetTypeAhead, state.isOpen])
+
+  useEffect(() => {
+    dispatch({ type: 'setOptions', options: normalizedOptions })
+  }, [dispatch, normalizedOptions])
+
+  const controlledIds = useMemo(() => {
+    if (value === undefined) return undefined
+    const nextIds: string[] = []
+    for (const item of value) {
+      const match = normalizedOptions.find((option) => compare(option.value, item))
+      if (match && !nextIds.includes(match.id)) nextIds.push(match.id)
+    }
+    return nextIds
+  }, [compare, normalizedOptions, value])
+
+  useEffect(() => {
+    if (controlledIds === undefined) return
+    dispatch({ type: 'syncSelection', ids: controlledIds })
+  }, [controlledIds, dispatch])
+
+  useEffect(() => {
+    if (!hasSearch && state.searchQuery !== '') {
+      dispatch({ type: 'setSearch', query: '' })
+    }
+  }, [dispatch, hasSearch, state.searchQuery])
+
+  useEffect(() => {
+    scrollHighlightedOption(state.highlightedId, optionRefsRef.current)
+  }, [state.highlightedId, state.isOpen])
+
+  const idToOptionMap = useMemo(() => {
+    return state.options.reduce((acc, option) => {
+      acc[option.id] = option
+      return acc
+    }, {} as Record<string, SelectionOptionData<T>>)
+  }, [state.options])
+
+  const config: MultiSelectContextConfig = useMemo(() => ({
+    iconAppearance,
+    hasClearIcon,
+    ids,
+  }), [hasClearIcon, iconAppearance, ids])
+
+  const layout: MultiSelectContextLayout = useMemo(() => ({
+    triggerRef,
+  }), [triggerRef])
 
   return (
-    <MultiSelectContext.Provider value={contextValue as MultiSelectContextType<unknown>}>
+    <MultiSelectContext.Provider
+      value={{
+        isInvalid,
+        isDisabled,
+        isReadOnly,
+        isRequired,
+        selectedIds: state.selectedIds,
+        highlightedId: state.highlightedId,
+        isOpen: state.isOpen,
+        options: state.options,
+        optionRefs,
+        visibleOptionIds,
+        idToOptionMap,
+        value: [...state.value],
+        toggleSelection: (optionId, selected) => dispatch({ type: 'toggle', id: optionId, selected }),
+        clear: () => dispatch({ type: 'clear' }),
+        highlightFirst: () => dispatch({ type: 'highlightFirst' }),
+        highlightLast: () => dispatch({ type: 'highlightLast' }),
+        highlightNext: () => dispatch({ type: 'highlightNext' }),
+        highlightPrevious: () => dispatch({ type: 'highlightPrevious' }),
+        highlightItem: (optionId) => dispatch({ type: 'highlight', id: optionId }),
+        handleTypeaheadKey: addToTypeAhead,
+        setIsOpen: (open, behavior) => dispatch({ type: 'setOpen', isOpen: open, behavior }),
+        toggleIsOpen: (behavior) => dispatch({ type: 'toggleOpen', behavior }),
+        config,
+        layout,
+        search: {
+          hasSearch,
+          searchQuery: state.searchQuery,
+          setSearchQuery: (query) => dispatch({ type: 'setSearch', query }),
+        },
+      }}
+    >
       <PopUpContext.Provider
         value={{
-          isOpen: state.isOpen,
-          setIsOpen,
+          state: { isOpen: state.isOpen },
+          dispatch: (event) => {
+            if (event.type === 'open') {
+              dispatch({ type: 'setOpen', isOpen: true })
+              return
+            }
+            if (event.type === 'close') {
+              dispatch({ type: 'setOpen', isOpen: false })
+              return
+            }
+            if (event.type === 'toggle') {
+              dispatch({ type: 'toggleOpen' })
+            }
+          },
           popUpId: ids.content,
           triggerId: ids.trigger,
           triggerRef,
-          setTriggerRef,
         }}
       >
         {children}

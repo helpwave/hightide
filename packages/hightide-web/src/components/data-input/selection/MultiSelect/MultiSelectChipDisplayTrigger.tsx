@@ -1,5 +1,5 @@
 import type { ForwardedRef, HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useEffect, useRef } from 'react'
+import { forwardRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
 import { IconButton } from '../../../interaction/IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
@@ -16,24 +16,9 @@ export type MultiSelectChipDisplayTriggerProps = HTMLAttributes<HTMLDivElement> 
 export const MultiSelectChipDisplayTrigger = forwardRef<
   HTMLDivElement,
   MultiSelectChipDisplayTriggerProps
->(function MultiSelectChipDisplayTrigger({ id, ...props }, ref: ForwardedRef<HTMLDivElement>) {
+>(function MultiSelectChipDisplayTrigger(props, ref: ForwardedRef<HTMLDivElement>) {
   const translation = useHightideTranslation()
   const context = useMultiSelectContext<unknown>()
-  const { config, layout } = context
-  const { setIds } = config
-  const { registerTrigger } = layout
-
-  useEffect(() => {
-    if (id) setIds((prev) => ({ ...prev, trigger: id }))
-  }, [id, setIds])
-
-  const innerRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    const unregister = registerTrigger(innerRef)
-    return () => unregister()
-  }, [registerTrigger])
-
   const disabled = !!props?.disabled || !!context.isDisabled
   const readOnly = !!context.isReadOnly
   const invalid = context.isInvalid
@@ -45,8 +30,13 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
   return (
     <div
       {...props}
-      ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
-      id={id ?? context.config.ids.trigger}
+      ref={ReactUtils.assingRefsBuilder([
+        ref,
+        (element) => {
+          context.layout.triggerRef.current = element
+        },
+      ])}
+      id={context.config.ids.trigger}
       className={clsx('multi-select-chip-display-container input-element', props.className)}
       data-value={context.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}

@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react'
-import type { FormStore, FormValues } from './FormStore'
+import type { FormStore, FormValue } from './FormStore'
 
-export const FormStoreContext = createContext<FormStore<FormValues> | null>(null)
+export const FormStoreContext = createContext<FormStore<FormValue> | null>(null)
 
-export function FormStoreProvider<T extends FormValues>({
+export function FormStoreProvider<T extends FormValue>({
   store,
   children,
 }: {
@@ -11,14 +11,14 @@ export function FormStoreProvider<T extends FormValues>({
   children: React.ReactNode,
 }) {
   return (
-    <FormStoreContext.Provider value={store as FormStore<FormValues>}>
+    <FormStoreContext.Provider value={store as FormStore<FormValue>}>
       {children}
     </FormStoreContext.Provider>
   )
 }
 
 export function useFormStore<
-  T extends FormValues
+  T extends FormValue
 >(): FormStore<T> {
   const store = useContext(FormStoreContext)
 

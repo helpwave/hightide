@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
+import type { DOMInputStateManagerProps } from '../../domInput'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { YearMonthPickerContext, type YearMonthPickerContextConfig } from './YearMonthPickerContext'
 import {
@@ -14,13 +14,16 @@ import {
 const defaultPickerStart = DateUtils.subtractDuration(new Date(), { years: 100 })
 const defaultPickerEnd = DateUtils.addDuration(new Date(), { years: 100 })
 
-export type YearMonthPickerStateManagerProps = DOMInputStateMangerProps<YearMonthPickerState, YearMonthPickerEvent> & {
+export type YearMonthPickerStateManagerProps = DOMInputStateManagerProps<YearMonthPickerState, YearMonthPickerEvent> & {
   start?: Date,
   end?: Date,
 }
 
 export function YearMonthPickerStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -42,8 +45,12 @@ export function YearMonthPickerStateManager({
   const transition = useMemo(() => {
     return (current: YearMonthPickerState, event: YearMonthPickerEvent) => yearMonthPickerStateTransition(current, event, bounds)
   }, [bounds])
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => ({ value: seeded ?? new Date() }),
     transition,
     onStateChange,
     onStateEvent,

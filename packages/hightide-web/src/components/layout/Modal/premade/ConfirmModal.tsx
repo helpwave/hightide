@@ -14,7 +14,7 @@ type ButtonOverwriteType = {
   disabled?: boolean,
 }
 
-export type ConfirmModalProps = Omit<ModalProps, 'onClose'> & {
+export type ConfirmModalProps = ModalProps & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
   onCancel: () => void,
@@ -33,6 +33,7 @@ export const ConfirmModal = ({
   buttonOverwrites,
   isShowingDecline: _isShowingDecline,
   requireAnswer: _requireAnswer,
+  onIsOpenChange,
   ...restProps
 }: PropsWithChildren<ConfirmModalProps>) => {
   const translation = useHightideTranslation()
@@ -47,7 +48,12 @@ export const ConfirmModal = ({
   return (
     <Modal
       {...restProps}
-      onClose={onCancel}
+      onIsOpenChange={(isOpen) => {
+        const change = onIsOpenChange?.(isOpen)
+        if (change && change.action === 'rejectChange') return change
+        if (!isOpen) onCancel()
+        return change
+      }}
     >
       <div className="flex-col-2 grow">
         {children}

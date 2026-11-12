@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { UnknownTypeFilterContext, type UnknownTypeFilterContextValue } from './UnknownTypeFilterContext'
 import type { FilterOperatorUnknownType } from '../../filter-operator'
-import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
+import { useFilterState, type FilterStateManagerProps } from '../filter-value'
 
 export type UnknownTypeFilterStateManagerProps = FilterStateManagerProps<FilterOperatorUnknownType>
 
 export function UnknownTypeFilterStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -18,11 +20,17 @@ export function UnknownTypeFilterStateManager({
   operatorOverrides,
   children,
 }: UnknownTypeFilterStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useFilterState({
     state,
-    transition: filterStateTransition,
+    value,
+    initialValue,
+    onValueChange,
     onStateChange,
     onStateEvent,
+    defaultValue: {
+      operator: 'isNotUndefined',
+      parameter: {},
+    },
   })
 
   const config = useMemo(() => ({

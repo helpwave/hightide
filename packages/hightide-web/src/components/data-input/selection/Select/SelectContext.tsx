@@ -1,16 +1,10 @@
-import type { Dispatch, RefObject, SetStateAction } from 'react'
+import type { RefObject } from 'react'
 import { createContext, useContext } from 'react'
 import type { SelectionOptionData } from '../option'
-import type { UseSelectFirstHighlightBehavior } from './useSelect'
+import type { UseSelectFirstHighlightBehavior } from './SelectState'
+import type { SelectIds } from './SelectStateManager'
 
 export type SelectOptionData<T> = SelectionOptionData<T>
-
-export interface SelectContextIds {
-  trigger: string,
-  content: string,
-  listbox: string,
-  searchInput: string,
-}
 
 export interface SelectContextState<T> {
   isInvalid: boolean,
@@ -30,6 +24,7 @@ export interface SelectContextComputedState<T> {
 
 export interface SelectContextActions {
   toggleSelection(id: string): void,
+  clear(): void,
   highlightFirst(): void,
   highlightLast(): void,
   highlightNext(): void,
@@ -55,8 +50,8 @@ export type SelectIconAppearance = 'left' | 'right' | 'none';
 
 export interface SelectContextConfig {
   iconAppearance: SelectIconAppearance,
-  ids: SelectContextIds,
-  setIds: Dispatch<SetStateAction<SelectContextIds>>,
+  hasClearIcon: boolean,
+  ids: SelectIds,
 }
 
 export interface SelectContextType<T> extends SelectContextActions, SelectContextState<T>, SelectContextComputedState<T> {

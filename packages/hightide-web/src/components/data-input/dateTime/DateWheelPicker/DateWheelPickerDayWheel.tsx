@@ -12,7 +12,7 @@ export function DateWheelPickerDayWheel() {
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       onValueChange={(day) => {
-        if (!isLocked && day !== undefined) {
+        if (!isLocked && day !== null) {
           dispatch({ type: 'setDay', day })
         }
       }}
@@ -21,12 +21,11 @@ export function DateWheelPickerDayWheel() {
           dispatch({ type: 'loopDay', direction })
         }
       }}
-    >
-      {config.days.map((day) => (
-        <WheelPicker.Option key={day} value={day} valueId={String(day)}>
-          {String(day).padStart(2, '0')}
-        </WheelPicker.Option>
-      ))}
-    </WheelPicker>
+      options={config.days.map((day) => ({
+        value: day,
+        id: String(day),
+        label: String(day).padStart(2, '0'),
+      }))}
+    />
   )
 }

@@ -1,48 +1,12 @@
-import type { ControllableDOMInputProps } from '../../../data-input/domInput'
 import { BooleanFilterContext } from './BooleanFilterContext'
-import { BooleanFilterStateManager } from './BooleanFilterStateManager'
+import { BooleanFilterStateManager, type BooleanFilterStateManagerProps } from './BooleanFilterStateManager'
 import { BooleanFilterOperator } from './BooleanFilterOperator'
-import type { FilterOperatorBoolean } from '../../filter-operator'
-import { useFilterState, type FilterEvent, type FilterInputValue } from '../filter-value'
 
-export type BooleanFilterProps = ControllableDOMInputProps<FilterInputValue<FilterOperatorBoolean>, FilterEvent<FilterOperatorBoolean>> & {
-  operatorOverrides?: FilterOperatorBoolean[],
-}
+export type BooleanFilterProps = Omit<BooleanFilterStateManagerProps, 'children'>
 
-const BooleanFilterComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
-  operatorOverrides,
-}: BooleanFilterProps) => {
-  const valueBinding = useFilterState<FilterOperatorBoolean>({
-    value,
-    initialValue,
-    onValueChange,
-    defaultValue: {
-      operator: 'isTrue',
-      parameter: {},
-    },
-  })
-
+const BooleanFilterComponent = (props: BooleanFilterProps) => {
   return (
-    <BooleanFilterStateManager
-      state={valueBinding.store}
-      onStateChange={valueBinding.onStateChange}
-      onStateEvent={onStateEvent}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
-      operatorOverrides={operatorOverrides}
-    >
+    <BooleanFilterStateManager {...props}>
       <BooleanFilterOperator />
     </BooleanFilterStateManager>
   )

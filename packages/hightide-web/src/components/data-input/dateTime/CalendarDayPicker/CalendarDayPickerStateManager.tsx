@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
+import type { DOMInputStateManagerProps } from '../../domInput'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { CalendarDayPickerContext, type CalendarDayPickerContextConfig } from './CalendarDayPickerContext'
 import {
@@ -11,7 +11,10 @@ import {
   type CalendarDayPickerState
 } from './CalendarDayPickerState'
 
-export type CalendarDayPickerStateManagerProps = DOMInputStateMangerProps<CalendarDayPickerState, CalendarDayPickerEvent> & {
+export type CalendarDayPickerStateManagerProps = DOMInputStateManagerProps<CalendarDayPickerState, CalendarDayPickerEvent> & {
+  displayedMonth?: Date,
+  initialDisplayedMonth?: Date,
+  changeDisplayedMonth?: (date: Date) => void,
   start?: Date,
   end?: Date,
   weekStart?: Weekday,
@@ -24,6 +27,9 @@ function dateOnly(date: Date) {
 
 export function CalendarDayPickerStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -31,6 +37,9 @@ export function CalendarDayPickerStateManager({
   isReadOnly,
   isRequired,
   id,
+  displayedMonth,
+  initialDisplayedMonth,
+  changeDisplayedMonth,
   start: providedStart,
   end: providedEnd,
   weekStart: weekStartOverride,
@@ -52,8 +61,21 @@ export function CalendarDayPickerStateManager({
     markToday,
     locale,
   }), [end, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, start, weekStart, id])
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => {
+      const resolved = seeded ?? new Date()
+      return {
+        value: resolved,
+        displayedMonth: displayedMonth ?? initialDisplayedMonth ?? resolved,
+      }
+    },
+    bindings: {
+      displayedMonth: { value: displayedMonth, onValueChange: changeDisplayedMonth },
+    },
     transition,
     onStateChange,
     onStateEvent,

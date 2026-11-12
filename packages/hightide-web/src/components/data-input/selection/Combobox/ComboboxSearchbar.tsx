@@ -1,8 +1,10 @@
 import type { ForwardedRef, InputHTMLAttributes, KeyboardEvent } from 'react'
 import { forwardRef, useEffect } from 'react'
+import { X } from 'lucide-react'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+import { IconButton } from '../../../interaction/IconButton'
 import { TextInput } from '../../text/TextInput'
 import { useComboboxContext } from './ComboboxContext'
 import { useSelectionListKeyDown } from '../useSelectionListKeyDown'
@@ -51,35 +53,58 @@ export const ComboboxSearchbar = forwardRef<HTMLInputElement, ComboboxSearchbarP
       keyHandler(event)
     }
 
+    const isDisabled = disabled ?? context.isDisabled
+    const isReadOnly = readOnly ?? context.isReadOnly
+    const showClear = context.config.hasClearIcon && !isDisabled && !isReadOnly && (context.search.searchQuery.length > 0 || context.value !== null)
+
     return (
-      <TextInput
-        id={context.config.ids.trigger}
-        inputRef={ReactUtils.assingRefsBuilder([context.layout.searchbarRef, ref])}
-        value={context.search.searchQuery}
-        onValueChange={context.search.setSearchQuery}
-        isInvalid={context.isInvalid}
-        isDisabled={disabled ?? context.isDisabled}
-        isReadOnly={readOnly ?? context.isReadOnly}
-        isRequired={required ?? context.isRequired}
-        inputProps={{
-          ...inputProps,
-          'id': context.config.ids.trigger,
-          'onKeyDown': handleKeyDown,
-          'onFocus': (event) => {
-            onFocus?.(event)
-            if (!context.isDisabled && !context.isReadOnly) context.setIsOpen(true)
-          },
-          'placeholder': placeholder ?? translation('search'),
-          'role': 'combobox',
-          'aria-expanded': context.isOpen,
-          'aria-controls': context.config.ids.listbox,
-          'aria-activedescendant': context.highlightedId
-            ? context.config.ids.listbox + '-' + context.highlightedId
-            : undefined,
-          'aria-autocomplete': 'list',
-          'className': clsx('combobox-input', className),
-        }}
-      />
+      <div className="combobox-control">
+        <TextInput
+          id={context.config.ids.trigger}
+          inputRef={ReactUtils.assingRefsBuilder([context.layout.searchbarRef, ref])}
+          value={context.search.searchQuery}
+          onValueChange={context.search.setSearchQuery}
+          isInvalid={context.isInvalid}
+          isDisabled={isDisabled}
+          isReadOnly={isReadOnly}
+          isRequired={required ?? context.isRequired}
+          inputProps={{
+            ...inputProps,
+            'id': context.config.ids.trigger,
+            'onKeyDown': handleKeyDown,
+            'onFocus': (event) => {
+              onFocus?.(event)
+              if (!context.isDisabled && !context.isReadOnly) context.setIsOpen(true)
+            },
+            'placeholder': placeholder ?? translation('search'),
+            'role': 'combobox',
+            'aria-expanded': context.config.isInline || context.isOpen,
+            'aria-controls': context.config.ids.listbox,
+            'aria-activedescendant': context.highlightedId
+              ? context.config.ids.listbox + '-' + context.highlightedId
+              : undefined,
+            'aria-autocomplete': 'list',
+            'className': clsx('combobox-input', className),
+          }}
+        />
+        {showClear && (
+          <IconButton
+            className="combobox-clear"
+            tooltip={translation('clearValue')}
+            variant="foreground"
+            color="neutral"
+            size="sm"
+            icon={X}
+            onMouseDown={(event) => {
+              event.preventDefault()
+            }}
+            onClick={(event) => {
+              event.stopPropagation()
+              context.clear()
+            }}
+          />
+        )}
+      </div>
     )
   }
 )

@@ -1,6 +1,4 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CalendarDayPickerContext } from './CalendarDayPickerContext'
@@ -8,10 +6,9 @@ import { CalendarDayPickerGrid } from './CalendarDayPickerGrid'
 import { CalendarDayPickerHeader } from './CalendarDayPickerHeader'
 import { CalendarDayPickerLayout, type CalendarDayPickerLayoutProps } from './CalendarDayPickerLayout'
 import { CalendarDayPickerTrigger } from './CalendarDayPickerTrigger'
-import { CalendarDayPickerStateManager } from './CalendarDayPickerStateManager'
-import type { CalendarDayPickerEvent, CalendarDayPickerState } from './CalendarDayPickerState'
+import { CalendarDayPickerStateManager, type CalendarDayPickerStateManagerProps } from './CalendarDayPickerStateManager'
 
-export type CalendarDayPickerProps = ControllableDOMInputProps<Date, CalendarDayPickerEvent> & {
+export type CalendarDayPickerProps = Omit<CalendarDayPickerStateManagerProps, 'children'> & {
   displayedMonth?: Date,
   changeDisplayedMonth?: (date: Date) => void,
   initialDisplayedMonth?: Date,
@@ -43,28 +40,21 @@ const CalendarDayPickerComponent = ({
   layoutRef,
   layoutProps,
 }: CalendarDayPickerProps) => {
-  const store = useStateStore<CalendarDayPickerState>({
-    value: value ?? initialValue,
-    displayedMonth: displayedMonth ?? initialDisplayedMonth ?? initialValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-      displayedMonth: { value: displayedMonth, onValueChange: changeDisplayedMonth },
-    },
-  })
 
   return (
     <CalendarDayPickerStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
       id={id}
+      displayedMonth={displayedMonth}
+      initialDisplayedMonth={initialDisplayedMonth}
+      changeDisplayedMonth={changeDisplayedMonth}
       start={start}
       end={end}
       weekStart={weekStart}

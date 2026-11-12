@@ -5,23 +5,21 @@ import { MathUtil } from '@helpwave/hightide-utils/utils'
 import { PropsUtil } from '../../../../utils/propsUtil'
 import { useNumberInputContext } from './NumberInputContext'
 
-export type NumberInputInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max'> & {
-  minimum?: number,
-  maximum?: number,
-  approximateMaxCharacters?: number,
-  formatDisplayedValue?: (value: number) => string,
-  parseDisplayedValue?: (rawValue: string) => number | undefined,
-}
+export type NumberInputInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max'>
 
 export const NumberInputInput = forwardRef<HTMLInputElement, NumberInputInputProps>(function NumberInputInput({
-  minimum,
-  maximum,
-  approximateMaxCharacters = 6,
-  formatDisplayedValue,
-  parseDisplayedValue,
   ...props
 }, forwardedRef) {
-  const { state, dispatch, config } = useNumberInputContext()
+  const {
+    state,
+    dispatch,
+    config,
+    minimum,
+    maximum,
+    approximateMaxCharacters,
+    formatDisplayedValue,
+    parseDisplayedValue,
+  } = useNumberInputContext()
   const displayed = Number.isFinite(state.value)
     ? (formatDisplayedValue?.(Math.round(state.value)) ?? String(Math.round(state.value)))
     : ''

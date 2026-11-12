@@ -117,7 +117,7 @@ export const TableProvider = <T,>({
     ]
 
     if (!hasNonExcludedColumns(merged, excludedIds)) {
-      return [...merged, createNoColumnPlaceholderColumn<T>(translation)]
+      return [...merged, createNoColumnPlaceholderColumn<T>(translation('noColumn'))]
     }
 
     return merged
@@ -186,14 +186,22 @@ export const TableProvider = <T,>({
     if(pageCount === -1) {
       return
     }
-    if(pagination.pageIndex > pageCount - 1) {
-      table.setPageIndex(pageCount - 1)
+    const lastIndex = Math.max(0, pageCount - 1)
+    if(pagination.pageIndex > lastIndex) {
+      table.setPageIndex(lastIndex)
     }
   }, [table, pagination.pageIndex, pageCount])
 
   // Fix column order when columns change
   useEffect(() => {
-    table.setColumnOrder(prev => [...prev])
+    const columnIds = table.getAllLeafColumns().map(column => column.id)
+    const current = table.getState().columnOrder
+    const next = [
+      ...current.filter(id => columnIds.includes(id)),
+      ...columnIds.filter(id => !current.includes(id)),
+    ]
+    if (next.length === current.length && next.every((id, index) => id === current[index])) return
+    table.setColumnOrder(next)
   }, [table, columns])
 
   // Fix column sizing when target width changes or column visibility changes

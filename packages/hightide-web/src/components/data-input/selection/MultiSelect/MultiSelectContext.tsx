@@ -1,16 +1,10 @@
-import type { Dispatch, RefObject, SetStateAction } from 'react'
+import type { RefObject } from 'react'
 import { createContext, useContext } from 'react'
 import type { SelectionOptionData } from '../option'
-import type { UseMultiSelectFirstHighlightBehavior } from './useMultiSelect'
+import type { UseMultiSelectFirstHighlightBehavior } from './MultiSelectState'
+import type { MultiSelectIds } from './MultiSelectStateManager'
 
 export type MultiSelectOptionData<T> = SelectionOptionData<T>
-
-export interface MultiSelectContextIds {
-  trigger: string,
-  content: string,
-  listbox: string,
-  searchInput: string,
-}
 
 export interface MultiSelectContextState<T> {
   isInvalid: boolean,
@@ -19,7 +13,7 @@ export interface MultiSelectContextState<T> {
   isRequired: boolean,
   value: T[],
   options: ReadonlyArray<MultiSelectOptionData<T>>,
-  selectedIds: string[],
+  selectedIds: readonly string[],
   highlightedId: string | null,
   isOpen: boolean,
 }
@@ -31,6 +25,7 @@ export interface MultiSelectContextComputedState<T> {
 
 export interface MultiSelectContextActions {
   toggleSelection(id: string, isSelected?: boolean): void,
+  clear(): void,
   highlightFirst(): void,
   highlightLast(): void,
   highlightNext(): void,
@@ -43,7 +38,6 @@ export interface MultiSelectContextActions {
 
 export interface MultiSelectContextLayout {
   triggerRef: RefObject<HTMLElement | null>,
-  registerTrigger(element: RefObject<HTMLElement | null>): () => void,
 }
 
 export interface MultiSelectContextSearch {
@@ -56,8 +50,8 @@ export type MultiSelectIconAppearance = 'left' | 'right' | 'none';
 
 export interface MultiSelectContextConfig {
   iconAppearance: MultiSelectIconAppearance,
-  ids: MultiSelectContextIds,
-  setIds: Dispatch<SetStateAction<MultiSelectContextIds>>,
+  hasClearIcon: boolean,
+  ids: MultiSelectIds,
 }
 
 export interface MultiSelectContextType<T> extends MultiSelectContextActions, MultiSelectContextState<T>, MultiSelectContextComputedState<T> {

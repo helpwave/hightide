@@ -18,7 +18,8 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
     <Select
       {...props}
       value={locale}
-      onValueChange={(language: string) => {
+      onValueChange={(language) => {
+        if (language == null) return
         setLocale(language)
         props.onValueChange?.(language)
       }}
@@ -41,7 +42,6 @@ type LanguageModalProps = Omit<ModalProps, 'titleElement' | 'description'> & Pro
 }>
 
 export const LanguageModal = ({
-  onClose,
   titleOverwrite,
   descriptionOverwrite,
   panelProps: contentProps,
@@ -54,7 +54,6 @@ export const LanguageModal = ({
       {...props}
       titleElement={titleOverwrite ?? translation('language')}
       description={descriptionOverwrite ?? translation('chooseLanguage')}
-      onClose={onClose}
       panelProps={{
         ...contentProps,
         className: clsx('w-80', contentProps?.className),
@@ -62,9 +61,15 @@ export const LanguageModal = ({
     >
       <LanguageSelect />
       <div className="flex-row-4 mt-3 justify-end">
-        <Button color="positive" onClick={onClose}>
-          {translation('done')}
-        </Button>
+        <Modal.Consumer>
+          {(context) => {
+            return (
+              <Button color="positive" onClick={() => context?.dispatch({ type: 'close' })}>
+                {translation('done')}
+              </Button>
+            )
+          }}
+        </Modal.Consumer>
       </div>
     </Modal>
   )

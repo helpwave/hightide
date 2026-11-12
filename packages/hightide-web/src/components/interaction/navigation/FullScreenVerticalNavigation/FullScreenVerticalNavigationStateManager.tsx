@@ -1,7 +1,7 @@
 import type { ElementType } from 'react'
 import { useMemo } from 'react'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateManager } from '@helpwave/hightide-utils/hooks'
 import type { NavigationItemData, NavigationLinkComponentProps } from '../types'
 import {
   FullScreenVerticalNavigationContext,
@@ -29,8 +29,9 @@ export function FullScreenVerticalNavigationStateManager({
   LinkComponent,
   activeId = null,
 }: FullScreenVerticalNavigationStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useStateManager({
     state,
+    initialState: { isOpen: false },
     transition: fullScreenVerticalNavigationStateTransition,
     onStateChange,
     onStateEvent,

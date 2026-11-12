@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../domInput'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { DateTimeWheelPickerContext, type DateTimeWheelPickerContextConfig } from './DateTimeWheelPickerContext'
 import {
@@ -11,11 +11,14 @@ import {
 } from './DateTimeWheelPickerState'
 
 export type DateTimeWheelPickerStateManagerProps =
-  DOMInputStateMangerProps<DateTimeWheelPickerState, DateTimeWheelPickerEvent> &
+  DOMInputStateManagerProps<DateTimeWheelPickerState, DateTimeWheelPickerEvent> &
   DateTimeWheelPickerOptions
 
 export function DateTimeWheelPickerStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -46,8 +49,12 @@ export function DateTimeWheelPickerStateManager({
     millisecondIncrement,
     precision,
   }), [end, is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, millisecondIncrement, minuteIncrement, precision, secondIncrement, start, id])
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => ({ value: seeded ?? new Date() }),
     transition: dateTimeWheelPickerStateTransition,
     onStateChange,
     onStateEvent,

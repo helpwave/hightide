@@ -102,6 +102,18 @@
       "max": { "type": "float" }
     }
   },
+  "validationErrorNumberTooSmall": "The value must be at least {min}.",
+  "@validationErrorNumberTooSmall": {
+    "placeholders": {
+      "min": { "type": "float" }
+    }
+  },
+  "validationErrorNumberTooLarge": "The value must be at most {max}.",
+  "@validationErrorNumberTooLarge": {
+    "placeholders": {
+      "max": { "type": "float" }
+    }
+  },
   "validationErrorOutOfRangeSelectionItems": "Between {min} and {max} items must be selected.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {

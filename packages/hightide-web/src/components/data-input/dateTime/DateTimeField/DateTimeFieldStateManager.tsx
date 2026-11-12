@@ -1,20 +1,30 @@
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../domInput'
+import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
+import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
+import { buildSegmentLayout, decomposeDate } from '../dateTimeSegments'
 import { DateTimeFieldContext, type DateTimeFieldContextValue } from './DateTimeFieldContext'
 import { dateTimeFieldStateTransition, type DateTimeFieldEvent, type DateTimeFieldState } from './DateTimeFieldState'
 
-export type DateTimeFieldStateManagerProps = DOMInputStateMangerProps<DateTimeFieldState, DateTimeFieldEvent> & {
-  locale: string,
-  is24HourFormat: boolean,
+export type DateTimeFieldStateManagerProps = DOMInputStateManagerProps<DateTimeFieldState, DateTimeFieldEvent> & {
+  locale?: string,
+  is24HourFormat?: boolean,
+  mode?: DateTimeFormat,
+  precision?: DateTimePrecision,
 }
 
 export function DateTimeFieldStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
-  locale,
-  is24HourFormat,
+  locale: localeOverride,
+  is24HourFormat: is24HourFormatOverride,
+  mode = 'date',
+  precision = 'minute',
   isInvalid = false,
   isDisabled = false,
   isReadOnly = false,
@@ -22,8 +32,26 @@ export function DateTimeFieldStateManager({
   id,
   children,
 }: DateTimeFieldStateManagerProps) {
-  const machine = useStateMachine({
+  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocalization()
+  const locale = localeOverride ?? contextLocale
+  const is24HourFormat = is24HourFormatOverride ?? contextIs24HourFormat ?? true
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => {
+      const resolved = seeded ?? null
+      const layout = buildSegmentLayout({ locale, mode, precision, is24HourFormat })
+      return {
+        value: resolved,
+        edit: {
+          values: resolved ? decomposeDate(resolved, layout, is24HourFormat) : {},
+          buffer: null,
+        },
+        focusedType: null,
+      }
+    },
     transition: dateTimeFieldStateTransition,
     onStateChange,
     onStateEvent,
@@ -41,7 +69,9 @@ export function DateTimeFieldStateManager({
     config,
     locale,
     is24HourFormat,
-  }), [config, machine.dispatch, is24HourFormat, locale, machine.state])
+    mode,
+    precision,
+  }), [config, machine.dispatch, is24HourFormat, locale, machine.state, mode, precision])
 
   return (
     <DateTimeFieldContext.Provider value={contextValue}>

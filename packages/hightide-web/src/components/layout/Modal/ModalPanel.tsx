@@ -21,16 +21,13 @@ export const ModalPanel = forwardRef<HTMLDivElement, ModalPanelProps>(function M
   ...props
 }, forwardedRef: ForwardedRef<HTMLDivElement>) {
   const context = useModalContext()
-  if (!context.ids || !context.onClose || context.transitionState === undefined || !context.contentRef || !context.contentRefAssignment) {
-    throw new Error('Modal.Content must be used within a Modal.Container')
-  }
 
   return (
-    <FocusTrap active={!!context.isContentPresent && context.isOpen} container={context.contentRef}>
+    <FocusTrap active={context.state.isOpen} container={context.contentRef}>
       <div
         {...props}
         id={props.id ?? context.ids.content}
-        ref={ReactUtils.assingRefsBuilder([context.contentRefAssignment, forwardedRef])}
+        ref={ReactUtils.assingRefsBuilder([context.contentRef, forwardedRef])}
         data-state={context.transitionState}
         data-position={position}
         role="dialog"

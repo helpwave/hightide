@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { MenuContent, type MenuContentProps } from './MenuContent'
 import { MenuContext } from './MenuContext'
@@ -17,6 +17,7 @@ export type MenuProps = {
   disabled?: boolean,
   trigger: MenuTriggerProps['children'],
   triggerProps?: Partial<MenuTriggerProps>,
+  contentRef?: RefObject<HTMLDivElement | null>,
   contentProps?: MenuContentProps,
 }
 
@@ -30,6 +31,7 @@ const MenuComponent = ({
   trigger,
   triggerProps,
   contentProps,
+  contentRef,
 }: MenuProps) => {
   const store = useStateStore<MenuState>({
     isOpen: isOpen ?? initialIsOpen,
@@ -48,8 +50,12 @@ const MenuComponent = ({
       onStateEvent={onStateEvent}
       disabled={disabled}
     >
-      <MenuTrigger {...{ children: trigger, ...triggerProps }} />
-      <MenuContent {...{ children, ...contentProps }} />
+      <MenuTrigger {...triggerProps}>
+        {trigger}
+      </MenuTrigger>
+      <MenuContent ref={contentRef} {...contentProps}>
+        {children}
+      </MenuContent>
     </MenuStateManager>
   )
 }

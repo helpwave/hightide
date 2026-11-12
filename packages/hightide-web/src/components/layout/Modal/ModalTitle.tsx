@@ -1,28 +1,26 @@
 'use client'
 
 import type { HTMLAttributes } from 'react'
+import { forwardRef } from 'react'
 import clsx from 'clsx'
-
 import { useModalContext } from './ModalContext'
 
 export type ModalTitleProps = HTMLAttributes<HTMLDivElement>
 
-export function ModalTitle({
+export const ModalTitle = forwardRef<HTMLDivElement, ModalTitleProps>(function ModalTitle({
   children,
   ...props
-}: ModalTitleProps) {
+}, ref) {
   const context = useModalContext()
-  if (!context.ids) {
-    throw new Error('Modal.Title must be used within a Modal.Container')
-  }
 
   return (
     <div
       {...props}
+      ref={ref}
       id={context.ids.title}
       className={clsx('modal-title', props.className)}
     >
       {children}
     </div>
   )
-}
+})

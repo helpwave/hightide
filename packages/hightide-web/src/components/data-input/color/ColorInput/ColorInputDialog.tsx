@@ -32,7 +32,7 @@ export function ColorInputDialog({ popupId, anchor }: ColorInputDialogProps) {
   const opaque = state.value.slice(0, 7)
 
   return (
-    <PopUp
+    <PopUp.Panel
       id={popupId}
       isOpen={state.isOpen}
       anchor={anchor}
@@ -93,6 +93,6 @@ export function ColorInputDialog({ popupId, anchor }: ColorInputDialogProps) {
           <span className="color-input-marker" style={{ left: `${state.alphaLevel * 100}%` }} />
         </div>
       )}
-    </PopUp>
+    </PopUp.Panel>
   )
 }

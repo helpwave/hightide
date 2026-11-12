@@ -101,6 +101,18 @@
       "max": { "type": "float" }
     }
   },
+  "validationErrorNumberTooSmall": "Der Wert muss mindestens {min} sein.",
+  "@validationErrorNumberTooSmall": {
+    "placeholders": {
+      "min": { "type": "float" }
+    }
+  },
+  "validationErrorNumberTooLarge": "Der Wert darf höchstens {max} sein.",
+  "@validationErrorNumberTooLarge": {
+    "placeholders": {
+      "max": { "type": "float" }
+    }
+  },
   "validationErrorOutOfRangeSelectionItems": "Es müssen zwischen {min} und {max} Elemente ausgewählt werden.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {

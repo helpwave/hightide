@@ -193,7 +193,136 @@ export const asyncDataExample: Story = {
 
     const { data, isLoading, error, totalCount } = usePaginatedData(pagination.pageIndex, pagination.pageSize, sorting, columnFilters)
 
-    const pageCount = useMemo(() => Math.ceil(totalCount / pagination.pageSize), [totalCount, pagination.pageSize])
+    const pageCount = isLoading && totalCount === 0
+      ? -1
+      : Math.max(1, Math.ceil(totalCount / pagination.pageSize))
+    const columns = useMemo(() => [
+      {
+        id: 'name',
+        header: translation('name'),
+        accessorKey: 'name',
+        sortingFn: 'textCaseSensitive',
+        minSize: 150,
+        size: 200,
+        maxSize: 400,
+        filterFn: 'text',
+      },
+      {
+        id: 'age',
+        header: translation('age'),
+        accessorKey: 'age',
+        sortingFn: 'alphanumeric',
+        minSize: 140,
+        size: 160,
+        maxSize: 250,
+        filterFn: 'number',
+      },
+      {
+        id: 'street',
+        header: translation('street'),
+        accessorKey: 'street',
+        sortingFn: 'text',
+        minSize: 250,
+        size: 250,
+        maxSize: 400,
+        filterFn: 'text',
+      },
+      {
+        id: 'entryDate',
+        header: translation('entryDate'),
+        cell: ({ cell }) => (
+          <TableCell>
+            {(cell.getValue() as Date).toLocaleDateString()}
+          </TableCell>
+        ),
+        accessorKey: 'entryDate',
+        sortingFn: 'datetime',
+        minSize: 250,
+        size: 250,
+        maxSize: 400,
+        filterFn: 'date',
+      },
+      {
+        id: 'lastOnlineDate',
+        header: 'Last Online',
+        cell: ({ cell }) => {
+          const value = cell.getValue() as Date
+          if (!value) return <TableCell>No last online date</TableCell>
+          return (
+            <TableCell>
+              {value.toLocaleString()}
+            </TableCell>
+          )
+        },
+        accessorKey: 'lastOnlineDate',
+        sortingFn: 'datetime',
+        minSize: 250,
+        size: 250,
+        maxSize: 400,
+        filterFn: 'dateTime',
+      },
+      {
+        id: 'tags',
+        header: 'Realationship',
+        cell: ({ cell }) => {
+          const value = cell.getValue() as RelationShipTag[]
+          if (value.length === 0) return <TableCell>No tags</TableCell>
+          return (
+            <div className="flex-row-2 flex-wrap gap-y-2">
+              {value.map(tag => (<Chip key={tag}>{tag}</Chip>))}
+            </div>
+          )
+        },
+        accessorKey: 'tags',
+        minSize: 300,
+        size: 300,
+        maxSize: 400,
+        filterFn: 'multiTags',
+        meta: {
+          filterData: {
+            tags: relationShipTags.map(tag => ({ tag, label: tag })),
+          },
+        },
+      },
+      {
+        id: 'hobbies',
+        header: 'Hobbies',
+        cell: ({ cell }) => {
+          const value = cell.getValue() as HobbyTag | null
+          if (!value) return <TableCell>No hobbies</TableCell>
+          return (
+            <div className="flex-row-2 flex-wrap gap-y-2">
+              {value ? (<Chip key={value}>{value}</Chip>) : null}
+            </div>
+          )
+        },
+        accessorKey: 'hobbies',
+        minSize: 200,
+        size: 250,
+        maxSize: 300,
+        filterFn: 'singleTag',
+        sortingFn: 'text',
+        meta: {
+          filterData: {
+            tags: hobbyTags.map(tag => ({ tag, label: tag })),
+          },
+        },
+      },
+      {
+        id: 'hasChildren',
+        header: 'Has Children',
+        cell: ({ cell }) => (
+          <TableCell>
+            {cell.getValue() as boolean ? translation('yes') : translation('no')}
+          </TableCell>
+        ),
+        accessorKey: 'hasChildren',
+        minSize: 200,
+        size: 200,
+        maxSize: 300,
+        filterFn: 'boolean',
+      },
+    ] as ColumnDef<DataType>[], [translation])
 
     return (
       <Table
@@ -209,142 +338,22 @@ export const asyncDataExample: Story = {
             sorting,
             columnFilters,
           },
-          onPaginationChange: setPagination,
+          onPaginationChange: (updater) => {
+            setPagination(current => {
+              const next = typeof updater === 'function' ? updater(current) : updater
+              if (next.pageIndex === current.pageIndex && next.pageSize === current.pageSize) return current
+              return next
+            })
+          },
           onSortingChange: (updater) => {
             setSorting(updater)
-            setPagination({ ...pagination, pageIndex: 0 })
+            setPagination(current => current.pageIndex === 0 ? current : { ...current, pageIndex: 0 })
           },
           onColumnFiltersChange: (updater) => {
             setColumnFilters(updater)
-            setPagination({ ...pagination, pageIndex: 0 })
+            setPagination(current => current.pageIndex === 0 ? current : { ...current, pageIndex: 0 })
           },
-          columns: [
-            {
-              id: 'name',
-              header: translation('name'),
-              accessorKey: 'name',
-              sortingFn: 'textCaseSensitive',
-              minSize: 150,
-              size: 200,
-              maxSize: 400,
-              filterFn: 'text',
-            },
-            {
-              id: 'age',
-              header: translation('age'),
-              accessorKey: 'age',
-              sortingFn: 'alphanumeric',
-              minSize: 140,
-              size: 160,
-              maxSize: 250,
-              filterFn: 'number',
-            },
-            {
-              id: 'street',
-              header: translation('street'),
-              accessorKey: 'street',
-              sortingFn: 'text',
-              minSize: 250,
-              size: 250,
-              maxSize: 400,
-              filterFn: 'text',
-            },
-            {
-              id: 'entryDate',
-              header: translation('entryDate'),
-              cell: ({ cell }) => (
-                <TableCell>
-                  {(cell.getValue() as Date).toLocaleDateString()}
-                </TableCell>
-              ),
-              accessorKey: 'entryDate',
-              sortingFn: 'datetime',
-              minSize: 250,
-              size: 250,
-              maxSize: 400,
-              filterFn: 'date',
-            },
-            {
-              id: 'lastOnlineDate',
-              header: 'Last Online',
-              cell: ({ cell }) => {
-                const value = cell.getValue() as Date
-                if (!value) return <TableCell>No last online date</TableCell>
-                return (
-                  <TableCell>
-                    {value.toLocaleString()}
-                  </TableCell>
-                )
-              },
-              accessorKey: 'lastOnlineDate',
-              sortingFn: 'datetime',
-              minSize: 250,
-              size: 250,
-              maxSize: 400,
-              filterFn: 'dateTime',
-            },
-            {
-              id: 'tags',
-              header: 'Realationship',
-              cell: ({ cell }) => {
-                const value = cell.getValue() as RelationShipTag[]
-                if (value.length === 0) return <TableCell>No tags</TableCell>
-                return (
-                  <div className="flex-row-2 flex-wrap gap-y-2">
-                    {value.map(tag => (<Chip key={tag}>{tag}</Chip>))}
-                  </div>
-                )
-              },
-              accessorKey: 'tags',
-              minSize: 300,
-              size: 300,
-              maxSize: 400,
-              filterFn: 'multiTags',
-              meta: {
-                filterData: {
-                  tags: relationShipTags.map(tag => ({ tag, label: tag })),
-                },
-              },
-            },
-            {
-              id: 'hobbies',
-              header: 'Hobbies',
-              cell: ({ cell }) => {
-                const value = cell.getValue() as HobbyTag | null
-                if (!value) return <TableCell>No hobbies</TableCell>
-                return (
-                  <div className="flex-row-2 flex-wrap gap-y-2">
-                    {value ? (<Chip key={value}>{value}</Chip>) : null}
-                  </div>
-                )
-              },
-              accessorKey: 'hobbies',
-              minSize: 200,
-              size: 250,
-              maxSize: 300,
-              filterFn: 'singleTag',
-              sortingFn: 'text',
-              meta: {
-                filterData: {
-                  tags: hobbyTags.map(tag => ({ tag, label: tag })),
-                },
-              },
-            },
-            {
-              id: 'hasChildren',
-              header: 'Has Children',
-              cell: ({ cell }) => (
-                <TableCell>
-                  {cell.getValue() as boolean ? translation('yes') : translation('no')}
-                </TableCell>
-              ),
-              accessorKey: 'hasChildren',
-              minSize: 200,
-              size: 200,
-              maxSize: 300,
-              filterFn: 'boolean',
-            },
-          ] as ColumnDef<DataType>[],
+          columns,
         }}
         header={(
           <div className="flex-row-2 items-center justify-between w-full">

@@ -72,7 +72,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
         <div className="flex-col-1">
           <label htmlFor={ids.range} className="typography-label-md">{translation('min')}</label>
           <Select<[number, number] | null>
-            triggerProps={{ id: ids.range }}
+            ids={{ trigger: ids.range }}
             value={parameter.numberMin !== undefined && parameter.numberMax !== undefined ? [parameter.numberMin, parameter.numberMax] : null}
             onValueChange={(newRange) => {
               if(newRange != null)

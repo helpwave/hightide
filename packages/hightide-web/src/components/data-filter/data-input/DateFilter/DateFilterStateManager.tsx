@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { DateFilterContext, type DateFilterContextValue } from './DateFilterContext'
 import type { FilterOperatorDate } from '../../filter-operator'
-import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
+import { useFilterState, type FilterStateManagerProps } from '../filter-value'
 
 export type DateFilterStateManagerProps = FilterStateManagerProps<FilterOperatorDate>
 
 export function DateFilterStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -18,11 +20,17 @@ export function DateFilterStateManager({
   operatorOverrides,
   children,
 }: DateFilterStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useFilterState({
     state,
-    transition: filterStateTransition,
+    value,
+    initialValue,
+    onValueChange,
     onStateChange,
     onStateEvent,
+    defaultValue: {
+      operator: 'between',
+      parameter: {},
+    },
   })
 
   const config = useMemo(() => ({

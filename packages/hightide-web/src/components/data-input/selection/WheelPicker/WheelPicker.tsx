@@ -1,33 +1,32 @@
 import type { ComponentRef, Ref } from 'react'
-import { useCallback } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { WheelPickerBar, type WheelPickerBarProps } from './WheelPickerBar'
+import { WheelPickerBarLine } from './WheelPickerBarLine'
 import { WheelPickerContext } from './WheelPickerContext'
+import { WheelPickerItems, type WheelPickerItemsProps } from './WheelPickerItems'
+import { WheelPickerLayout, type WheelPickerLayoutProps } from './WheelPickerLayout'
+import { WheelPickerLoopPreview } from './WheelPickerLoopPreview'
 import { WheelPickerOption } from './WheelPickerOption'
-import { WheelPickerRoot, type WheelPickerRootProps } from './WheelPickerRoot'
-import { WheelPickerStateManager } from './WheelPickerStateManager'
-import { type WheelPickerEvent, type WheelPickerLoopEvent, type WheelPickerState } from './WheelPickerState'
+import { WheelPickerStateManager, type WheelPickerStateManagerProps } from './WheelPickerStateManager'
 
-export type WheelPickerProps<T> = ControllableDOMInputProps<T | undefined, WheelPickerEvent<T>>
-  & {
-    isLooping?: boolean,
-    visibleRows?: number,
-    onLoop?: (event: WheelPickerLoopEvent<T>) => void,
-    children?: WheelPickerRootProps['children'],
-    rootRef?: Ref<ComponentRef<typeof WheelPickerRoot>>,
-    rootProps?: Omit<WheelPickerRootProps, 'children'>,
-    barRef?: Ref<ComponentRef<typeof WheelPickerBar>>,
-    barProps?: WheelPickerBarProps,
-  }
+export type WheelPickerProps<T> = Omit<WheelPickerStateManagerProps<T>, 'children'> & {
+  layoutRef?: Ref<ComponentRef<typeof WheelPickerLayout>>,
+  layoutProps?: WheelPickerLayoutProps,
+  itemsRef?: Ref<ComponentRef<typeof WheelPickerItems>>,
+  itemsProps?: WheelPickerItemsProps,
+  barRef?: Ref<ComponentRef<typeof WheelPickerBar>>,
+  barProps?: WheelPickerBarProps,
+}
 
 function WheelPickerComponent<T>({
+  state,
   value,
   initialValue,
   onValueChange,
+  onStateChange,
   onStateEvent,
   onLoop,
+  options,
   isInvalid,
   isDisabled,
   isReadOnly,
@@ -35,33 +34,23 @@ function WheelPickerComponent<T>({
   id,
   isLooping,
   visibleRows,
-  children,
-  rootRef,
-  rootProps,
+  layoutRef,
+  layoutProps,
+  itemsRef,
+  itemsProps,
   barRef,
   barProps,
 }: WheelPickerProps<T>) {
-  const store = useStateStore<WheelPickerState<T>>({
-    value: value ?? initialValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-  const handleStateEvent = useCallback((event: WheelPickerEvent<T>) => {
-    onStateEvent?.(event)
-    if (event.type === 'loop') {
-      onLoop?.(event)
-    }
-  }, [onLoop, onStateEvent])
-
   return (
     <WheelPickerStateManager
-      state={store}
+      state={state}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateChange={onStateChange}
-      onStateEvent={handleStateEvent}
+      onStateEvent={onStateEvent}
+      onLoop={onLoop}
+      options={options}
       isInvalid={isInvalid}
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
@@ -70,25 +59,31 @@ function WheelPickerComponent<T>({
       isLooping={isLooping}
       visibleRows={visibleRows}
     >
-      <WheelPickerRoot
-        ref={ReactUtils.assingRefsBuilder([rootRef])}
-        {...rootProps}
+      <WheelPickerLayout
+        {...layoutProps}
+        ref={ReactUtils.assingRefsBuilder([layoutRef])}
       >
-        {children}
-        <WheelPickerBar
-          ref={ReactUtils.assingRefsBuilder([barRef])}
-          {...barProps}
+        <WheelPickerItems
+          {...itemsProps}
+          ref={ReactUtils.assingRefsBuilder([itemsRef])}
         />
-      </WheelPickerRoot>
+        <WheelPickerBar
+          {...barProps}
+          ref={ReactUtils.assingRefsBuilder([barRef])}
+        />
+      </WheelPickerLayout>
     </WheelPickerStateManager>
   )
 }
 
 export const WheelPicker = Object.assign(WheelPickerComponent, {
   StateManager: WheelPickerStateManager,
-  Root: WheelPickerRoot,
+  Layout: WheelPickerLayout,
+  Items: WheelPickerItems,
+  LoopPreview: WheelPickerLoopPreview,
   Option: WheelPickerOption,
   Bar: WheelPickerBar,
+  BarLine: WheelPickerBarLine,
   Context: WheelPickerContext,
   Provider: WheelPickerContext.Provider,
   Consumer: WheelPickerContext.Consumer,

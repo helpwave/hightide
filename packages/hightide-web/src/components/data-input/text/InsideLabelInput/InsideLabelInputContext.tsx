@@ -2,7 +2,9 @@ import { createContext, useContext } from 'react'
 import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { InsideLabelInputEvent, InsideLabelInputState } from './InsideLabelInputState'
 
-export type InsideLabelInputContextValue = DOMInputContextValue<InsideLabelInputState, InsideLabelInputEvent, DOMInputConfig>
+export type InsideLabelInputContextValue = DOMInputContextValue<InsideLabelInputState, InsideLabelInputEvent, DOMInputConfig> & {
+  labelId: string,
+}
 
 export const InsideLabelInputContext = createContext<InsideLabelInputContextValue | null>(null)
 

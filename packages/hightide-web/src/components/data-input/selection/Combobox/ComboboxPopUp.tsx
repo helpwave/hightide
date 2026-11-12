@@ -1,10 +1,10 @@
 import type { ForwardedRef } from 'react'
 import { forwardRef } from 'react'
 import clsx from 'clsx'
-import { PopUp, type PopUpProps } from '../../../layout/PopUp/PopUp'
+import { PopUp, type PopUpPanelProps } from '../../../layout/PopUp/PopUp'
 import { useComboboxContext } from './ComboboxContext'
 
-export type ComboboxPopUpProps = PopUpProps
+export type ComboboxPopUpProps = PopUpPanelProps
 
 export const ComboboxPopUp = forwardRef<HTMLDivElement, ComboboxPopUpProps>(function ComboboxPopUp(
   props,
@@ -13,9 +13,9 @@ export const ComboboxPopUp = forwardRef<HTMLDivElement, ComboboxPopUpProps>(func
   const context = useComboboxContext()
 
   return (
-    <PopUp
+    <PopUp.Panel
       {...props}
-      ref={ref}
+      panelRef={ref}
       id={context.config.ids.popup}
       isOpen={context.isOpen}
       anchor={context.layout.searchbarRef}
@@ -28,6 +28,6 @@ export const ComboboxPopUp = forwardRef<HTMLDivElement, ComboboxPopUpProps>(func
       className={clsx('combobox-popup', props.className)}
     >
       {props.children}
-    </PopUp>
+    </PopUp.Panel>
   )
 })

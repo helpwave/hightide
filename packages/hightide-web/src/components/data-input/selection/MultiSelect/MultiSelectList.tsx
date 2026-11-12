@@ -51,6 +51,9 @@ function DefaultMultiSelectListElement<T>({
       data-selected={isSelected ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-visible={isVisible ? '' : undefined}
+      onMouseDown={(event) => {
+        event.preventDefault()
+      }}
       onClick={() => {
         if (!disabled) context.toggleSelection(option.id)
       }}
@@ -120,7 +123,7 @@ const MultiSelectListImpl = forwardRef<HTMLUListElement, MultiSelectListProps<un
       aria-orientation="vertical"
       aria-label={listboxAriaLabel}
       tabIndex={showSearch ? undefined : 0}
-      className={clsx('multi-select-list flex-col-1 p-2 overflow-auto', props.className)}
+      className={clsx('multi-select-list p-1.5 overflow-auto', props.className)}
     >
       {context.options.map((option) => {
         const isVisible = visibleIds.has(option.id)

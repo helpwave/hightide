@@ -1,11 +1,12 @@
 import { useCallback, useMemo, useSyncExternalStore } from 'react'
 import type { StateStore } from '../../interfaces/state-store'
 import { useStableEvent } from '../useStableEvent'
+import type { StateStoreChange, StateTransitionInformation } from './useStateStoreBindings'
 
 export type StateMachineProps<S, E> = {
   state: StateStore<S>,
   transition: (state: S, event: E) => S,
-  onStateChange?: (state: S) => void,
+  onStateChange?: (state: S, transition?: StateTransitionInformation<S, E>) => StateStoreChange<S> | void,
   onStateEvent?: (event: E) => void,
 }
 
@@ -29,7 +30,7 @@ export function useStateMachine<S, E>({
   const dispatch = useCallback((event: E) => {
     const current = getSnapshot()
     const next = transitionStable(current, event)
-    onStateChangeStable(next)
+    onStateChangeStable(next, { event, previousState: current })
     onStateEventStable(event)
   }, [getSnapshot, onStateChangeStable, onStateEventStable, transitionStable])
 

@@ -55,11 +55,12 @@ export function SingleTagFilterParameter() {
           isRequired={context.config.isRequired}
           value={selectedTagSingle}
           onValueChange={(selectedTag) => {
+            if (selectedTag == null) return
             context.dispatch({
               type: 'change',
               value: {
                 operator,
-                parameter: { ...parameter, uuidValue: selectedTag ?? undefined },
+                parameter: { ...parameter, uuidValue: selectedTag },
               },
             })
           }}

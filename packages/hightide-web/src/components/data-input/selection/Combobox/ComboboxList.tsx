@@ -73,7 +73,7 @@ const ComboboxListImpl = forwardRef<HTMLUListElement, ComboboxListProps<unknown>
             key={option.id}
             option={option}
             optionRef={optionRef}
-            isSelected={context.value !== undefined && option.value === context.value}
+            isSelected={context.value !== null && option.value === context.value}
             isHighlighted={context.highlightedId === option.id}
             isVisible={isVisible}
           />
@@ -83,7 +83,6 @@ const ComboboxListImpl = forwardRef<HTMLUListElement, ComboboxListProps<unknown>
         <li
           ref={newValueRef}
           id={context.config.ids.listbox + '-' + newValueId}
-          tabIndex={-1}
           role="option"
           aria-selected={isNewValueHighlighted}
           data-highlighted={isNewValueHighlighted ? '' : undefined}

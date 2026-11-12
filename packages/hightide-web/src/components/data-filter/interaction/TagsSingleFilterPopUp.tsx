@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, type ReactNode } from 'react'
 import { SingleTagFilter } from '../data-input/SingleTagFilter'
-import { useFilterState, type FilterInputValue } from '../data-input/filter-value'
+import type { FilterInputValue } from '../data-input/filter-value'
 import type { FilterOperatorTagsSingle } from '../filter-operator'
 import { FilterOperatorUtils, operatorNeedsParameter } from '../filter-operator'
 import { FilterPopUpShell } from './FilterBasePopUp'
@@ -23,17 +23,13 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
   const operator = FilterOperatorUtils.typeCheck.tagsSingle(suggestion) ? suggestion : 'contains'
   const parameter = value?.parameter ?? {}
   const typedValue: FilterInputValue<FilterOperatorTagsSingle> = { operator, parameter }
-  const binding = useFilterState<FilterOperatorTagsSingle>({
-    value: typedValue,
-    onValueChange: useCallback((next: FilterInputValue<FilterOperatorTagsSingle>) => {
-      onValueChange({
-        dataType: 'singleTag',
-        operator: next.operator,
-        parameter: next.parameter,
-      })
-    }, [onValueChange]),
-    defaultValue: typedValue,
-  })
+  const changeValue = useCallback((next: FilterInputValue<FilterOperatorTagsSingle>) => {
+    onValueChange({
+      dataType: 'singleTag',
+      operator: next.operator,
+      parameter: next.parameter,
+    })
+  }, [onValueChange])
 
   if (tags.length === 0) {
     return null
@@ -41,8 +37,8 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
 
   return (
     <SingleTagFilter.StateManager
-      state={binding.store}
-      onStateChange={binding.onStateChange}
+      value={typedValue}
+      onValueChange={changeValue}
       tags={tags}
       operatorOverrides={operatorOverrides}
     >
@@ -51,7 +47,7 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
         {...props}
         name={name}
         onRemove={onRemove}
-        noParameterRequired={!operatorNeedsParameter(binding.state.value.operator)}
+        noParameterRequired={!operatorNeedsParameter(operator)}
         operator={<SingleTagFilter.Operator />}
       >
         <SingleTagFilter.Parameter />

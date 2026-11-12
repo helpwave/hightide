@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { TextFilterContext, type TextFilterContextValue } from './TextFilterContext'
 import type { FilterOperatorText } from '../../filter-operator'
-import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
+import { useFilterState, type FilterStateManagerProps } from '../filter-value'
 
 export type TextFilterStateManagerProps = FilterStateManagerProps<FilterOperatorText>
 
 export function TextFilterStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -18,11 +20,17 @@ export function TextFilterStateManager({
   operatorOverrides,
   children,
 }: TextFilterStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useFilterState({
     state,
-    transition: filterStateTransition,
+    value,
+    initialValue,
+    onValueChange,
     onStateChange,
     onStateEvent,
+    defaultValue: {
+      operator: 'contains',
+      parameter: {},
+    },
   })
 
   const config = useMemo(() => ({

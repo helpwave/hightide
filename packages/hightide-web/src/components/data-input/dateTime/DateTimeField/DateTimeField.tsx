@@ -1,83 +1,24 @@
 import type { ComponentRef, Ref } from 'react'
-import { useMemo } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
-import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { buildSegmentLayout, decomposeDate } from '../dateTimeSegments'
 import { DateTimeFieldContext } from './DateTimeFieldContext'
 import { DateTimeFieldLayout, type DateTimeFieldLayoutProps } from './DateTimeFieldLayout'
-import { DateTimeFieldStateManager } from './DateTimeFieldStateManager'
-import { type DateTimeFieldEvent, type DateTimeFieldState } from './DateTimeFieldState'
+import { DateTimeFieldStateManager, type DateTimeFieldStateManagerProps } from './DateTimeFieldStateManager'
 
-export type DateTimeFieldProps = ControllableDOMInputProps<Date | null, DateTimeFieldEvent> & {
-  mode?: DateTimeFormat,
-  precision?: DateTimePrecision,
-  is24HourFormat?: boolean,
-  locale?: string,
+export type DateTimeFieldProps = Omit<DateTimeFieldStateManagerProps, 'children'> & {
   layoutRef?: Ref<ComponentRef<typeof DateTimeFieldLayout>>,
   layoutProps?: DateTimeFieldLayoutProps,
 }
 
 const DateTimeFieldComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
-  mode = 'date',
-  precision = 'minute',
-  is24HourFormat,
-  locale: localeOverride,
   layoutRef,
   layoutProps,
+  ...props
 }: DateTimeFieldProps) => {
-  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocalization()
-  const locale = localeOverride ?? contextLocale
-  const is24Hour = is24HourFormat ?? contextIs24HourFormat ?? true
-  const initialLayout = useMemo(
-    () => buildSegmentLayout({ locale, mode, precision, is24HourFormat: is24Hour }),
-    [is24Hour, locale, mode, precision]
-  )
-  const resolvedValue = value !== undefined ? value : (initialValue ?? null)
-  const store = useStateStore<DateTimeFieldState>({
-    value: resolvedValue,
-    edit: {
-      values: resolvedValue ? decomposeDate(resolvedValue, initialLayout, is24Hour) : {},
-      buffer: null,
-    },
-    focusedType: null,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-
   return (
-    <DateTimeFieldStateManager
-      state={store}
-      onStateChange={onStateChange}
-      onStateEvent={onStateEvent}
-      locale={locale}
-      is24HourFormat={is24Hour}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
-    >
+    <DateTimeFieldStateManager {...props}>
       <DateTimeFieldLayout
         {...layoutProps}
         ref={ReactUtils.assingRefsBuilder([layoutRef])}
-        mode={mode}
-        precision={precision}
       />
     </DateTimeFieldStateManager>
   )

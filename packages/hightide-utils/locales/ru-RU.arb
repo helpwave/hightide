@@ -337,6 +337,22 @@
       }
     }
   },
+  "validationErrorNumberTooSmall": "Значение должно быть не менее {min}.",
+  "@validationErrorNumberTooSmall": {
+    "placeholders": {
+      "min": {
+        "type": "float"
+      }
+    }
+  },
+  "validationErrorNumberTooLarge": "Значение должно быть не более {max}.",
+  "@validationErrorNumberTooLarge": {
+    "placeholders": {
+      "max": {
+        "type": "float"
+      }
+    }
+  },
   "validationErrorOutOfRangeSelectionItems": "Необходимо выбрать от {min} до {max} элементов.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {

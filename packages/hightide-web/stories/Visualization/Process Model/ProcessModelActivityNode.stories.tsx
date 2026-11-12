@@ -64,7 +64,10 @@ export const processModelActivityNode: Story = {
           <span>Example node</span>
           <Select<string>
             value={exampleId}
-            onValueChange={setExampleId}
+            onValueChange={(value) => {
+              if (value == null) return
+              setExampleId(value)
+            }}
             options={activityNodeExamples.map((item) => ({
               value: item.id,
               label: item.optionLabel,

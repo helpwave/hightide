@@ -19,62 +19,48 @@ export const stackedModal: Story = {
   },
   render: ({ position }) => {
     return (
-      <>
-        <Modal.Root>
-          <Modal.Opener>
-            {({ props }) => (
-              <Button {...props}>Open Modal 1</Button>
-            )}
-          </Modal.Opener>
+      <Modal
+        titleElement="Modal 1"
+        description="This is the first Modal"
+        position={position}
+        trigger={({ props }) => (
+          <Button {...props}>Open Modal 1</Button>
+        )}
+      >
+        <Modal
+          titleElement="Modal 2"
+          description="This is the second Modal"
+          position={position}
+          trigger={({ props }) => (
+            <Button {...props}>Open Modal 2</Button>
+          )}
+        >
           <Modal
-            titleElement="Modal 1"
-            description="This is the first Modal"
+            titleElement="Modal 3"
+            description="This is the third Modal"
             position={position}
+            trigger={({ props }) => (
+              <Button {...props}>Open Modal 3</Button>
+            )}
           >
-            <Modal.Root>
-              <Modal.Opener>
-                {({ props }) => (
-                  <Button {...props}>Open Modal 2</Button>
-                )}
-              </Modal.Opener>
-              <Modal
-                titleElement="Modal 2"
-                description="This is the second Modal"
-                position={position}
-              >
-                <Modal.Root>
-                  <Modal.Opener>
-                    {({ props }) => (
-                      <Button {...props}>Open Modal 3</Button>
-                    )}
-                  </Modal.Opener>
-                  <Modal
-                    titleElement="Modal 3"
-                    description="This is the third Modal"
-                    position={position}
-                  >
-                    <Modal.Consumer>
-                      {({ setIsOpen }) => (
-                        <Button color="negative" onClick={() => setIsOpen(false)}>Close</Button>
-                      )}
-                    </Modal.Consumer>
-                  </Modal>
-                </Modal.Root>
-                <Modal.Consumer>
-                  {({ setIsOpen }) => (
-                    <Button color="negative" onClick={() => setIsOpen(false)}>Close Modal 2</Button>
-                  )}
-                </Modal.Consumer>
-              </Modal>
-            </Modal.Root>
             <Modal.Consumer>
-              {({ setIsOpen }) => (
-                <Button color="negative" onClick={() => setIsOpen(false)}>Close</Button>
+              {({ dispatch }) => (
+                <Button color="negative" onClick={() => dispatch({ type: 'close' })}>Close</Button>
               )}
             </Modal.Consumer>
           </Modal>
-        </Modal.Root>
-      </>
+          <Modal.Consumer>
+            {({ dispatch }) => (
+              <Button color="negative" onClick={() => dispatch({ type: 'close' })}>Close Modal 2</Button>
+            )}
+          </Modal.Consumer>
+        </Modal>
+        <Modal.Consumer>
+          {({ dispatch }) => (
+            <Button color="negative" onClick={() => dispatch({ type: 'close' })}>Close</Button>
+          )}
+        </Modal.Consumer>
+      </Modal>
     )
   }
 }

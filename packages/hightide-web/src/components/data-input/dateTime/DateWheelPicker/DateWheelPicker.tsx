@@ -1,7 +1,5 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
 import { defaultWheelLoopingBehaviour } from '../TimeWheelPicker/TimeWheelPickerState'
 import { DateWheelPickerContext } from './DateWheelPickerContext'
@@ -9,10 +7,9 @@ import { DateWheelPickerDayWheel } from './DateWheelPickerDayWheel'
 import { DateWheelPickerLayout, type DateWheelPickerLayoutProps } from './DateWheelPickerLayout'
 import { DateWheelPickerMonthWheel } from './DateWheelPickerMonthWheel'
 import { DateWheelPickerYearWheel } from './DateWheelPickerYearWheel'
-import { DateWheelPickerStateManager } from './DateWheelPickerStateManager'
-import type { DateWheelPickerEvent, DateWheelPickerState } from './DateWheelPickerState'
+import { DateWheelPickerStateManager, type DateWheelPickerStateManagerProps } from './DateWheelPickerStateManager'
 
-export type DateWheelPickerProps = ControllableDOMInputProps<Date, DateWheelPickerEvent> & {
+export type DateWheelPickerProps = Omit<DateWheelPickerStateManagerProps, 'children'> & {
   start?: Date,
   end?: Date,
   isLooping?: boolean,
@@ -38,20 +35,12 @@ const DateWheelPickerComponent = ({
   layoutRef,
   layoutProps,
 }: DateWheelPickerProps) => {
-  const store = useStateStore<DateWheelPickerState>({
-    value: value ?? initialValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
 
   return (
     <DateWheelPickerStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

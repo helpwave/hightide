@@ -1,16 +1,20 @@
 import { useEffect, useMemo, useRef } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateManagerProps } from '../../domInput'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { ColorInputContext, type ColorInputContextValue } from './ColorInputContext'
-import { colorInputStateTransition, type ColorInputEvent, type ColorInputState } from './ColorInputState'
+import { defaultHex } from './hexColor'
+import { colorInputStateFromHex, colorInputStateTransition, type ColorInputEvent, type ColorInputState } from './ColorInputState'
 
-export type ColorInputStateManagerProps = DOMInputStateMangerProps<ColorInputState, ColorInputEvent> & {
+export type ColorInputStateManagerProps = DOMInputStateManagerProps<ColorInputState, ColorInputEvent> & {
   hasAlpha?: boolean,
   isCapitalized?: boolean,
 }
 
 export function ColorInputStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -22,20 +26,25 @@ export function ColorInputStateManager({
   isCapitalized = false,
   children,
 }: ColorInputStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded) => colorInputStateFromHex(seeded ?? defaultHex(true)),
     transition: colorInputStateTransition,
     onStateChange,
     onStateEvent,
   })
 
+  const { dispatch, state: colorState } = machine
   const hasAlphaRef = useRef<boolean | null>(null)
   useEffect(() => {
     const previous = hasAlphaRef.current
     hasAlphaRef.current = hasAlpha
     if (hasAlpha || previous === hasAlpha) return
-    machine.dispatch({ type: 'resetAlpha' })
-  }, [machine.dispatch, hasAlpha])
+    dispatch({ type: 'resetAlpha' })
+  }, [dispatch, hasAlpha])
 
   const config = useMemo(() => ({
     isInvalid,
@@ -48,10 +57,10 @@ export function ColorInputStateManager({
   }), [isCapitalized, hasAlpha, isDisabled, isInvalid, isReadOnly, isRequired, id])
 
   const contextValue = useMemo<ColorInputContextValue>(() => ({
-    state: machine.state,
-    dispatch: machine.dispatch,
+    state: colorState,
+    dispatch,
     config,
-  }), [config, machine.dispatch, machine.state])
+  }), [colorState, config, dispatch])
 
   return (
     <ColorInputContext.Provider value={contextValue}>

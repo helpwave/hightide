@@ -1,8 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { TimePickerContext } from './TimePickerContext'
 import { TimePickerColumn, type TimePickerColumnProps } from './TimePickerColumn'
 import { TimePickerLayout, type TimePickerLayoutProps } from './TimePickerLayout'
@@ -13,17 +11,15 @@ import type {
   TimePickerMinuteIncrement,
   TimePickerSecondIncrement
 } from './TimePickerOptions'
-import { TimePickerStateManager } from './TimePickerStateManager'
+import { TimePickerStateManager, type TimePickerStateManagerProps } from './TimePickerStateManager'
 import {
   defaultTimePickerMillisecondIncrement,
   defaultTimePickerMinuteIncrement,
   defaultTimePickerPrecision,
-  defaultTimePickerSecondIncrement,
-  type TimePickerEvent,
-  type TimePickerState
+  defaultTimePickerSecondIncrement
 } from './TimePickerState'
 
-export type TimePickerProps = ControllableDOMInputProps<Date, TimePickerEvent> & {
+export type TimePickerProps = Omit<TimePickerStateManagerProps, 'children'> & {
   is24HourFormat?: boolean,
   precision?: DateTimePrecision,
   minuteIncrement?: TimePickerMinuteIncrement,
@@ -71,20 +67,12 @@ const TimePickerComponent = ({
   periodRef,
   periodProps,
 }: TimePickerProps) => {
-  const store = useStateStore<TimePickerState>({
-    value: value ?? initialValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
 
   return (
     <TimePickerStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

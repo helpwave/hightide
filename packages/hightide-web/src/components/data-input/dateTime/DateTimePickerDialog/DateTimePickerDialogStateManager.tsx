@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../domInput'
+import { useEffect, useMemo, useRef } from 'react'
+import type { DOMInputStateManagerProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useInputStateManager } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
 import type {
@@ -17,7 +17,7 @@ import {
   type DateTimePickerDialogState
 } from './DateTimePickerDialogState'
 
-export type DateTimePickerDialogStateManagerProps = DOMInputStateMangerProps<DateTimePickerDialogState, DateTimePickerDialogEvent> & {
+export type DateTimePickerDialogStateManagerProps = DOMInputStateManagerProps<DateTimePickerDialogState, DateTimePickerDialogEvent> & {
   mode?: DateTimeFormat,
   allowRemove?: boolean,
   label?: ReactNode,
@@ -37,6 +37,9 @@ export type DateTimePickerDialogStateManagerProps = DOMInputStateMangerProps<Dat
 
 export function DateTimePickerDialogStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -79,12 +82,34 @@ export function DateTimePickerDialogStateManager({
     millisecondIncrement,
     precision,
   }), [allowRemove, end, is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, label, labelId, loopingBehaviour, markToday, millisecondIncrement, minuteIncrement, mode, precision, secondIncrement, start, weekStart, id])
-  const machine = useStateMachine({
+  const machine = useInputStateManager({
     state,
+    value,
+    initialValue,
+    onValueChange,
+    initialState: (seeded: Date | null | undefined): DateTimePickerDialogState => ({
+      value: seeded ?? null,
+      pickerValue: seeded ?? new Date(),
+      step: 'date',
+    }),
     transition: dateTimePickerDialogStateTransition,
     onStateChange,
     onStateEvent,
   })
+  const valueTime = value === undefined ? undefined : value === null ? null : value.getTime()
+  const previousTimeRef = useRef(valueTime)
+  useEffect(() => {
+    if (value === undefined || Object.is(previousTimeRef.current, valueTime)) {
+      return
+    }
+    previousTimeRef.current = valueTime
+    const current = machine.store.getSnapshot()
+    machine.store.set({
+      ...current,
+      value,
+      pickerValue: value ?? current.pickerValue,
+    })
+  }, [machine.store, value, valueTime])
   const contextValue = useMemo(() => ({
     state: machine.state,
     dispatch: machine.dispatch,

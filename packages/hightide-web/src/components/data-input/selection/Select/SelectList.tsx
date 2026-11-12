@@ -34,7 +34,6 @@ function DefaultSelectListElement<T>({
     <li
       ref={optionRef}
       id={domId}
-      tabIndex={-1}
       hidden={!isVisible}
       role="option"
       aria-disabled={disabled}
@@ -123,7 +122,7 @@ const SelectListImpl = forwardRef<HTMLUListElement, SelectListProps<unknown>>(fu
       aria-orientation="vertical"
       aria-label={listboxAriaLabel}
       tabIndex={showSearch ? undefined : 0}
-      className={clsx('flex-col-1 p-2 overflow-auto', props.className)}
+      className={clsx('select-list p-1.5 overflow-auto', props.className)}
     >
       {context.options.map((option) => {
         const isVisible = visibleIds.has(option.id)

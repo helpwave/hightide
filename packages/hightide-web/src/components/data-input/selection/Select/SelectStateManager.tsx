@@ -1,12 +1,12 @@
-import type { ReactNode, RefObject, SetStateAction } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { SelectContext } from './SelectContext'
 import type { SelectContextConfig, SelectContextLayout } from './SelectContext'
-import { useSelect } from './useSelect'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStableEvent } from '@helpwave/hightide-utils/hooks'
+import { createSelectState, selectStateTransition, type SelectEvent } from './SelectState'
+import type { DOMInputValueProps } from '../../domInput'
+import { useStateManager, useTypeAheadSearch } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from '../../../layout/PopUp/PopUpContext'
-import type { SelectionOptionInput } from '../option'
+import type { SelectionOptionData, SelectionOptionInput } from '../option'
 import { normalizeSelectionOptions, scrollHighlightedOption, useOptionRefs } from '../option'
 
 export interface SelectIds {
@@ -16,9 +16,7 @@ export interface SelectIds {
   searchInput: string,
 }
 
-export type SelectEvent<T> = { type: 'commit', value: T }
-
-export interface SelectStateManagerProps<T> extends ControllableDOMInputProps<T, SelectEvent<T>> {
+export interface SelectStateManagerProps<T> extends DOMInputValueProps<T | null, SelectEvent<T>> {
   options: ReadonlyArray<SelectionOptionInput<T>>,
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
@@ -26,6 +24,8 @@ export interface SelectStateManagerProps<T> extends ControllableDOMInputProps<T,
   onIsOpenChange?: (isOpen: boolean) => void,
   searchableThreshold?: number,
   iconAppearance?: 'left' | 'right' | 'none',
+  hasClearIcon?: boolean,
+  ids?: Partial<SelectIds>,
   children: ReactNode,
 }
 
@@ -40,8 +40,10 @@ export function SelectStateManager<T>({
   initialIsOpen = false,
   onClose,
   onIsOpenChange,
-  searchableThreshold = 6,
+  searchableThreshold = 7,
   iconAppearance = 'right',
+  hasClearIcon = false,
+  ids: idsOverride,
   isInvalid = false,
   isDisabled = false,
   isReadOnly = false,
@@ -56,17 +58,19 @@ export function SelectStateManager<T>({
   const optionRefsRef = useRef(optionRefs)
   optionRefsRef.current = optionRefs
   const generatedId = useId()
-  const [ids, setIds] = useState<SelectIds>({
-    trigger: id ?? 'select-' + generatedId,
-    content: 'select-content-' + generatedId,
-    listbox: 'select-listbox-' + generatedId,
-    searchInput: 'select-search-' + generatedId,
-  })
-
-  useEffect(() => {
-    if (!id) return
-    setIds((prev) => (prev.trigger === id ? prev : { ...prev, trigger: id }))
-  }, [id])
+  const ids = useMemo<SelectIds>(() => ({
+    trigger: idsOverride?.trigger ?? id ?? 'select-' + generatedId,
+    content: idsOverride?.content ?? 'select-content-' + generatedId,
+    listbox: idsOverride?.listbox ?? 'select-listbox-' + generatedId,
+    searchInput: idsOverride?.searchInput ?? 'select-search-' + generatedId,
+  }), [
+    generatedId,
+    id,
+    idsOverride?.content,
+    idsOverride?.listbox,
+    idsOverride?.searchInput,
+    idsOverride?.trigger,
+  ])
 
   const registerTrigger = useCallback((ref: RefObject<HTMLElement | null>) => {
     setTriggerRef(ref)
@@ -76,96 +80,102 @@ export function SelectStateManager<T>({
   }, [])
 
   const compare = useMemo(() => compareFunction ?? Object.is, [compareFunction])
+  const seededValue = value !== undefined ? value : initialValue
+  const seededId = seededValue == null
+    ? null
+    : normalizedOptions.find((option) => compare(option.value, seededValue))?.id ?? null
+
+  const machine = useStateManager({
+    initialState: () => createSelectState({
+      options: normalizedOptions,
+      selectedId: seededId,
+      isOpen: initialIsOpen,
+    }),
+    transition: selectStateTransition<T>,
+    onStateEvent,
+    onStateChange: (next, transition) => {
+      if (!transition) return
+      const previous = transition.previousState
+      const event = transition.event
+      if (event.type === 'select' && next.selectedId !== previous.selectedId) {
+        onValueChange?.(next.value)
+      }
+      if (event.type === 'clear' && next.selectedId !== previous.selectedId) {
+        onValueChange?.(null)
+      }
+      if ((event.type === 'setOpen' || event.type === 'toggleOpen') && next.isOpen !== previous.isOpen) {
+        if (!next.isOpen) onClose?.()
+        onIsOpenChange?.(next.isOpen)
+      }
+    },
+  })
+  const { dispatch, state } = machine
+  const visibleOptionIds = useMemo(
+    () => state.visibleOptions.map((option) => option.id),
+    [state.visibleOptions]
+  )
+  const enabledVisibleOptions = useMemo(
+    () => state.visibleOptions.filter((option) => !option.disabled),
+    [state.visibleOptions]
+  )
+  const hasSearch = state.options.length >= searchableThreshold
+
+  const { addToTypeAhead, reset: resetTypeAhead } = useTypeAheadSearch({
+    options: enabledVisibleOptions,
+    resetTimer: 500,
+    toString: (option) => option.label,
+    onResultChange: (option) => {
+      if (!option) return
+      dispatch({ type: 'highlight', id: option.id })
+    },
+  })
+
+  useEffect(() => {
+    if (!state.isOpen) resetTypeAhead()
+  }, [resetTypeAhead, state.isOpen])
+
+  useEffect(() => {
+    dispatch({ type: 'setOptions', options: normalizedOptions })
+  }, [dispatch, normalizedOptions])
+
+  const controlledId = useMemo(() => {
+    if (value === undefined) return undefined
+    if (value === null) return null
+    return normalizedOptions.find((option) => compare(option.value, value))?.id ?? null
+  }, [compare, normalizedOptions, value])
+
+  useEffect(() => {
+    if (controlledId === undefined) return
+    dispatch({ type: 'syncSelection', id: controlledId })
+  }, [controlledId, dispatch])
+
+  useEffect(() => {
+    if (!hasSearch && state.searchQuery !== '') {
+      dispatch({ type: 'setSearch', query: '' })
+    }
+  }, [dispatch, hasSearch, state.searchQuery])
+
+  useEffect(() => {
+    scrollHighlightedOption(state.highlightedId, optionRefsRef.current)
+  }, [state.highlightedId, state.isOpen])
 
   const idToOptionMap = useMemo(() => {
-    return normalizedOptions.reduce((acc, option) => {
+    return state.options.reduce((acc, option) => {
       acc[option.id] = option
       return acc
-    }, {} as Record<string, typeof normalizedOptions[number]>)
-  }, [normalizedOptions])
-
-  const mappedValueId = useMemo(() => {
-    if (value === undefined) return undefined
-    return normalizedOptions.find((option) => compare(option.value, value))?.id
-  }, [normalizedOptions, value, compare])
-
-  const mappedInitialValueId = useMemo(() => {
-    if (initialValue === undefined) return undefined
-    return normalizedOptions.find((option) => compare(option.value, initialValue))?.id
-  }, [normalizedOptions, initialValue, compare])
-
-  const onValueChangeStable = useStableEvent(onValueChange)
-  const onStateEventStable = useStableEvent(onStateEvent)
-  const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
-
-  const onValueChangeWrapper = useCallback((nextId: string) => {
-    const option = idToOptionMap[nextId]
-    if (option === undefined) {
-      console.warn(`Attempted to select an option ${nextId} that is not valid`)
-      return
-    }
-    onValueChangeStable(option.value)
-  }, [onValueChangeStable, idToOptionMap])
-
-  const onEditCompleteWrapper = useCallback((nextId: string) => {
-    const option = idToOptionMap[nextId]
-    if (option === undefined) {
-      console.warn(`Attempted to edit complete an option ${nextId} that is not valid`)
-      return
-    }
-    onStateEventStable?.({ type: 'commit', value: option.value })
-  }, [onStateEventStable, idToOptionMap])
-
-  const state = useSelect({
-    value: value !== undefined && mappedValueId === undefined ? null : mappedValueId,
-    initialValue: initialValue !== undefined && mappedInitialValueId === undefined ? null : mappedInitialValueId,
-    onValueChange: onValueChangeWrapper,
-    onEditComplete: onEditCompleteWrapper,
-    options: normalizedOptions.map((option) => ({
-      id: option.id,
-      label: option.label,
-      disabled: option.disabled,
-    })),
-    initialIsOpen,
-    onClose,
-    onIsOpenChange: onIsOpenChangeStable,
-  })
-  const { setSearchQuery } = state
-  const hasSearch = normalizedOptions.length >= searchableThreshold
-
-  useEffect(() => {
-    if (!hasSearch) {
-      setSearchQuery('')
-    }
-  }, [hasSearch, setSearchQuery])
-
-  useEffect(() => {
-    scrollHighlightedOption(
-      state.highlightedValue ?? null,
-      optionRefsRef.current,
-      ids.listbox,
-      hasSearch ? ids.searchInput : undefined
-    )
-  }, [hasSearch, ids.listbox, ids.searchInput, state.highlightedValue, state.isOpen])
+    }, {} as Record<string, SelectionOptionData<T>>)
+  }, [state.options])
 
   const config: SelectContextConfig = useMemo(() => ({
     iconAppearance,
+    hasClearIcon,
     ids,
-    setIds,
-  }), [iconAppearance, ids, setIds])
+  }), [iconAppearance, hasClearIcon, ids])
 
   const layout: SelectContextLayout = useMemo(() => ({
     triggerRef,
     registerTrigger,
   }), [triggerRef, registerTrigger])
-
-  const setIsOpen = useCallback((updater: SetStateAction<boolean>) => {
-    if (typeof updater === 'function') {
-      state.setIsOpen(updater(state.isOpen))
-    } else {
-      state.setIsOpen(updater)
-    }
-  }, [state])
 
   return (
     <SelectContext.Provider
@@ -174,39 +184,51 @@ export function SelectStateManager<T>({
         isDisabled,
         isReadOnly,
         isRequired,
-        selectedId: state.value,
-        highlightedId: state.highlightedValue ?? null,
+        selectedId: state.resolvedSelectedId,
+        highlightedId: state.highlightedId,
         isOpen: state.isOpen,
-        options: normalizedOptions,
+        options: state.options,
         optionRefs,
-        visibleOptionIds: state.visibleOptionIds,
+        visibleOptionIds,
         idToOptionMap,
-        toggleSelection: state.selectValue,
-        highlightFirst: state.highlightFirst,
-        highlightLast: state.highlightLast,
-        highlightNext: state.highlightNext,
-        highlightPrevious: state.highlightPrevious,
-        highlightItem: state.highlightItem,
-        handleTypeaheadKey: state.handleTypeaheadKey,
-        setIsOpen: state.setIsOpen,
-        toggleIsOpen: state.toggleOpen,
+        toggleSelection: (optionId) => dispatch({ type: 'select', id: optionId }),
+        clear: () => dispatch({ type: 'clear' }),
+        highlightFirst: () => dispatch({ type: 'highlightFirst' }),
+        highlightLast: () => dispatch({ type: 'highlightLast' }),
+        highlightNext: () => dispatch({ type: 'highlightNext' }),
+        highlightPrevious: () => dispatch({ type: 'highlightPrevious' }),
+        highlightItem: (optionId) => dispatch({ type: 'highlight', id: optionId }),
+        handleTypeaheadKey: addToTypeAhead,
+        setIsOpen: (open, behavior) => dispatch({ type: 'setOpen', isOpen: open, behavior }),
+        toggleIsOpen: (behavior) => dispatch({ type: 'toggleOpen', behavior }),
         config,
         layout,
         search: {
           hasSearch,
           searchQuery: state.searchQuery,
-          setSearchQuery: state.setSearchQuery,
+          setSearchQuery: (query) => dispatch({ type: 'setSearch', query }),
         },
       }}
     >
       <PopUpContext.Provider
         value={{
-          isOpen: state.isOpen,
-          setIsOpen: setIsOpen,
+          state: { isOpen: state.isOpen },
+          dispatch: (event) => {
+            if (event.type === 'open') {
+              dispatch({ type: 'setOpen', isOpen: true })
+              return
+            }
+            if (event.type === 'close') {
+              dispatch({ type: 'setOpen', isOpen: false })
+              return
+            }
+            if (event.type === 'toggle') {
+              dispatch({ type: 'toggleOpen' })
+            }
+          },
           popUpId: ids.content,
           triggerId: ids.trigger,
           triggerRef,
-          setTriggerRef,
         }}
       >
         {children}

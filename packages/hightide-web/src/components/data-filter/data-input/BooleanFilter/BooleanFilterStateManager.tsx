@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { BooleanFilterContext, type BooleanFilterContextValue } from './BooleanFilterContext'
 import type { FilterOperatorBoolean } from '../../filter-operator'
-import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
+import { useFilterState, type FilterStateManagerProps } from '../filter-value'
 
 export type BooleanFilterStateManagerProps = FilterStateManagerProps<FilterOperatorBoolean>
 
 export function BooleanFilterStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -18,11 +20,17 @@ export function BooleanFilterStateManager({
   operatorOverrides,
   children,
 }: BooleanFilterStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useFilterState({
     state,
-    transition: filterStateTransition,
+    value,
+    initialValue,
+    onValueChange,
     onStateChange,
     onStateEvent,
+    defaultValue: {
+      operator: 'isTrue',
+      parameter: {},
+    },
   })
 
   const config = useMemo(() => ({

@@ -7,12 +7,11 @@ import { useDateTimeInputContext } from './DateTimeInputContext'
 
 export type DateTimeInputActionsProps = {
   actions?: ReactNode[],
-  popupId: string,
 }
 
-export function DateTimeInputActions({ actions = [], popupId }: DateTimeInputActionsProps) {
+export function DateTimeInputActions({ actions = [] }: DateTimeInputActionsProps) {
   const translation = useHightideTranslation()
-  const { state, dispatch, config, mode, hasClear, hasTimePicker } = useDateTimeInputContext()
+  const { state, dispatch, config, mode, hasClear, hasTimePicker, ids } = useDateTimeInputContext()
 
   return (
     <div className="data-time-actions-container">
@@ -38,7 +37,7 @@ export function DateTimeInputActions({ actions = [], popupId }: DateTimeInputAct
           onClick={() => dispatch({ type: 'open' })}
           aria-haspopup="dialog"
           aria-expanded={state.isOpen}
-          aria-controls={state.isOpen ? popupId : undefined}
+          aria-controls={state.isOpen ? ids.popup : undefined}
           icon={CalendarIcon}
         />
       </Visibility>

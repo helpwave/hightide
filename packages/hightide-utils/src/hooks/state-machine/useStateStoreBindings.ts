@@ -1,32 +1,68 @@
 import { useCallback, useEffect, useRef } from 'react'
 import type { StateStore } from '../../interfaces/state-store'
+import { useStableEvent } from '../useStableEvent'
 
-export type StateStoreBinding<S, K extends keyof S> = {
+export type StateStoreChange<T> =
+  | { action: 'acceptChange' }
+  | { action: 'rejectChange' }
+  | { action: 'overwrite', value: T }
+
+export type StateStoreBindingChange<T> = StateStoreChange<T>
+
+export type StateTransitionInformation<S, E> = {
+  event: E,
+  previousState: S,
+}
+
+export type BindingTransitionInformation<S, K extends keyof S, E> = {
+  event: E,
+  previousValue: S[K],
+  previousState: S,
+}
+
+function isStateStoreChange<T>(
+  change: StateStoreChange<T> | void
+): change is StateStoreChange<T> {
+  return typeof change === 'object' && change !== null
+}
+
+export type StateStoreBinding<S, K extends keyof S, E = unknown> = {
   value?: S[K],
-  onValueChange?: (value: S[K]) => boolean | undefined | void,
+  onValueChange?: (
+    value: S[K],
+    transition: BindingTransitionInformation<S, K, E>,
+  ) => StateStoreChange<S[K]> | void,
 }
 
-export type StateStoreBindings<S extends object> = {
-  [K in keyof S]?: StateStoreBinding<S, K>
+export type StateStoreBindings<S extends object, E = unknown> = {
+  [K in keyof S]?: StateStoreBinding<S, K, E>
 }
 
-export type UseStateStoreBindingsProps<S extends object> = {
+export type UseStateStoreBindingsProps<S extends object, E = unknown> = {
   store: StateStore<S>,
-  bindings: StateStoreBindings<S>,
+  bindings: StateStoreBindings<S, E>,
+  onStateChange?: (
+    state: S,
+    transition: StateTransitionInformation<S, E>,
+  ) => StateStoreChange<S> | void,
 }
 
 type BindingMode = 'controlled' | 'uncontrolled'
 
-function bindingKeys<S extends object>(bindings: StateStoreBindings<S>): (keyof S)[] {
+function bindingKeys<S extends object, E>(bindings: StateStoreBindings<S, E>): (keyof S)[] {
   return Object.keys(bindings) as (keyof S)[]
 }
 
-export function useStateStoreBindings<S extends object>({
+export function useStateStoreBindings<S extends object, E = unknown>({
   store,
   bindings,
-}: UseStateStoreBindingsProps<S>): (next: S) => void {
+  onStateChange,
+}: UseStateStoreBindingsProps<S, E>): (next: S, transition?: StateTransitionInformation<S, E>) => void {
   const bindingsRef = useRef(bindings)
-  bindingsRef.current = bindings
+  useEffect(() => {
+    bindingsRef.current = bindings
+  }, [bindings])
+  const onStateChangeStable = useStableEvent(onStateChange)
   const modesRef = useRef<Partial<Record<keyof S, BindingMode>> | null>(null)
   const seenControlledRef = useRef<Partial<Record<keyof S, boolean>>>({})
 
@@ -87,10 +123,12 @@ export function useStateStoreBindings<S extends object>({
     }
   })
 
-  return useCallback((next: S) => {
+  return useCallback((next: S, transition?: StateTransitionInformation<S, E>) => {
     const current = store.getSnapshot()
+    const previousState = transition?.previousState ?? current
+    const event = transition?.event as E
     const currentBindings = bindingsRef.current
-    let committed = current
+    let adjusted = current
     let changed = false
     const keys = new Set<keyof S>([
       ...bindingKeys(currentBindings),
@@ -102,18 +140,33 @@ export function useStateStoreBindings<S extends object>({
       if (Object.is(proposed, current[key])) {
         continue
       }
-      const accepted = binding?.onValueChange?.(proposed)
-      if (accepted === false) {
+      const change = binding?.onValueChange?.(proposed, {
+        event,
+        previousValue: current[key],
+        previousState,
+      })
+      if (isStateStoreChange(change) && change.action === 'rejectChange') {
+        continue
+      }
+      const value = isStateStoreChange(change) && change.action === 'overwrite' ? change.value : proposed
+      if (Object.is(value, current[key])) {
         continue
       }
       if (!changed) {
-        committed = { ...current }
+        adjusted = { ...current }
         changed = true
       }
-      committed = { ...committed, [key]: proposed }
+      adjusted = { ...adjusted, [key]: value }
     }
-    if (changed) {
+    const stateChange = onStateChangeStable(adjusted, { event, previousState })
+    if (isStateStoreChange(stateChange) && stateChange.action === 'rejectChange') {
+      return
+    }
+    const committed = isStateStoreChange(stateChange) && stateChange.action === 'overwrite'
+      ? stateChange.value
+      : adjusted
+    if (!Object.is(committed, current)) {
       store.set(committed)
     }
-  }, [store])
+  }, [store, onStateChangeStable])
 }

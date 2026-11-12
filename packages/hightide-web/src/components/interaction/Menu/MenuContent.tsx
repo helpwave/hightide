@@ -1,11 +1,10 @@
 import type { ReactNode } from 'react'
 import { forwardRef } from 'react'
 import clsx from 'clsx'
-import type { PopUpProps } from '../../layout/PopUp/PopUp'
-import { PopUp } from '../../layout/PopUp/PopUp'
+import { PopUp, type PopUpPanelProps } from '../../layout/PopUp/PopUp'
 import { useMenuContext } from './MenuContext'
 
-export type MenuContentProps = Omit<PopUpProps, 'isOpen' | 'anchor' | 'children'> & {
+export type MenuContentProps = Omit<PopUpPanelProps, 'isOpen' | 'anchor' | 'children'> & {
   children?: ReactNode,
 }
 
@@ -20,10 +19,10 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
   const isOpen = state.isOpen && !disabled
 
   return (
-    <PopUp
+    <PopUp.Panel
       role="menu"
       {...props}
-      ref={ref}
+      panelRef={ref}
       isOpen={isOpen}
       anchor={triggerRef}
       outsideClickOptions={{
@@ -38,6 +37,6 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
       className={clsx('menu', className)}
     >
       {children}
-    </PopUp>
+    </PopUp.Panel>
   )
 })

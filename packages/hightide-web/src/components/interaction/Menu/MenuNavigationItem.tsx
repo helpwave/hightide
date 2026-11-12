@@ -1,10 +1,17 @@
+import clsx from 'clsx'
 import type { ListNavigationItemProps } from '../../layout/list/ListNavigationItem'
 import { ListNavigationItem } from '../../layout/list/ListNavigationItem'
 
 export type MenuNavigationItemProps = ListNavigationItemProps
 
-export function MenuNavigationItem(props: MenuNavigationItemProps) {
+export function MenuNavigationItem({
+  className,
+  ...props
+}: MenuNavigationItemProps) {
   return (
-    <ListNavigationItem {...props} />
+    <ListNavigationItem
+      {...props}
+      className={clsx('menu-navigation-item', className)}
+    />
   )
 }

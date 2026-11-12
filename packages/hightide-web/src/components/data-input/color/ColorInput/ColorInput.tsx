@@ -1,20 +1,17 @@
 import type { ComponentRef, Ref, RefObject } from 'react'
 import { useId, useMemo, useRef } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import type { HexColor } from './hexColor'
-import { defaultHex } from './hexColor'
+
 import { ColorInputContext } from './ColorInputContext'
 import { ColorInputControl, type ColorInputControlProps } from './ColorInputControl'
 import { ColorInputDialog } from './ColorInputDialog'
 import { ColorInputField, type ColorInputFieldProps } from './ColorInputField'
 import { ColorInputLayout, type ColorInputLayoutProps } from './ColorInputLayout'
-import { ColorInputStateManager } from './ColorInputStateManager'
-import { colorInputStateFromHex, type ColorInputEvent, type ColorInputState } from './ColorInputState'
+import { ColorInputStateManager, type ColorInputStateManagerProps } from './ColorInputStateManager'
+
 import { ColorInputSwatch } from './ColorInputSwatch'
 
-export type ColorInputProps = ControllableDOMInputProps<HexColor, ColorInputEvent> & {
+export type ColorInputProps = Omit<ColorInputStateManagerProps, 'children'> & {
   hasAlpha?: boolean,
   isCapitalized?: boolean,
   layoutRef?: Ref<ComponentRef<typeof ColorInputLayout>>,
@@ -47,22 +44,14 @@ const ColorInputComponent = ({
   const generatedId = useId()
   const popupId = useMemo(() => `color-input-popup-${generatedId}`, [generatedId])
   const anchorRef = useRef<HTMLDivElement>(null)
-  const store = useStateStore<ColorInputState>(
-    colorInputStateFromHex(value ?? initialValue ?? defaultHex(true))
-  )
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
 
   return (
     <ColorInputStateManager
-      state={store}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       hasAlpha={hasAlpha}
       isCapitalized={isCapitalized}
-      onStateChange={onStateChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

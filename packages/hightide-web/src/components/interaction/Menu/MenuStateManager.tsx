@@ -1,7 +1,7 @@
 import type { RefObject } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStateManager } from '@helpwave/hightide-utils/hooks'
 import { MenuContext, type MenuContextValue } from './MenuContext'
 import { menuStateTransition, type MenuEvent, type MenuState } from './MenuState'
 
@@ -16,8 +16,9 @@ export function MenuStateManager({
   disabled = false,
   children,
 }: MenuStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useStateManager({
     state,
+    initialState: { isOpen: false },
     transition: (current, event) => menuStateTransition(current, event, disabled),
     onStateChange,
     onStateEvent,

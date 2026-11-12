@@ -1,37 +1,25 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ChangeRateCurveProps, StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberStepperInputContext } from './NumberStepperInputContext'
 import { NumberStepperInputField, type NumberStepperInputFieldProps } from './NumberStepperInputField'
-import { NumberStepperHold } from './NumberStepperInputHold'
 import {
   NumberStepperInputLayout as NumberStepperInputLayoutComponent,
   type NumberStepperInputLayoutMode,
   type NumberStepperInputLayoutProps
 } from './NumberStepperInputLayout'
-import { NumberStepperInputStateManager } from './NumberStepperInputStateManager'
+import { NumberStepperInputStateManager, type NumberStepperInputStateManagerProps } from './NumberStepperInputStateManager'
 import {
   NumberStepperInputDecrement,
   NumberStepperInputIncrement,
   type NumberStepperInputStepButtonProps
 } from './NumberStepperInputStepButton'
-import { type NumberStepperInputEvent, type NumberStepperInputState } from './NumberStepperInputState'
-
 export type NumberStepperInputLayout = NumberStepperInputLayoutMode
 
-export type NumberStepperInputProps = ControllableDOMInputProps<number, NumberStepperInputEvent> & {
-  minimum?: number,
-  maximum?: number,
-  stepSize?: number,
+export type NumberStepperInputProps = Omit<NumberStepperInputStateManagerProps, 'children'> & {
   layout?: NumberStepperInputLayout,
-  isLooping?: boolean,
   approximateMaxCharacters?: number,
-  changeRateCurveProps?: ChangeRateCurveProps,
   formatDisplayedValue?: (value: number) => string,
   parseDisplayedValue?: (rawValue: string) => number | undefined,
-  onLooped?: (event: StepperLoopEvent) => void,
   layoutRef?: Ref<ComponentRef<typeof NumberStepperInputLayoutComponent>>,
   layoutProps?: NumberStepperInputLayoutProps,
   decrementRef?: Ref<ComponentRef<typeof NumberStepperInputDecrement>>,
@@ -43,20 +31,11 @@ export type NumberStepperInputProps = ControllableDOMInputProps<number, NumberSt
 }
 
 const NumberStepperInputComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
   minimum,
   maximum,
   stepSize,
   layout = 'row',
-  isLooping = false,
+  isLooping,
   approximateMaxCharacters,
   changeRateCurveProps,
   formatDisplayedValue,
@@ -70,62 +49,43 @@ const NumberStepperInputComponent = ({
   incrementProps,
   fieldRef,
   fieldProps,
+  ...props
 }: NumberStepperInputProps) => {
-  const store = useStateStore<NumberStepperInputState>({
-    value: value ?? initialValue ?? 0,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-
   return (
     <NumberStepperInputStateManager
-      state={store}
-      onStateChange={onStateChange}
-      onStateEvent={onStateEvent}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
+      {...props}
+      minimum={minimum}
+      maximum={maximum}
+      stepSize={stepSize}
+      isLooping={isLooping}
+      changeRateCurveProps={changeRateCurveProps}
+      onLooped={onLooped}
     >
-      <NumberStepperHold
-        minimum={minimum}
-        maximum={maximum}
-        stepSize={stepSize}
-        isLooping={isLooping}
-        changeRateCurveProps={changeRateCurveProps}
-        onLooped={onLooped}
+      <NumberStepperInputLayoutComponent
+        {...layoutProps}
+        ref={ReactUtils.assingRefsBuilder([layoutRef])}
+        layout={layout}
       >
-        <NumberStepperInputLayoutComponent
-          {...layoutProps}
-          ref={ReactUtils.assingRefsBuilder([layoutRef])}
+        <NumberStepperInputDecrement
+          {...decrementProps}
+          ref={ReactUtils.assingRefsBuilder([decrementRef])}
           layout={layout}
-        >
-          <NumberStepperInputDecrement
-            {...decrementProps}
-            ref={ReactUtils.assingRefsBuilder([decrementRef])}
-            layout={layout}
-          />
-          <NumberStepperInputField
-            {...fieldProps}
-            inputRef={ReactUtils.assingRefsBuilder([fieldRef, fieldProps?.inputRef])}
-            minimum={minimum}
-            maximum={maximum}
-            approximateMaxCharacters={approximateMaxCharacters}
-            formatDisplayedValue={formatDisplayedValue}
-            parseDisplayedValue={parseDisplayedValue}
-          />
-          <NumberStepperInputIncrement
-            {...incrementProps}
-            ref={ReactUtils.assingRefsBuilder([incrementRef])}
-            layout={layout}
-          />
-        </NumberStepperInputLayoutComponent>
-      </NumberStepperHold>
+        />
+        <NumberStepperInputField
+          {...fieldProps}
+          inputRef={ReactUtils.assingRefsBuilder([fieldRef, fieldProps?.inputRef])}
+          minimum={minimum}
+          maximum={maximum}
+          approximateMaxCharacters={approximateMaxCharacters}
+          formatDisplayedValue={formatDisplayedValue}
+          parseDisplayedValue={parseDisplayedValue}
+        />
+        <NumberStepperInputIncrement
+          {...incrementProps}
+          ref={ReactUtils.assingRefsBuilder([incrementRef])}
+          layout={layout}
+        />
+      </NumberStepperInputLayoutComponent>
     </NumberStepperInputStateManager>
   )
 }

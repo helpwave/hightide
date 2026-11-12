@@ -1,17 +1,19 @@
 import clsx from 'clsx'
 import { ChevronDown } from 'lucide-react'
-import { Icon } from './Icon'
+import { Icon, type IconSize } from './Icon'
 import type { HTMLAttributes } from 'react'
 
 export type ExpansionIconProps = HTMLAttributes<HTMLDivElement> & {
   isExpanded: boolean,
   disabled?: boolean,
+  size?: IconSize,
 }
 
 export const ExpansionIcon = ({
   children,
   isExpanded,
   disabled = false,
+  size = 'xs',
   ...props
 }: ExpansionIconProps) => {
 
@@ -27,7 +29,7 @@ export const ExpansionIcon = ({
       ) : (
         <Icon
           icon={ChevronDown}
-          size="xs"
+          size={size}
           aria-hidden={true}
         />
       )}

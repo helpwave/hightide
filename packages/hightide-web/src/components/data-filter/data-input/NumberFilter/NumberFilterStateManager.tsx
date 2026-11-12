@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { NumberFilterContext, type NumberFilterContextValue } from './NumberFilterContext'
 import type { FilterOperatorNumber } from '../../filter-operator'
-import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
+import { useFilterState, type FilterStateManagerProps } from '../filter-value'
 
 export type NumberFilterStateManagerProps = FilterStateManagerProps<FilterOperatorNumber>
 
 export function NumberFilterStateManager({
   state,
+  value,
+  initialValue,
+  onValueChange,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -18,11 +20,17 @@ export function NumberFilterStateManager({
   operatorOverrides,
   children,
 }: NumberFilterStateManagerProps) {
-  const machine = useStateMachine({
+  const machine = useFilterState({
     state,
-    transition: filterStateTransition,
+    value,
+    initialValue,
+    onValueChange,
     onStateChange,
     onStateEvent,
+    defaultValue: {
+      operator: 'between',
+      parameter: {},
+    },
   })
 
   const config = useMemo(() => ({

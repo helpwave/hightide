@@ -1,13 +1,15 @@
+import type { StateStoreChange } from '@helpwave/hightide-utils/hooks'
 import type {
   InputConfig,
   InputState,
   InputStateEvent,
-  StateManagerProps
+  InputStateManagerProps
 } from '@helpwave/hightide-utils/interfaces'
 
 export type {
   InputState,
   InputStateEvent,
+  InputStateManagerProps,
 }
 
 export interface DOMInputConfig extends InputConfig {
@@ -24,13 +26,13 @@ export interface DOMInputContextValue<
   config: C,
 }
 
-export interface ControllableDOMInputProps<T, E extends InputStateEvent> extends Partial<DOMInputConfig> {
-  value?: T,
-  initialValue?: T,
-  onValueChange?: (value: T) => void,
-  onStateEvent?: (event: E) => void,
-}
-
-export type DOMInputStateMangerProps<T extends InputState, E extends InputStateEvent> =
+export type DOMInputStateManagerProps<T extends InputState, E extends InputStateEvent> =
   Partial<DOMInputConfig> &
-  StateManagerProps<T, E>
+  InputStateManagerProps<T, E>
+
+export type DOMInputValueProps<TValue, TEvent extends InputStateEvent = InputStateEvent> = Partial<DOMInputConfig> & {
+  value?: TValue,
+  initialValue?: TValue,
+  onValueChange?: (value: TValue) => StateStoreChange<TValue> | void,
+  onStateEvent?: (event: TEvent) => void,
+}

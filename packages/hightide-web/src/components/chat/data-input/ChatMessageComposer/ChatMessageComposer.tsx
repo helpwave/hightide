@@ -1,6 +1,4 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../../data-input/domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import {
   ChatMessageComposerActionLayout,
@@ -15,14 +13,13 @@ import {
   ChatMessageComposerSendButton,
   type ChatMessageComposerSendButtonProps
 } from './ChatMessageComposerSendButton'
-import { ChatMessageComposerStateManager } from './ChatMessageComposerStateManager'
-import { type ChatMessageComposerEvent, type ChatMessageComposerState } from './ChatMessageComposerState'
+import { ChatMessageComposerStateManager, type ChatMessageComposerStateManagerProps } from './ChatMessageComposerStateManager'
 import {
   ChatMessageComposerTextarea,
   type ChatMessageComposerTextareaProps
 } from './ChatMessageComposerTextarea'
 
-export type ChatMessageComposerProps = ControllableDOMInputProps<string, ChatMessageComposerEvent> & {
+export type ChatMessageComposerProps = Omit<ChatMessageComposerStateManagerProps, 'children'> & {
   onSend: (value: string) => void,
   actions?: ReactNode,
   trailing?: ReactNode,
@@ -37,15 +34,6 @@ export type ChatMessageComposerProps = ControllableDOMInputProps<string, ChatMes
 }
 
 const ChatMessageComposerComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
   onSend,
   actions,
   trailing,
@@ -57,28 +45,12 @@ const ChatMessageComposerComponent = ({
   textareaProps,
   sendButtonRef,
   sendButtonProps,
+  ...props
 }: ChatMessageComposerProps) => {
-  const store = useStateStore<ChatMessageComposerState>({
-    value: value ?? initialValue ?? '',
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-
   return (
     <ChatMessageComposerStateManager
-      state={store}
-      onStateChange={onStateChange}
-      onStateEvent={onStateEvent}
+      {...props}
       onSend={onSend}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
     >
       <ChatMessageComposerLayout
         {...layoutProps}

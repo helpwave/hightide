@@ -6,7 +6,10 @@ export type FlexibleDateTimeInputContextValue = DOMInputContextValue<
   FlexibleDateTimeInputState,
   FlexibleDateTimeInputEvent,
   DOMInputConfig
->
+> & {
+  timeZone: string | undefined,
+  fixedTime: Date,
+}
 
 export const FlexibleDateTimeInputContext = createContext<FlexibleDateTimeInputContextValue | null>(null)
 

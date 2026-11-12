@@ -1,15 +1,12 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { YearMonthPickerContext } from './YearMonthPickerContext'
 import { YearMonthPickerLayout, type YearMonthPickerLayoutProps } from './YearMonthPickerLayout'
 import { YearMonthPickerMonthWheel } from './YearMonthPickerMonthWheel'
 import { YearMonthPickerYearWheel } from './YearMonthPickerYearWheel'
-import { YearMonthPickerStateManager } from './YearMonthPickerStateManager'
-import type { YearMonthPickerEvent, YearMonthPickerState } from './YearMonthPickerState'
+import { YearMonthPickerStateManager, type YearMonthPickerStateManagerProps } from './YearMonthPickerStateManager'
 
-export type YearMonthPickerProps = ControllableDOMInputProps<Date, YearMonthPickerEvent> & {
+export type YearMonthPickerProps = Omit<YearMonthPickerStateManagerProps, 'children'> & {
   start?: Date,
   end?: Date,
   layoutRef?: Ref<ComponentRef<typeof YearMonthPickerLayout>>,
@@ -31,20 +28,12 @@ const YearMonthPickerComponent = ({
   layoutRef,
   layoutProps,
 }: YearMonthPickerProps) => {
-  const store = useStateStore<YearMonthPickerState>({
-    value: value ?? initialValue,
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
 
   return (
     <YearMonthPickerStateManager
-      state={store}
-      onStateChange={onStateChange}
+      value={value}
+      initialValue={initialValue}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       isInvalid={isInvalid}
       isDisabled={isDisabled}

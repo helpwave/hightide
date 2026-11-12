@@ -8,7 +8,6 @@ import { Icon } from '../../../visualization/Icon'
 import { IconButton } from '../../../interaction/IconButton'
 import { useFileInputContext } from './FileInputContext'
 import {
-
   createFileInputItemsFromFileList,
   formatFileInputAccept,
   isFileDataTransfer
@@ -31,7 +30,9 @@ export const FileInputMenu = ({
   return (
     <Modal
       isOpen={context.isOpen && (context.maxFiles ?? 1) > 1}
-      onClose={() => context.setIsOpen(false)}
+      onIsOpenChange={(isOpen) => {
+        if (!isOpen) context.setIsOpen(false)
+      }}
       titleElement={translation('selectFiles')}
       description={translation('dropFilesHere')}
       panelProps={{

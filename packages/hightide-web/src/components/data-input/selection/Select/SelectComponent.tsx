@@ -13,7 +13,7 @@ import { SelectList } from './SelectList'
 export type SelectProps<T = string> = Omit<SelectStateManagerProps<T>, 'children'> & {
   placeholder?: SelectTriggerProps<T>['placeholder'],
   selectedDisplay?: SelectTriggerProps<T>['selectedDisplay'],
-  triggerRef?: Ref<HTMLDivElement>,
+  triggerRef?: Ref<HTMLButtonElement>,
   triggerProps?: SelectTriggerProps<T>,
   popupRef?: Ref<HTMLDivElement>,
   popupProps?: SelectPopUpProps,

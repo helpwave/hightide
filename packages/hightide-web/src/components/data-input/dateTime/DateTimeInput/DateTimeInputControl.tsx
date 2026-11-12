@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect } from 'react'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { PropsUtil } from '../../../../utils/propsUtil'
 import { useDateTimeInputContext } from './DateTimeInputContext'
 
@@ -14,7 +15,7 @@ export const DateTimeInputControl = forwardRef<HTMLDivElement, DateTimeInputCont
   children,
   ...props
 }, forwardedRef) {
-  const { state, dispatch, config, hasClear, hasTimePicker } = useDateTimeInputContext()
+  const { state, dispatch, config, hasClear, hasTimePicker, anchorRef } = useDateTimeInputContext()
   const actionCount = actions.length + (hasClear ? 1 : 0) + (hasTimePicker ? 1 : 0)
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const DateTimeInputControl = forwardRef<HTMLDivElement, DateTimeInputCont
   return (
     <div
       {...props}
-      ref={forwardedRef}
+      ref={ReactUtils.assingRefsBuilder([anchorRef, forwardedRef])}
       tabIndex={-1}
       onFocus={(event) => {
         props.onFocus?.(event)

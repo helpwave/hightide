@@ -1,15 +1,12 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableDOMInputProps } from '../../domInput'
-import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { SearchBarContext } from './SearchBarContext'
 import { SearchBarField, type SearchBarFieldProps } from './SearchBarField'
 import { SearchBarLayout, type SearchBarLayoutProps } from './SearchBarLayout'
 import { SearchBarSearchButton, type SearchBarSearchButtonProps } from './SearchBarSearchButton'
-import { SearchBarStateManager } from './SearchBarStateManager'
-import { type SearchBarEvent, type SearchBarState } from './SearchBarState'
+import { SearchBarStateManager, type SearchBarStateManagerProps } from './SearchBarStateManager'
 
-export type SearchBarProps = ControllableDOMInputProps<string, SearchBarEvent> & {
+export type SearchBarProps = Omit<SearchBarStateManagerProps, 'children'> & {
   onSearch: (value: string) => void,
   layoutRef?: Ref<ComponentRef<typeof SearchBarLayout>>,
   layoutProps?: SearchBarLayoutProps,
@@ -20,44 +17,17 @@ export type SearchBarProps = ControllableDOMInputProps<string, SearchBarEvent> &
 }
 
 const SearchBarComponent = ({
-  value,
-  initialValue,
-  onValueChange,
-  onStateEvent,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  id,
-  onSearch,
   layoutRef,
   layoutProps,
   inputRef,
   inputProps,
   searchButtonRef,
   searchButtonProps,
+  ...props
 }: SearchBarProps) => {
-  const store = useStateStore<SearchBarState>({
-    value: value ?? initialValue ?? '',
-  })
-  const onStateChange = useStateStoreBindings({
-    store,
-    bindings: {
-      value: { value, onValueChange },
-    },
-  })
-
   return (
     <SearchBarStateManager
-      state={store}
-      onStateChange={onStateChange}
-      onStateEvent={onStateEvent}
-      onSearch={onSearch}
-      isInvalid={isInvalid}
-      isDisabled={isDisabled}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-      id={id}
+      {...props}
     >
       <SearchBarLayout
         {...layoutProps}
